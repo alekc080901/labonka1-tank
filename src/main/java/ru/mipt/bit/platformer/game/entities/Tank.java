@@ -7,14 +7,25 @@ public class Tank implements Player {
     Класс игрока.
      */
     private Coordinates coordinates;
+    private Coordinates destination;
     private float rotation = 0f;
     public Tank(Coordinates coordinates) {
         this.coordinates = coordinates;
+        this.destination = coordinates;
     }
 
     @Override
     public Coordinates getCoordinates() {
         return coordinates;
+    }
+
+    @Override
+    public Coordinates getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Coordinates destination) {
+        this.destination = new Coordinates(destination);
     }
 
     @Override

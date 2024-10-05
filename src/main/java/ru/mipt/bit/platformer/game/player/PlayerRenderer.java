@@ -15,33 +15,29 @@ public class PlayerRenderer {
 
     private final PlayerMoveLogic playerMoveLogic;
     private final LevelRenderer levelRenderer;
-    private final LevelEntity playerTexture;
+    private final LevelEntity player;
     public static final float MOVEMENT_SPEED = 0.4f;
     private float playerMovementProgress = 1f;
 
 
     public PlayerRenderer(LevelEntity player, PlayerMoveLogic playerMoveLogic, LevelRenderer levelRenderer) {
-        this.playerTexture = player;
+        this.player = player;
         this.playerMoveLogic = playerMoveLogic;
         this.levelRenderer = levelRenderer;
     }
 
-    public void startMove(MoveCommand command) {
-        if (isEqual(playerMovementProgress, 1f)) {
-            boolean hasMoved = playerMoveLogic.makeMove(command);
-            if (hasMoved) {
+    public void movePlayer(MoveCommand command, float deltaTime) {
+        if (isEqual(playerMovementProgress, 1f) && command != null) {
+            playerMoveLogic.finishMove();  // Finish previous move (do nothing if move hasn't been started)
+            boolean hasStarted = playerMoveLogic.startMove(command);
+            if (hasStarted) {
                 playerMovementProgress = 0f;
             }
         }
-    }
 
-    public void movePlayer(float deltaTime) {
         playerMovementProgress = continueProgress(playerMovementProgress, deltaTime, MOVEMENT_SPEED);
-        if (isEqual(playerMovementProgress, 1f)) {
-            playerMoveLogic.confirmMove();
-        }
         levelRenderer.shiftEntity(
-                playerTexture, playerMoveLogic.getDestination(), playerMovementProgress
+                player, playerMoveLogic.getDestination(), playerMovementProgress
         );
     }
 }

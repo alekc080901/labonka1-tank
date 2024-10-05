@@ -12,52 +12,46 @@ public class PlayerMoveLogic {
      */
 
     private final Player player;
-    private Coordinates playerDestination;
     private final List<GameEntity> obstacles;
 
     public PlayerMoveLogic(Player player, List<GameEntity> obstacles) {
         this.player = player;
         this.obstacles = obstacles;
-
-        this.playerDestination = player.getCoordinates();
     }
 
-    public boolean makeMove(MoveCommand direction) {
-        Coordinates oldCoordinates = new Coordinates(playerDestination.x, playerDestination.y);
-        movePlayer(direction);
+    public boolean startMove(MoveCommand direction) {
+        Coordinates oldCoordinates = new Coordinates(player.getCoordinates());
+        moveAndChangeDestination(direction);
         if (!hasHitObstacle()) {
             return true;
         } else {
-            playerDestination = oldCoordinates;
+            player.setDestination(oldCoordinates);
             return false;
         }
     }
 
-    public void confirmMove() {
-        player.setCoordinates(playerDestination);
+    public void finishMove() {
+        player.setCoordinates(player.getDestination());
     }
 
     private boolean hasHitObstacle() {
         for (GameEntity obstacle : obstacles) {
-            if (obstacle.getCoordinates().equals(playerDestination)) {
+            if (obstacle.getCoordinates().equals(player.getDestination())) {
                 return true;
             }
         }
         return false;
     }
 
-    private void movePlayer(MoveCommand direction) {
+    private void moveAndChangeDestination(MoveCommand direction) {
+        var coords = player.getDestination();
+        coords.x += direction.getShiftX();
+        coords.y += direction.getShiftY();
+
         player.setRotation(direction.getRotation());
-        playerDestination.x += direction.getShiftX();
-        playerDestination.y += direction.getShiftY();
     }
 
     public Coordinates getDestination() {
-        return playerDestination;
-    }
-
-    public void setPlayerCoordinates(Coordinates destination) {
-        this.playerDestination = destination;
-        confirmMove();
+        return player.getDestination();
     }
 }

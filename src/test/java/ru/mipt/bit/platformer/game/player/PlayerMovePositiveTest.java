@@ -32,8 +32,8 @@ class PlayerMovePositiveTest {
     @Test
     void movePositiveUp() {
         moveLogic.setPlayerCoordinates(new Coordinates(2, 2));
-        assertTrue(moveLogic.makeMove(MoveCommand.UP));
-        moveLogic.confirmMove();
+        assertTrue(moveLogic.startMove(MoveCommand.UP));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(2, 3), player.getCoordinates());
         assertEquals(90f, player.getRotation());
     }
@@ -41,8 +41,8 @@ class PlayerMovePositiveTest {
     @Test
     void movePositiveDown() {
         moveLogic.setPlayerCoordinates(new Coordinates(0, 1));
-        assertTrue(moveLogic.makeMove(MoveCommand.DOWN));
-        moveLogic.confirmMove();
+        assertTrue(moveLogic.startMove(MoveCommand.DOWN));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(0, 0), player.getCoordinates());
         assertEquals(-90f, player.getRotation());
     }
@@ -50,8 +50,8 @@ class PlayerMovePositiveTest {
     @Test
     void movePositiveLeft() {
         moveLogic.setPlayerCoordinates(new Coordinates(0, 4));
-        assertTrue(moveLogic.makeMove(MoveCommand.LEFT));
-        moveLogic.confirmMove();
+        assertTrue(moveLogic.startMove(MoveCommand.LEFT));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(-1, 4), player.getCoordinates());
         assertEquals(-180f, player.getRotation());
     }
@@ -59,8 +59,8 @@ class PlayerMovePositiveTest {
     @Test
     void movePositiveRight() {
         moveLogic.setPlayerCoordinates(new Coordinates(5, 4));
-        assertTrue(moveLogic.makeMove(MoveCommand.RIGHT));
-        moveLogic.confirmMove();
+        assertTrue(moveLogic.startMove(MoveCommand.RIGHT));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(6, 4), player.getCoordinates());
         assertEquals(0f, player.getRotation());
     }

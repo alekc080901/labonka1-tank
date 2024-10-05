@@ -10,7 +10,7 @@ public class KeyboardHandler implements InputHandler {
     Класс, считывающий нажатие игроком клавиш клавиатуры.
      */
 
-    public UserCommand handleUserInput() {
+    public Command handleUserInput() {
         if (Gdx.input.isKeyPressed(UP) || Gdx.input.isKeyPressed(W))
             return MoveCommand.UP;
         if (Gdx.input.isKeyPressed(LEFT) || Gdx.input.isKeyPressed(A))

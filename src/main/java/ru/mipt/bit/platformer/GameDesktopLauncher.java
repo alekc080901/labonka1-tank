@@ -5,9 +5,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import ru.mipt.bit.platformer.game.controls.Command;
 import ru.mipt.bit.platformer.game.controls.InputController;
 import ru.mipt.bit.platformer.game.controls.MoveCommand;
-import ru.mipt.bit.platformer.game.controls.UserCommand;
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 import ru.mipt.bit.platformer.game.entities.GameEntity;
 import ru.mipt.bit.platformer.game.entities.Obstacle;
@@ -19,7 +19,9 @@ import ru.mipt.bit.platformer.game.level.LevelRenderer;
 import ru.mipt.bit.platformer.game.player.PlayerMoveLogic;
 import ru.mipt.bit.platformer.game.player.PlayerRenderer;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
@@ -28,7 +30,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private LevelRenderer levelRenderer;
     private PlayerRenderer playerRenderer;
-    private final InputController userInputController = new InputController();
+    private final InputController inputController = new InputController();
 
     @Override
     public void create() {
@@ -55,18 +57,13 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = levelRenderer.getDeltaTime();
 
-        renderUserInput(deltaTime);
+        Set<Command> thisTurnCommands = new HashSet<>();
+//        thisTurnCommands.add()
+//        renderUserInput(deltaTime);
+        Command command = inputController.getUserCommand();
+        playerRenderer.movePlayer((MoveCommand) command, deltaTime);
 
         levelRenderer.render();
-    }
-
-    private void renderUserInput(float deltaTime) {
-        UserCommand userCommand = userInputController.getUserCommand();
-        if (userCommand instanceof MoveCommand) {
-            playerRenderer.startMove((MoveCommand) userCommand);
-        }
-
-        playerRenderer.movePlayer(deltaTime);
     }
 
     @Override

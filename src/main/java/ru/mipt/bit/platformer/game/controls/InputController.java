@@ -9,10 +9,10 @@ public class InputController {
 
     private final InputHandler keyboard = new KeyboardHandler();
 
-    public UserCommand getUserCommand() {
+    public Command getUserCommand() {
         List<InputHandler> devices = List.of(keyboard);
         for (InputHandler device : devices) {
-            UserCommand pressedKey = device.handleUserInput();
+            Command pressedKey = device.handleUserInput();
             if (pressedKey != null) return pressedKey;
         }
         return null;

@@ -31,8 +31,8 @@ class PlayerMoveObstacleTest {
     @Test
     void moveVertical() {
         moveLogic.setPlayerCoordinates(new Coordinates(1, 2));
-        assertFalse(moveLogic.makeMove(MoveCommand.UP));
-        moveLogic.confirmMove();
+        assertFalse(moveLogic.startMove(MoveCommand.UP));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(1, 2), player.getCoordinates());
         assertEquals(90f, player.getRotation());
     }
@@ -40,8 +40,8 @@ class PlayerMoveObstacleTest {
     @Test
     void moveHorizontal() {
         moveLogic.setPlayerCoordinates(new Coordinates(0, 3));
-        assertFalse(moveLogic.makeMove(MoveCommand.RIGHT));
-        moveLogic.confirmMove();
+        assertFalse(moveLogic.startMove(MoveCommand.RIGHT));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(0, 3), player.getCoordinates());
         assertEquals(0f, player.getRotation());
     }
@@ -49,8 +49,8 @@ class PlayerMoveObstacleTest {
     @Test
     void moveObstacleAround() {
         moveLogic.setPlayerCoordinates(new Coordinates(2, 3));
-        assertTrue(moveLogic.makeMove(MoveCommand.DOWN));
-        moveLogic.confirmMove();
+        assertTrue(moveLogic.startMove(MoveCommand.DOWN));
+        moveLogic.finishMove();
         assertEquals(new Coordinates(2, 2), player.getCoordinates());
         assertEquals(-90f, player.getRotation());
     }
