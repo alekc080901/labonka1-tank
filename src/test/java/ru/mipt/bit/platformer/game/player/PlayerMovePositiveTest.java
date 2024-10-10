@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.game.player;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.game.controls.MoveCommand;
+import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 import ru.mipt.bit.platformer.game.entities.GameEntity;
 import ru.mipt.bit.platformer.game.entities.Obstacle;

@@ -1,20 +1,24 @@
 package ru.mipt.bit.platformer.game.controls;
 
+import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandHandler;
+
 import java.util.List;
 
 public class InputController {
     /*
-    Класс, считывающий пользвательский ввод с различных устройств и возвращающий команду от пользователя.
+    Класс, считывающий пользвательский ввод с различных устройств и перенаправляющий его на управление игровыми
+    сущностями.
      */
 
-    private final InputHandler keyboard = new KeyboardMouseHandler();
+    private final List<PlayerCommandHandler> handlers;
 
-    public Command getUserCommand() {
-        List<InputHandler> devices = List.of(keyboard);
-        for (InputHandler device : devices) {
-            Command pressedKey = device.handleUserInput();
-            if (pressedKey != null) return pressedKey;
+    public InputController(List<PlayerCommandHandler> handlers) {
+        this.handlers = handlers;
+    }
+
+    public void handleAllPlayers(float deltaTime) {
+        for (PlayerCommandHandler handler : handlers) {
+            handler.handleSinglePlayer(deltaTime);
         }
-        return null;
     }
 }

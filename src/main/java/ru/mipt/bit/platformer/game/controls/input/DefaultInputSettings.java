@@ -1,4 +1,7 @@
-package ru.mipt.bit.platformer.game.controls;
+package ru.mipt.bit.platformer.game.controls.input;
+
+import ru.mipt.bit.platformer.game.controls.commands.Command;
+import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 
 import java.util.HashMap;
 

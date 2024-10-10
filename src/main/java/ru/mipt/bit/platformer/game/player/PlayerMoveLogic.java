@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.game.player;
 
-import ru.mipt.bit.platformer.game.controls.MoveCommand;
+import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 import ru.mipt.bit.platformer.game.entities.GameEntity;
 

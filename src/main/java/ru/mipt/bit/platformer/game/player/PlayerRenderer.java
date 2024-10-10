@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.game.player;
 
-import ru.mipt.bit.platformer.game.controls.Command;
-import ru.mipt.bit.platformer.game.controls.MoveCommand;
+import ru.mipt.bit.platformer.game.controls.commands.Command;
+import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.level.LevelEntity;
 import ru.mipt.bit.platformer.game.level.LevelRenderer;
 

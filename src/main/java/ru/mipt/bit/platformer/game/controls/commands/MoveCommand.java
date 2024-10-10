@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.controls;
+package ru.mipt.bit.platformer.game.controls.commands;
 
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 

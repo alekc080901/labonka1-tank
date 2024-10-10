@@ -5,8 +5,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import ru.mipt.bit.platformer.game.controls.Command;
 import ru.mipt.bit.platformer.game.controls.InputController;
+import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandDistributor;
+import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandHandler;
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 import ru.mipt.bit.platformer.game.entities.GameEntity;
 import ru.mipt.bit.platformer.game.entities.Obstacle;
@@ -18,9 +19,7 @@ import ru.mipt.bit.platformer.game.level.LevelRenderer;
 import ru.mipt.bit.platformer.game.player.PlayerMoveLogic;
 import ru.mipt.bit.platformer.game.player.PlayerRenderer;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
@@ -29,7 +28,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private LevelRenderer levelRenderer;
     private PlayerRenderer playerRenderer;
-    private final InputController inputController = new InputController();
+    private InputController inputController;
 
     @Override
     public void create() {
@@ -48,6 +47,10 @@ public class GameDesktopLauncher implements ApplicationListener {
         levelRenderer = new LevelRenderer(level, batch, textures);
         PlayerMoveLogic playerMoveLogic = new PlayerMoveLogic(player, obstacles, level.getLevelSize());
         playerRenderer = new PlayerRenderer(blueTank, playerMoveLogic, levelRenderer);
+
+        PlayerCommandHandler tankHandler = new PlayerCommandHandler(playerRenderer, new PlayerCommandDistributor());
+        var handlers = List.of(tankHandler);
+        inputController = new InputController(handlers);
     }
 
     @Override
@@ -55,16 +58,9 @@ public class GameDesktopLauncher implements ApplicationListener {
         levelRenderer.clear();
 
         float deltaTime = levelRenderer.getDeltaTime();
-        handleCommands(deltaTime);
-        levelRenderer.render();
-    }
+        inputController.handleAllPlayers(deltaTime);
 
-    private void handleCommands(float deltaTime) {
-        Map<PlayerRenderer, Command> commands = new HashMap<>();
-        commands.put(playerRenderer, inputController.getUserCommand());
-        for (PlayerRenderer renderer : commands.keySet()) {
-            renderer.handleCommand(commands.get(renderer), deltaTime);
-        }
+        levelRenderer.render();
     }
 
     @Override
