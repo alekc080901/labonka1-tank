@@ -8,8 +8,11 @@ import java.util.HashMap;
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class DefaultInputSettings {
+    /*
+    Возвращает команды по умолчанию для различных устройств ввода.
+     */
 
-    public static HashMap<Integer, Command> forKeyboardMouse() {
+    public static HashMap<Integer, Command> forKeyboard() {
         var map = new HashMap<Integer, Command>();
         map.put(UP, MoveCommand.UP);
         map.put(W, MoveCommand.UP);

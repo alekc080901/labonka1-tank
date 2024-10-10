@@ -6,15 +6,15 @@ import ru.mipt.bit.platformer.game.controls.commands.Command;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyboardMouseReceiver implements InputReceiver {
+public class KeyboardReceiver implements InputReceiver {
     /*
     Класс, считывающий нажатие игроком клавиш клавиатуры.
      */
 
-    private static final HashMap<Integer, Command> keyboardMouseInput = DefaultInputSettings.forKeyboardMouse();
+    private static final HashMap<Integer, Command> keyboardInput = DefaultInputSettings.forKeyboard();
 
     public Command receiveInput() {
-        for (Map.Entry<Integer, Command> entry : keyboardMouseInput.entrySet()) {
+        for (Map.Entry<Integer, Command> entry : keyboardInput.entrySet()) {
             if (Gdx.input.isKeyPressed(entry.getKey())) {
                 return entry.getValue();
             }

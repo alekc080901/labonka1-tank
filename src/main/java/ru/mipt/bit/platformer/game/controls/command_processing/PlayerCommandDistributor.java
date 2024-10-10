@@ -2,13 +2,16 @@ package ru.mipt.bit.platformer.game.controls.command_processing;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.input.InputReceiver;
-import ru.mipt.bit.platformer.game.controls.input.KeyboardMouseReceiver;
+import ru.mipt.bit.platformer.game.controls.input.KeyboardReceiver;
 
 import java.util.List;
 
 public class PlayerCommandDistributor implements CommandDistributor {
+    /*
+    Реализация контракта генерации команд, производимых с подключенных устройств пользователем.
+     */
     private final List<InputReceiver> devices = List.of(
-            new KeyboardMouseReceiver()
+            new KeyboardReceiver()
     );
 
     @Override

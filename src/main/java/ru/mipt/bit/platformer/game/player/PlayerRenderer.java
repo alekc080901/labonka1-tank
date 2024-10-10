@@ -8,7 +8,7 @@ import ru.mipt.bit.platformer.game.level.LevelRenderer;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class PlayerRenderer implements Renderer {
+public class PlayerRenderer {
     /*
     Класс, ответственный за отображение перемещения игрока на уровне. Обертка над логикой PlayerMoveLogic для рендера
     текстуры игрока на поле.
@@ -26,7 +26,6 @@ public class PlayerRenderer implements Renderer {
         this.levelRenderer = levelRenderer;
     }
 
-    @Override
     public void handleCommand(Command command, float deltaTime) {
         if (command instanceof MoveCommand) {
             movePlayer((MoveCommand) command);

@@ -4,7 +4,7 @@ import ru.mipt.bit.platformer.game.player.Player;
 
 public class Tank implements Player {
     /*
-    Класс игрока.
+    Класс танка, реализующего логику игрока.
      */
     private Coordinates coordinates;
     private Coordinates destination;

@@ -4,6 +4,9 @@ import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.player.PlayerRenderer;
 
 public class PlayerCommandHandler {
+    /*
+    Класс, принимающий команды от игрока (кем бы он ни был) и передающий их в игру.
+     */
     private final PlayerRenderer playerRenderer;
     private final CommandDistributor commandDistributors;
 

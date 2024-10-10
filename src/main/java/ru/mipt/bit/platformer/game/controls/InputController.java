@@ -6,8 +6,7 @@ import java.util.List;
 
 public class InputController {
     /*
-    Класс, считывающий пользвательский ввод с различных устройств и перенаправляющий его на управление игровыми
-    сущностями.
+    Класс, обрабатывающий ввод всех игроков в игре.
      */
 
     private final List<PlayerCommandHandler> handlers;

@@ -17,7 +17,6 @@ public class LevelRenderer {
     /*
     Класс, отвечающий за отрисовку и обновление уровня (карты).
      */
-
     private final MapRenderer renderer;
     private final Level level;
     private final Batch batch;
