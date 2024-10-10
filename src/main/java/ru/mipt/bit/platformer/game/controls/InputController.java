@@ -7,7 +7,7 @@ public class InputController {
     Класс, считывающий пользвательский ввод с различных устройств и возвращающий команду от пользователя.
      */
 
-    private final InputHandler keyboard = new KeyboardHandler();
+    private final InputHandler keyboard = new KeyboardMouseHandler();
 
     public Command getUserCommand() {
         List<InputHandler> devices = List.of(keyboard);

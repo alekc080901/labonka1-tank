@@ -51,11 +51,9 @@ public class LevelRenderer {
 
         // start recording all drawing commands
         batch.begin();
-
-        for (LevelEntity object : levelEntities) {
-            drawTextureRegionUnscaled(batch, object.getGraphics(), object.getRectangle(), object.getRotation());
+        for (LevelEntity entity : levelEntities) {
+            entity.draw(batch);
         }
-
         // submit all drawing requests
         batch.end();
     }
@@ -71,7 +69,7 @@ public class LevelRenderer {
         level.dispose();
         batch.dispose();
 
-        for (LevelEntity object : levelEntities)
-            object.dispose();
+        for (LevelEntity entity : levelEntities)
+            entity.dispose();
     }
 }

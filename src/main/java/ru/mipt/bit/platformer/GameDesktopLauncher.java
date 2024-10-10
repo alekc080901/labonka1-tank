@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import ru.mipt.bit.platformer.game.controls.Command;
 import ru.mipt.bit.platformer.game.controls.InputController;
-import ru.mipt.bit.platformer.game.controls.MoveCommand;
 import ru.mipt.bit.platformer.game.entities.Coordinates;
 import ru.mipt.bit.platformer.game.entities.GameEntity;
 import ru.mipt.bit.platformer.game.entities.Obstacle;
@@ -19,9 +18,9 @@ import ru.mipt.bit.platformer.game.level.LevelRenderer;
 import ru.mipt.bit.platformer.game.player.PlayerMoveLogic;
 import ru.mipt.bit.platformer.game.player.PlayerRenderer;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
@@ -56,14 +55,16 @@ public class GameDesktopLauncher implements ApplicationListener {
         levelRenderer.clear();
 
         float deltaTime = levelRenderer.getDeltaTime();
-
-        Set<Command> thisTurnCommands = new HashSet<>();
-//        thisTurnCommands.add()
-//        renderUserInput(deltaTime);
-        Command command = inputController.getUserCommand();
-        playerRenderer.movePlayer((MoveCommand) command, deltaTime);
-
+        handleCommands(deltaTime);
         levelRenderer.render();
+    }
+
+    private void handleCommands(float deltaTime) {
+        Map<PlayerRenderer, Command> commands = new HashMap<>();
+        commands.put(playerRenderer, inputController.getUserCommand());
+        for (PlayerRenderer renderer : commands.keySet()) {
+            renderer.handleCommand(commands.get(renderer), deltaTime);
+        }
     }
 
     @Override

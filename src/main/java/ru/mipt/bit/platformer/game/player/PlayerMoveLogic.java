@@ -54,4 +54,8 @@ public class PlayerMoveLogic {
     public Coordinates getDestination() {
         return player.getDestination();
     }
+
+    public float getRotation() {
+        return player.getRotation();
+    }
 }
