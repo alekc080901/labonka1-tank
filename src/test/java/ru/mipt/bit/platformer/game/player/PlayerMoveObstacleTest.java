@@ -25,7 +25,7 @@ class PlayerMoveObstacleTest {
         player = new Tank(new Coordinates(1, 10));
         List<GameEntity> obstacles = List.of(obstacle1, obstacle2);
 
-        moveLogic = new PlayerMoveLogic(player, obstacles);
+        moveLogic = new PlayerMoveLogic(player, obstacles, new Coordinates(10, 10));
     }
 
     @Test

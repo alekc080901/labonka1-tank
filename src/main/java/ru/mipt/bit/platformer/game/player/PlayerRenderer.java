@@ -40,10 +40,13 @@ public class PlayerRenderer implements Renderer {
 
     private void movePlayer(MoveCommand command) {
         if (isEqual(playerMovementProgress, 1f)) {
-            playerMoveLogic.finishMove();  // Finish previous move (do nothing if move hasn't been started)
+            // Finish previous move (do nothing if move hasn't been started)
+            playerMoveLogic.finishMove();
+
             boolean hasStarted = playerMoveLogic.startMove(command);
+            // Rotation for playerMoveLogic and player on screen are different entities
+            player.setRotation(playerMoveLogic.getRotation());
             if (hasStarted) {
-                player.setRotation(playerMoveLogic.getRotation());
                 playerMovementProgress = 0f;
             }
         }

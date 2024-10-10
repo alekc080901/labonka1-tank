@@ -13,16 +13,19 @@ public class PlayerMoveLogic {
 
     private final Player player;
     private final List<GameEntity> obstacles;
+    private final Coordinates mapUpperRightLimit;
 
-    public PlayerMoveLogic(Player player, List<GameEntity> obstacles) {
+    public PlayerMoveLogic(Player player, List<GameEntity> obstacles, Coordinates mapUpperRightLimit) {
         this.player = player;
         this.obstacles = obstacles;
+        this.mapUpperRightLimit = mapUpperRightLimit;
     }
 
     public boolean startMove(MoveCommand direction) {
         Coordinates oldCoordinates = new Coordinates(player.getCoordinates());
+        changeRotation(direction);
         moveAndChangeDestination(direction);
-        if (!hasHitObstacle()) {
+        if (!hasHitObstacle() && !hasTrespassedMap()) {
             return true;
         } else {
             player.setDestination(oldCoordinates);
@@ -43,11 +46,18 @@ public class PlayerMoveLogic {
         return false;
     }
 
+    private boolean hasTrespassedMap() {
+        Coordinates coords = player.getDestination();
+        return coords.x >= mapUpperRightLimit.x || coords.x < 0 || coords.y >= mapUpperRightLimit.y || coords.y < 0;
+    }
+
     private void moveAndChangeDestination(MoveCommand direction) {
         var coords = player.getDestination();
         coords.x += direction.getShiftX();
         coords.y += direction.getShiftY();
+    }
 
+    private void changeRotation(MoveCommand direction) {
         player.setRotation(direction.getRotation());
     }
 
@@ -57,5 +67,9 @@ public class PlayerMoveLogic {
 
     public float getRotation() {
         return player.getRotation();
+    }
+
+    public void setPlayerCoordinates(Coordinates coordinates) {
+        player.setCoordinates(coordinates);
     }
 }

@@ -46,7 +46,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         List<GameEntity> obstacles = List.of(obstacle);
 
         levelRenderer = new LevelRenderer(level, batch, textures);
-        PlayerMoveLogic playerMoveLogic = new PlayerMoveLogic(player, obstacles);
+        PlayerMoveLogic playerMoveLogic = new PlayerMoveLogic(player, obstacles, level.getLevelSize());
         playerRenderer = new PlayerRenderer(blueTank, playerMoveLogic, levelRenderer);
     }
 
