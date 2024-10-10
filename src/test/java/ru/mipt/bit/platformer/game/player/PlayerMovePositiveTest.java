@@ -49,10 +49,10 @@ class PlayerMovePositiveTest {
 
     @Test
     void movePositiveLeft() {
-        moveLogic.setPlayerCoordinates(new Coordinates(0, 4));
+        moveLogic.setPlayerCoordinates(new Coordinates(1, 4));
         assertTrue(moveLogic.startMove(MoveCommand.LEFT));
         moveLogic.finishMove();
-        assertEquals(new Coordinates(-1, 4), player.getCoordinates());
+        assertEquals(new Coordinates(0, 4), player.getCoordinates());
         assertEquals(-180f, player.getRotation());
     }
 

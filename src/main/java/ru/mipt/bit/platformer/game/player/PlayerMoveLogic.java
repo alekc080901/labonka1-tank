@@ -70,6 +70,7 @@ public class PlayerMoveLogic {
     }
 
     public void setPlayerCoordinates(Coordinates coordinates) {
-        player.setCoordinates(coordinates);
+        player.setDestination(coordinates);
+        finishMove();
     }
 }
