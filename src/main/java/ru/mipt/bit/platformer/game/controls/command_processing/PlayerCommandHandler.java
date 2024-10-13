@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.command_processing;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
-import ru.mipt.bit.platformer.game.player.PlayerRenderer;
+import ru.mipt.bit.platformer.game.PlayerRenderer;
 
 public class PlayerCommandHandler {
     /*

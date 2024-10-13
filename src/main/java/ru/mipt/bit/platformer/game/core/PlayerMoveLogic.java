@@ -1,10 +1,6 @@
-package ru.mipt.bit.platformer.game.player;
+package ru.mipt.bit.platformer.game.core;
 
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
-import ru.mipt.bit.platformer.game.entities.Coordinates;
-import ru.mipt.bit.platformer.game.entities.GameEntity;
-
-import java.util.List;
 
 public class PlayerMoveLogic {
     /*
@@ -12,13 +8,11 @@ public class PlayerMoveLogic {
      */
 
     private final Player player;
-    private final List<GameEntity> obstacles;
-    private final Coordinates mapUpperRightLimit;
+    private final BaseLevel level;
 
-    public PlayerMoveLogic(Player player, List<GameEntity> obstacles, Coordinates mapUpperRightLimit) {
+    public PlayerMoveLogic(Player player, BaseLevel level) {
         this.player = player;
-        this.obstacles = obstacles;
-        this.mapUpperRightLimit = mapUpperRightLimit;
+        this.level = level;
     }
 
     public boolean startMove(MoveCommand direction) {
@@ -38,7 +32,7 @@ public class PlayerMoveLogic {
     }
 
     private boolean hasHitObstacle() {
-        for (GameEntity obstacle : obstacles) {
+        for (GameEntity obstacle : level.getObstacles()) {
             if (obstacle.getCoordinates().equals(player.getDestination())) {
                 return true;
             }
@@ -48,6 +42,7 @@ public class PlayerMoveLogic {
 
     private boolean hasTrespassedMap() {
         Coordinates coords = player.getDestination();
+        Coordinates mapUpperRightLimit = level.getUpperRightSize();
         return coords.x >= mapUpperRightLimit.x || coords.x < 0 || coords.y >= mapUpperRightLimit.y || coords.y < 0;
     }
 
@@ -59,6 +54,10 @@ public class PlayerMoveLogic {
 
     private void changeRotation(MoveCommand direction) {
         player.setRotation(direction.getRotation());
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public Coordinates getDestination() {

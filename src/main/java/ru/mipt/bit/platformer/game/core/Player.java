@@ -1,7 +1,7 @@
-package ru.mipt.bit.platformer.game.player;
+package ru.mipt.bit.platformer.game.core;
 
-import ru.mipt.bit.platformer.game.entities.Coordinates;
-import ru.mipt.bit.platformer.game.entities.GameEntity;
+import ru.mipt.bit.platformer.game.core.Coordinates;
+import ru.mipt.bit.platformer.game.core.GameEntity;
 
 public interface Player extends GameEntity {
     /*

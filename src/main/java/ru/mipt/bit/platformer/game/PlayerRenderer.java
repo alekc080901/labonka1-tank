@@ -1,9 +1,11 @@
-package ru.mipt.bit.platformer.game.player;
+package ru.mipt.bit.platformer.game;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
-import ru.mipt.bit.platformer.game.level.LevelEntity;
-import ru.mipt.bit.platformer.game.level.LevelRenderer;
+import ru.mipt.bit.platformer.game.core.Player;
+import ru.mipt.bit.platformer.game.core.PlayerMoveLogic;
+import ru.mipt.bit.platformer.game.graphics.Entity;
+import ru.mipt.bit.platformer.game.graphics.Renderer;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
@@ -15,15 +17,15 @@ public class PlayerRenderer {
      */
 
     private final PlayerMoveLogic playerMoveLogic;
-    private final LevelRenderer levelRenderer;
-    private final LevelEntity player;
+    private final Renderer<Entity> renderer;
+    private final Player player;
     public static final float MOVEMENT_SPEED = 0.4f;
     private float playerMovementProgress = 1f;
 
-    public PlayerRenderer(LevelEntity player, PlayerMoveLogic playerMoveLogic, LevelRenderer levelRenderer) {
-        this.player = player;
+    public PlayerRenderer(PlayerMoveLogic playerMoveLogic, Renderer<Entity> renderer) {
+        this.player = playerMoveLogic.getPlayer();
         this.playerMoveLogic = playerMoveLogic;
-        this.levelRenderer = levelRenderer;
+        this.renderer = renderer;
     }
 
     public void handleCommand(Command command, float deltaTime) {
@@ -31,9 +33,11 @@ public class PlayerRenderer {
             movePlayer((MoveCommand) command);
         }
 
+        // This function does not require Gdx engine to work
         playerMovementProgress = continueProgress(playerMovementProgress, deltaTime, MOVEMENT_SPEED);
-        levelRenderer.shiftEntity(
-                player, playerMoveLogic.getDestination(), playerMovementProgress
+
+        renderer.shiftEntity(
+                renderer.getRenderedEntity(player), playerMoveLogic.getDestination(), playerMovementProgress
         );
     }
 
@@ -44,7 +48,7 @@ public class PlayerRenderer {
 
             boolean hasStarted = playerMoveLogic.startMove(command);
             // Rotation for playerMoveLogic and player on screen are different entities
-            player.setRotation(playerMoveLogic.getRotation());
+            renderer.getRenderedEntity(player).setRotation(playerMoveLogic.getRotation());
             if (hasStarted) {
                 playerMovementProgress = 0f;
             }

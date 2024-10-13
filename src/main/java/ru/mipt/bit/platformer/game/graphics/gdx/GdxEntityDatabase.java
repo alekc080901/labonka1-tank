@@ -1,30 +1,30 @@
-package ru.mipt.bit.platformer.game.level;
+package ru.mipt.bit.platformer.game.graphics.gdx;
 
-import ru.mipt.bit.platformer.game.entities.GameEntity;
+import ru.mipt.bit.platformer.game.core.GameEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LevelEntityDatabase {
+public class GdxEntityDatabase {
     /*
     Класс, хранящий методы создания готовых объектов и коллекцию всех созданных объектов (в данном случае танка и дерева).
     Является связывающим хвеном между логикой и графикой.
      */
 
     // Созданные объекты передаются и удаляются в LevelRenderer при остановке приложения
-    public static List<LevelEntity> createdObjects = new ArrayList<>();
+    public static List<GdxEntity> createdObjects = new ArrayList<>();
 
-    private static LevelEntity getLevelObject(String path, GameEntity gameEntity) {
-        LevelEntity object = new LevelEntity(gameEntity, path);
-        createdObjects.add(object);
-        return object;
-    }
-
-    public static LevelEntity getBlueTank(GameEntity gameEntity) {
+    public static GdxEntity getBlueTank(GameEntity gameEntity) {
         return getLevelObject("images/tank_blue.png", gameEntity);
     }
 
-    public static LevelEntity getGreenTree(GameEntity gameEntity) {
+    public static GdxEntity getGreenTree(GameEntity gameEntity) {
         return getLevelObject("images/greenTree.png", gameEntity);
+    }
+
+    private static GdxEntity getLevelObject(String path, GameEntity gameEntity) {
+        GdxEntity object = new GdxEntity(gameEntity, path);
+        createdObjects.add(object);
+        return object;
     }
 }

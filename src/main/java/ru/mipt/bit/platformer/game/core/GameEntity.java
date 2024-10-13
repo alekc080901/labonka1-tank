@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.entities;
+package ru.mipt.bit.platformer.game.core;
 
 public interface GameEntity {
     /*

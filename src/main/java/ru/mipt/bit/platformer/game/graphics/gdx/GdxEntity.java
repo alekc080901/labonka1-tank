@@ -1,16 +1,16 @@
-package ru.mipt.bit.platformer.game.level;
+package ru.mipt.bit.platformer.game.graphics.gdx;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.game.entities.Coordinates;
-import ru.mipt.bit.platformer.game.entities.GameEntity;
+import ru.mipt.bit.platformer.game.core.Coordinates;
+import ru.mipt.bit.platformer.game.core.GameEntity;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
 
-public class LevelEntity {
+public class GdxEntity implements ru.mipt.bit.platformer.game.graphics.Entity {
     /*
     Класс объекта, размещенного на карте. Может быть кем угодно, лишь бы была нужная текстурка.
     */
@@ -18,10 +18,9 @@ public class LevelEntity {
     private final Texture texture;
     private float rotation = 0f;
     private final TextureRegion graphics;
-
     private final Rectangle rectangle;
 
-    public LevelEntity(GameEntity entity, String texturePath) {
+    public GdxEntity(GameEntity entity, String texturePath) {
         this.gameEntity = entity;
         this.texture = new Texture(texturePath);
         this.graphics = new TextureRegion(texture);
@@ -50,5 +49,9 @@ public class LevelEntity {
 
     public float getRotation() {
         return rotation;
+    }
+
+    public GameEntity getGameEntity() {
+        return gameEntity;
     }
 }

@@ -1,6 +1,4 @@
-package ru.mipt.bit.platformer.game.entities;
-
-import ru.mipt.bit.platformer.game.player.Player;
+package ru.mipt.bit.platformer.game.core;
 
 public class Tank implements Player {
     /*
