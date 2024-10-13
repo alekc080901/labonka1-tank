@@ -4,9 +4,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandHandler;
-import ru.mipt.bit.platformer.game.graphics.TimeCounter;
 import ru.mipt.bit.platformer.game.graphics.LevelLoader;
 import ru.mipt.bit.platformer.game.graphics.Renderer;
+import ru.mipt.bit.platformer.game.graphics.TimeCounter;
+import ru.mipt.bit.platformer.game.graphics.gdx.GdxLevelLoader;
 import ru.mipt.bit.platformer.game.graphics.gdx.GdxTimeCounter;
 
 import java.util.List;
@@ -22,8 +23,10 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        renderer = LevelLoader.generateWithDefaultLayout();
-        commandHandlers = LevelLoader.getCommandHandlersFromLevelRenderer(renderer);
+        LevelLoader levelLoader = new GdxLevelLoader("level.tmx");
+//        renderer = loader.generateRendererFromFile("level1.level");  // TODO: Реализовать выбор метода генерации через CLI
+        renderer = levelLoader.generateRandomRenderer();
+        commandHandlers = levelLoader.getCommandHandlersFromLevelRenderer(renderer);
         timeCounter = new GdxTimeCounter();
     }
 

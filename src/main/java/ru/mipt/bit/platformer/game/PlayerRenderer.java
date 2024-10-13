@@ -4,7 +4,6 @@ import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.Player;
 import ru.mipt.bit.platformer.game.core.PlayerMoveLogic;
-import ru.mipt.bit.platformer.game.graphics.Entity;
 import ru.mipt.bit.platformer.game.graphics.Renderer;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
@@ -17,12 +16,12 @@ public class PlayerRenderer {
      */
 
     private final PlayerMoveLogic playerMoveLogic;
-    private final Renderer<Entity> renderer;
+    private final Renderer renderer;
     private final Player player;
     public static final float MOVEMENT_SPEED = 0.4f;
     private float playerMovementProgress = 1f;
 
-    public PlayerRenderer(PlayerMoveLogic playerMoveLogic, Renderer<Entity> renderer) {
+    public PlayerRenderer(PlayerMoveLogic playerMoveLogic, Renderer renderer) {
         this.player = playerMoveLogic.getPlayer();
         this.playerMoveLogic = playerMoveLogic;
         this.renderer = renderer;

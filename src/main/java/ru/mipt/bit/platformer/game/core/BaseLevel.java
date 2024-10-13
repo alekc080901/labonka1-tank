@@ -1,22 +1,23 @@
 package ru.mipt.bit.platformer.game.core;
 
+import ru.mipt.bit.platformer.exceptions.IncorrectLevelSize;
+
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BaseLevel {
 
     private final Set<Tank> tanks;
     private final Set<Obstacle> obstacles;
+    private final Set<GameEntity> entities;
     private Coordinates upperRightSize;
-
-    public BaseLevel(Set<Tank> tanks, Set<Obstacle> obstacles) {
-        this.tanks = tanks;
-        this.obstacles = obstacles;
-    }
 
     public BaseLevel(Set<Tank> tanks, Set<Obstacle> obstacles, Coordinates upperRightSize) {
         this.tanks = tanks;
         this.obstacles = obstacles;
-        this.upperRightSize = upperRightSize;
+        this.entities = Stream.of(tanks, obstacles).flatMap(Set::stream).collect(Collectors.toSet());
+        setUpperRightSize(upperRightSize);
     }
 
     public Set<Tank> getTanks() {
@@ -41,5 +42,11 @@ public class BaseLevel {
 
     public void setUpperRightSize(Coordinates upperRightSize) {
         this.upperRightSize = upperRightSize;
+
+        for (GameEntity entity : entities) {
+            if (entity.getCoordinates().x > upperRightSize.x || entity.getCoordinates().y > upperRightSize.y) {
+                throw new IncorrectLevelSize("Level object is out of level bounds!");
+            }
+        }
     }
 }

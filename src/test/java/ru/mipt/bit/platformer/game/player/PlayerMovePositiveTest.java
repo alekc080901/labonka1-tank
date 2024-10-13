@@ -5,25 +5,27 @@ import org.junit.jupiter.api.Test;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.*;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlayerMovePositiveTest {
 
-    static Player player;
+    static Tank player;
     static PlayerMoveLogic moveLogic;
 
     @BeforeAll
     static void beforeAll() {
-        GameEntity obstacle1 = new Obstacle(new Coordinates(1, 3));
-        GameEntity obstacle2 = new Obstacle(new Coordinates(3, 3));
+        Obstacle obstacle1 = new Obstacle(new Coordinates(1, 3));
+        Obstacle obstacle2 = new Obstacle(new Coordinates(3, 3));
 
-        player = new Tank(new Coordinates(1, 10));
-        List<GameEntity> obstacles = List.of(obstacle1, obstacle2);
+        player = new Tank(new Coordinates(1, 4));
+        Set<Obstacle> obstacles = Set.of(obstacle1, obstacle2);
+        Set<Tank> players = Set.of(player);
+        BaseLevel level = new BaseLevel(players, obstacles, new Coordinates(10, 10));
 
-        moveLogic = new PlayerMoveLogic(player, obstacles, new Coordinates(10, 10));
+        moveLogic = new PlayerMoveLogic(player, level);
     }
 
     @Test

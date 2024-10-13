@@ -9,13 +9,14 @@ import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.graphics.Entity;
 import ru.mipt.bit.platformer.game.graphics.Renderer;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 
-public class GdxRenderer implements Renderer<GdxEntity> {
+public class GdxRenderer implements Renderer {
     /*
     Класс, отвечающий за отрисовку и обновление уровня (карты).
      */
@@ -46,10 +47,11 @@ public class GdxRenderer implements Renderer<GdxEntity> {
     }
 
     @Override
-    public void shiftEntity(GdxEntity entity, Coordinates dest, float progress) {
-        Coordinates coords = entity.getCoordinates();
+    public void shiftEntity(Entity entity, Coordinates dest, float progress) {
+        GdxEntity gdxEntity = (GdxEntity) entity;
+        Coordinates coords = gdxEntity.getCoordinates();
         tileMovement.moveRectangleBetweenTileCenters(
-                entity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), progress
+                gdxEntity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), progress
         );
     }
 
