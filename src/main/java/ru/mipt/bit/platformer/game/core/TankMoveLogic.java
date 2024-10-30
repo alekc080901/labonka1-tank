@@ -19,6 +19,7 @@ public class TankMoveLogic {
         Coordinates oldCoordinates = new Coordinates(tank.getCoordinates());
         tank.turn(direction.getRotation());
         moveAndChangeDestination(direction);
+
         if (!level.hasHitObstacle(tank) && !level.hasHitTank(tank) && !level.hasTrespassedMap(tank)) {
             return true;
         } else {

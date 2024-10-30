@@ -9,7 +9,7 @@ public class Tank implements MovableEntity {
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
-    private static final float MOVEMENT_SPEED = 0.4f;
+    private static final float MOVEMENT_SPEED = 0.5f;
 
     private Coordinates coordinates;
     private Coordinates destination;

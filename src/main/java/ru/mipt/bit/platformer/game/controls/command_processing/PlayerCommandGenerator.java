@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.command_processing;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
+import ru.mipt.bit.platformer.game.controls.commands.NoneCommand;
 import ru.mipt.bit.platformer.game.controls.input.InputReceiver;
 import ru.mipt.bit.platformer.game.controls.input.KeyboardReceiver;
 
@@ -20,7 +21,7 @@ public class PlayerCommandGenerator implements CommandGenerator {
             Command chosenCommand = device.receiveInput();
             if (chosenCommand != null) return chosenCommand;
         }
-        return null;
+        return new NoneCommand();
 
     }
 }

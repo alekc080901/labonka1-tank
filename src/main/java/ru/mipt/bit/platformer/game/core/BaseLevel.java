@@ -22,7 +22,7 @@ public class BaseLevel {
 
     public boolean hasHitObstacle(MovableEntity entity) {
         for (GameEntity obstacle : obstacles) {
-            if (obstacle.getCoordinates().equals(entity.getCoordinates())) {
+            if (obstacle.getCoordinates().equals(entity.getDestination())) {
                 return true;
             }
         }
@@ -31,8 +31,8 @@ public class BaseLevel {
 
     public boolean hasHitTank(MovableEntity entity) {
         for (MovableEntity tank : tanks) {
-            if (tank.getCoordinates().equals(entity.getCoordinates()) ||
-                    tank.getDestination().equals(entity.getDestination())) {
+            if ((tank.getCoordinates().equals(entity.getDestination()) && !entity.equals(tank)) ||
+                    (tank.getDestination().equals(entity.getDestination())) && !entity.equals(tank)) {
                 return true;
             }
         }
