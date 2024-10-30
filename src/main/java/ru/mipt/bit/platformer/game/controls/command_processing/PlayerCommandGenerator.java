@@ -17,8 +17,8 @@ public class PlayerCommandGenerator implements CommandGenerator {
     @Override
     public Command getCurrentCommand() {
         for (InputReceiver device : devices) {
-            Command pressedKey = device.receiveInput();
-            if (pressedKey != null) return pressedKey;
+            Command chosenCommand = device.receiveInput();
+            if (chosenCommand != null) return chosenCommand;
         }
         return null;
 

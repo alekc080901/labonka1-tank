@@ -1,6 +1,9 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
+import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
+import ru.mipt.bit.platformer.game.core.MovableEntity;
+import ru.mipt.bit.platformer.game.graphics.contracts.MoveRenderer;
 
 public enum MoveCommand implements Command {
     /*
@@ -14,10 +17,17 @@ public enum MoveCommand implements Command {
 
     private final Coordinates directionChange;
     private final float rotation;
+    private MovableEntity entity;
+    private BaseLevel level;
 
     MoveCommand(Coordinates direction, float rotation) {
         this.directionChange = direction;
         this.rotation = rotation;
+    }
+
+    public void bind(MovableEntity entity, BaseLevel level) {
+        this.entity = entity;
+        this.level = level;
     }
 
     public float getRotation() {
@@ -30,5 +40,10 @@ public enum MoveCommand implements Command {
 
     public int getShiftY() {
         return directionChange.y;
+    }
+
+    @Override
+    public void execute() {
+        entity.move(this, level);
     }
 }

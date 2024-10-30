@@ -1,9 +1,6 @@
 package ru.mipt.bit.platformer.data;
 
-import ru.mipt.bit.platformer.game.core.BaseLevel;
-import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.Obstacle;
-import ru.mipt.bit.platformer.game.core.Tank;
+import ru.mipt.bit.platformer.game.core.*;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +46,9 @@ public class MapRandomLoader implements MapLoader {
     }
 
     private void addPlayers(Random random) {
-        tanks.add(new Tank(getRandomCoordinates(random)));
+        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.PLAYER));
+        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI));
+        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI));
     }
 
     private Coordinates getRandomCoordinates(Random random) {

@@ -13,76 +13,68 @@ class PlayerMoveObstacleTest {
     private static final int MAP_SIZE_WIDTH = 10;
     private static final int MAP_SIZE_HEIGHT = 6;
 
-    static Tank player;
-    static TankMoveLogic moveLogic;
+    static Tank tank;
+    static BaseLevel level;
 
     @BeforeAll
     static void beforeAll() {
         Obstacle obstacle1 = new Obstacle(new Coordinates(1, 3));
         Obstacle obstacle2 = new Obstacle(new Coordinates(3, 3));
 
-        player = new Tank(new Coordinates(1, 4));
+        tank = new Tank(new Coordinates(1, 4), PlayerTypes.PLAYER);
         Set<Obstacle> obstacles = Set.of(obstacle1, obstacle2);
-        Set<Tank> players = Set.of(player);
-        BaseLevel level = new BaseLevel(players, obstacles, new Coordinates(MAP_SIZE_WIDTH, MAP_SIZE_HEIGHT));
-
-        moveLogic = new TankMoveLogic(player, level);
+        Set<Tank> players = Set.of(tank);
+        level = new BaseLevel(players, obstacles, new Coordinates(MAP_SIZE_WIDTH, MAP_SIZE_HEIGHT));
     }
 
     @Test
     void moveVertical() {
-        moveLogic.setPlayerCoordinates(new Coordinates(1, 2));
-        assertFalse(moveLogic.startMove(MoveCommand.UP));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(1, 2), player.getCoordinates());
-        assertEquals(90f, player.getRotation());
+        tank.setCoordinates(new Coordinates(1, 2));
+        tank.move(MoveCommand.UP, level);
+        assertEquals(new Coordinates(1, 3), tank.getCoordinates());
+        assertEquals(90f, tank.getRotation());
     }
 
     @Test
     void moveHorizontal() {
-        moveLogic.setPlayerCoordinates(new Coordinates(0, 3));
-        assertFalse(moveLogic.startMove(MoveCommand.RIGHT));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(0, 3), player.getCoordinates());
-        assertEquals(0f, player.getRotation());
+        tank.setCoordinates(new Coordinates(0, 3));
+        tank.move(MoveCommand.RIGHT, level);
+        assertEquals(new Coordinates(1, 3), tank.getCoordinates());
+        assertEquals(0f, tank.getRotation());
     }
 
     @Test
     void moveObstacleAround() {
-        moveLogic.setPlayerCoordinates(new Coordinates(2, 3));
-        assertTrue(moveLogic.startMove(MoveCommand.DOWN));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(2, 2), player.getCoordinates());
-        assertEquals(-90f, player.getRotation());
+        tank.setCoordinates(new Coordinates(2, 3));
+        tank.move(MoveCommand.DOWN, level);
+        assertEquals(new Coordinates(2, 2), tank.getCoordinates());
+        assertEquals(-90f, tank.getRotation());
     }
 
     @Test
     void moveOutOfBoundsZero() {
         var initCoords = new Coordinates(0, 3);
-        moveLogic.setPlayerCoordinates(initCoords);
-        assertFalse(moveLogic.startMove(MoveCommand.LEFT));
-        moveLogic.finishMove();
-        assertEquals(initCoords, player.getCoordinates());
-        assertEquals(-180f, player.getRotation());
+        tank.setCoordinates(initCoords);
+        tank.move(MoveCommand.LEFT, level);
+        assertEquals(initCoords, tank.getCoordinates());
+        assertEquals(-180f, tank.getRotation());
     }
 
     @Test
     void moveOutOfBoundsWidth() {
         var initCoords = new Coordinates(MAP_SIZE_WIDTH - 1, 3);
-        moveLogic.setPlayerCoordinates(initCoords);
-        assertFalse(moveLogic.startMove(MoveCommand.RIGHT));
-        moveLogic.finishMove();
-        assertEquals(initCoords, player.getCoordinates());
-        assertEquals(0f, player.getRotation());
+        tank.setCoordinates(initCoords);
+        tank.move(MoveCommand.RIGHT, level);
+        assertEquals(initCoords, tank.getCoordinates());
+        assertEquals(0f, tank.getRotation());
     }
 
     @Test
     void moveOutOfBoundsHeight() {
         var initCoords = new Coordinates(2, MAP_SIZE_HEIGHT - 1);
-        moveLogic.setPlayerCoordinates(initCoords);
-        assertFalse(moveLogic.startMove(MoveCommand.UP));
-        moveLogic.finishMove();
-        assertEquals(initCoords, player.getCoordinates());
-        assertEquals(90f, player.getRotation());
+        tank.setCoordinates(initCoords);
+        tank.move(MoveCommand.UP, level);
+        assertEquals(initCoords, tank.getCoordinates());
+        assertEquals(90f, tank.getRotation());
     }
 }

@@ -12,55 +12,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlayerMovePositiveTest {
 
-    static Tank player;
-    static TankMoveLogic moveLogic;
+    static Tank tank;
+    static BaseLevel level;
 
     @BeforeAll
     static void beforeAll() {
         Obstacle obstacle1 = new Obstacle(new Coordinates(1, 3));
         Obstacle obstacle2 = new Obstacle(new Coordinates(3, 3));
 
-        player = new Tank(new Coordinates(1, 4));
+        tank = new Tank(new Coordinates(1, 4), PlayerTypes.PLAYER);
         Set<Obstacle> obstacles = Set.of(obstacle1, obstacle2);
-        Set<Tank> players = Set.of(player);
-        BaseLevel level = new BaseLevel(players, obstacles, new Coordinates(10, 10));
-
-        moveLogic = new TankMoveLogic(player, level);
+        Set<Tank> players = Set.of(tank);
+        level = new BaseLevel(players, obstacles, new Coordinates(10, 10));
     }
 
     @Test
     void movePositiveUp() {
-        moveLogic.setPlayerCoordinates(new Coordinates(2, 2));
-        assertTrue(moveLogic.startMove(MoveCommand.UP));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(2, 3), player.getCoordinates());
-        assertEquals(90f, player.getRotation());
+        tank.setCoordinates(new Coordinates(2, 2));
+        tank.move(MoveCommand.UP, level);
+        assertEquals(new Coordinates(2, 3), tank.getCoordinates());
+        assertEquals(90f, tank.getRotation());
     }
 
     @Test
     void movePositiveDown() {
-        moveLogic.setPlayerCoordinates(new Coordinates(0, 1));
-        assertTrue(moveLogic.startMove(MoveCommand.DOWN));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(0, 0), player.getCoordinates());
-        assertEquals(-90f, player.getRotation());
+        tank.setCoordinates(new Coordinates(2, 2));
+        tank.move(MoveCommand.DOWN, level);
+        assertEquals(new Coordinates(0, 0), tank.getCoordinates());
+        assertEquals(-90f, tank.getRotation());
     }
 
     @Test
     void movePositiveLeft() {
-        moveLogic.setPlayerCoordinates(new Coordinates(1, 4));
-        assertTrue(moveLogic.startMove(MoveCommand.LEFT));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(0, 4), player.getCoordinates());
-        assertEquals(-180f, player.getRotation());
+        tank.setCoordinates(new Coordinates(2, 2));
+        tank.move(MoveCommand.LEFT, level);
+        assertEquals(new Coordinates(0, 4), tank.getCoordinates());
+        assertEquals(-180f, tank.getRotation());
     }
 
     @Test
     void movePositiveRight() {
-        moveLogic.setPlayerCoordinates(new Coordinates(5, 4));
-        assertTrue(moveLogic.startMove(MoveCommand.RIGHT));
-        moveLogic.finishMove();
-        assertEquals(new Coordinates(6, 4), player.getCoordinates());
-        assertEquals(0f, player.getRotation());
+        tank.setCoordinates(new Coordinates(2, 2));
+        tank.move(MoveCommand.RIGHT, level);
+        assertEquals(new Coordinates(6, 4), tank.getCoordinates());
+        assertEquals(0f, tank.getRotation());
     }
 }

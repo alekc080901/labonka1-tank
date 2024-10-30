@@ -1,7 +1,9 @@
 package ru.mipt.bit.platformer.game.controls.command_processing;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
+import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.PlayerTypes;
 import ru.mipt.bit.platformer.game.core.TankMoveLogic;
 import ru.mipt.bit.platformer.game.core.Tank;
 import ru.mipt.bit.platformer.game.graphics.contracts.MoveRenderer;
@@ -29,18 +31,22 @@ public class CommandHandler {
 
         // Затем их обрабатываем
         for (CommandReceiver renderer : playerCommandHandler.keySet()) {
-            renderer.handleCommand(playerCommands.poll(), deltaTime);
+            renderer.handleCommand(Objects.requireNonNull(playerCommands.poll()), deltaTime);
         }
     }
 
     public static CommandHandler getCommandHandler(Renderers renderers) {
-        BaseLevel level = ((GdxLevelRenderer) renderers.levelRenderer()).getLevel();
+        BaseLevel level = renderers.levelRenderer().getSource();
         Set<Tank> tanks = level.getTanks();
 
         CommandHandler commandHandler = new CommandHandler();
         for (Tank tank : tanks) {
             CommandReceiver commandReceiver = new CommandReceiver(tank, renderers);
-            commandHandler.register(commandReceiver, new PlayerCommandGenerator());
+            commandHandler.register(
+                    commandReceiver,
+                    tank.whoDrives() == PlayerTypes.PLAYER ? new PlayerCommandGenerator() :
+                            new SimpleAICommandGenerator()
+            );
         }
         return commandHandler;
     }

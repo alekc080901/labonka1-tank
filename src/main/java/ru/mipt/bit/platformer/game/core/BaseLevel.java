@@ -20,6 +20,30 @@ public class BaseLevel {
         setUpperRightSize(upperRightSize);
     }
 
+    public boolean hasHitObstacle(MovableEntity entity) {
+        for (GameEntity obstacle : obstacles) {
+            if (obstacle.getCoordinates().equals(entity.getCoordinates())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasHitTank(MovableEntity entity) {
+        for (MovableEntity tank : tanks) {
+            if (tank.getCoordinates().equals(entity.getCoordinates()) ||
+                    tank.getDestination().equals(entity.getDestination())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTrespassedMap(MovableEntity entity) {
+        Coordinates coords = entity.getDestination();
+        return coords.x >= upperRightSize.x || coords.x < 0 || coords.y >= upperRightSize.y || coords.y < 0;
+    }
+
     public Set<Tank> getTanks() {
         return tanks;
     }
@@ -34,10 +58,6 @@ public class BaseLevel {
 
     public void removeObstacle(Obstacle obstacle) {
         obstacles.remove(obstacle);
-    }
-
-    public Coordinates getUpperRightSize() {
-        return upperRightSize;
     }
 
     public void setUpperRightSize(Coordinates upperRightSize) {

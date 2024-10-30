@@ -2,10 +2,7 @@ package ru.mipt.bit.platformer.data;
 
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.exceptions.NotFoundException;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
-import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.Obstacle;
-import ru.mipt.bit.platformer.game.core.Tank;
+import ru.mipt.bit.platformer.game.core.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -63,7 +60,10 @@ public class MapFileLoader implements MapLoader {
                     obstacles.add(new Obstacle(new Coordinates(i, maxRow - rowNumber)));
                     break;
                 case 'X':
-                    tanks.add(new Tank(new Coordinates(i, maxRow - rowNumber)));
+                    tanks.add(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER));
+                    break;
+                case 'B':
+                    tanks.add(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI));
                     break;
                 case '_':
                     break;

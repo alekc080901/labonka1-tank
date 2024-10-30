@@ -1,6 +1,5 @@
 package ru.mipt.bit.platformer.game.core;
 
-import com.badlogic.gdx.utils.compression.lzma.Base;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
@@ -8,7 +7,7 @@ import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 public class Tank implements MovableEntity {
     /*
-    Класс танка, реализующего логику игрока.
+    Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
     private static final float MOVEMENT_SPEED = 0.4f;
 
@@ -17,11 +16,17 @@ public class Tank implements MovableEntity {
     private float rotation = 0f;
 
     private final TankMoveLogic moveLogic;
+    private final PlayerTypes whoDrives;
 
-    public Tank(Coordinates coordinates) {
+    public Tank(Coordinates coordinates, PlayerTypes whoDrives) {
         this.coordinates = coordinates;
         this.destination = coordinates;
+        this.whoDrives = whoDrives;
         this.moveLogic = new TankMoveLogic(this);
+    }
+
+    public PlayerTypes whoDrives() {
+        return whoDrives;
     }
 
     @Override

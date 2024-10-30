@@ -31,11 +31,8 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void render() {
         renderers.levelRenderer().clear();
-
         float deltaTime = timeCounter.getDelta();
-
         commandHandler.handleAllPlayers(deltaTime);
-
         renderers.levelRenderer().render();
     }
 

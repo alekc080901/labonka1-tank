@@ -5,6 +5,7 @@ import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 public class TankMoveLogic {
     /*
     Класс, ответственный за перемещение игрока по полю (логическое). Также следит, чтобы игрок не врезался в препятствия.
+    Композиция внутри танка, призванная упростить восприятие кода.
      */
 
     private final Tank tank;
@@ -18,7 +19,7 @@ public class TankMoveLogic {
         Coordinates oldCoordinates = new Coordinates(tank.getCoordinates());
         tank.turn(direction.getRotation());
         moveAndChangeDestination(direction);
-        if (!hasHitObstacle(level) && !hasTrespassedMap(level)) {
+        if (!level.hasHitObstacle(tank) && !level.hasHitTank(tank) && !level.hasTrespassedMap(tank)) {
             return true;
         } else {
             tank.setDestination(oldCoordinates);
@@ -38,29 +39,9 @@ public class TankMoveLogic {
         this.movementProgress = movementProgress;
     }
 
-    private boolean hasHitObstacle(BaseLevel level) {
-        for (GameEntity obstacle : level.getObstacles()) {
-            if (obstacle.getCoordinates().equals(tank.getDestination())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean hasTrespassedMap(BaseLevel level) {
-        Coordinates coords = tank.getDestination();
-        Coordinates mapUpperRightLimit = level.getUpperRightSize();
-        return coords.x >= mapUpperRightLimit.x || coords.x < 0 || coords.y >= mapUpperRightLimit.y || coords.y < 0;
-    }
-
     private void moveAndChangeDestination(MoveCommand direction) {
         var coords = tank.getDestination();
         coords.x += direction.getShiftX();
         coords.y += direction.getShiftY();
-    }
-
-    public void setPlayerCoordinates(Coordinates coordinates) {
-        tank.setDestination(coordinates);
-        finishMove();
     }
 }

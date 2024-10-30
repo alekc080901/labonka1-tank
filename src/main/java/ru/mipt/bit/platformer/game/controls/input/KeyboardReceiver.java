@@ -13,6 +13,7 @@ public class KeyboardReceiver implements InputReceiver {
 
     private static final HashMap<Integer, Command> keyboardInput = DefaultInputSettings.forKeyboard();
 
+    @Override
     public Command receiveInput() {
         for (Map.Entry<Integer, Command> entry : keyboardInput.entrySet()) {
             if (Gdx.input.isKeyPressed(entry.getKey())) {
