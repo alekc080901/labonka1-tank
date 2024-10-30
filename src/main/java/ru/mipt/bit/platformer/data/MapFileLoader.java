@@ -1,6 +1,5 @@
 package ru.mipt.bit.platformer.data;
 
-import org.jetbrains.annotations.NotNull;
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.exceptions.NotFoundException;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
@@ -9,48 +8,51 @@ import ru.mipt.bit.platformer.game.core.Obstacle;
 import ru.mipt.bit.platformer.game.core.Tank;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class LevelFileLoader implements MapLoader {
+public class MapFileLoader implements MapLoader {
 
+    private final String filePath;
     private final Set<Tank> tanks = new HashSet<>();
     private final Set<Obstacle> obstacles = new HashSet<>();
 
+    public MapFileLoader(String filePath) {
+        this.filePath = filePath;
+    }
+
     @Override
-    public BaseLevel load(String filePath) {
-        int width = -1;
-        int height;
+    public BaseLevel load() {
         try (
                 InputStream stream = getStream(filePath);
                 BufferedReader br = new BufferedReader(new InputStreamReader(stream)
-        )) {
-            height = countLines(filePath);
-
-            String line;
-            int currentLineNumber = 0;
-            while ((line = br.readLine()) != null) {
-                if (width != line.length() && width != -1) {
-                    throw new NotFoundException("Error while parsing level file!");
-                }
-                width = line.length();
-                currentLineNumber++;
-
-                processLine(line, currentLineNumber, height);
-            }
+                )) {
+            int width = getWidth();
+            int height = getHeight();
+            fillTanksAndObstacles(br, height);
+            return new BaseLevel(tanks, obstacles, new Coordinates(width, height));
         } catch (FileNotFoundException e) {
             throw new NotFoundException("Level file not found!");
         } catch (IOException e) {
             throw new IncorrectFileFormatException("Error while parsing level:" + e.getMessage());
         }
-
-        return new BaseLevel(tanks, obstacles, new Coordinates(width, height));
     }
 
-    @NotNull
     private InputStream getStream(String filePath) {
         return Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(filePath));
+    }
+
+    private void fillTanksAndObstacles(BufferedReader br, int height) throws IOException {
+        String line;
+        int currentLineNumber = 0;
+        while ((line = br.readLine()) != null) {
+            currentLineNumber++;
+            processLine(line, currentLineNumber, height);
+        }
     }
 
     private void processLine(String line, int rowNumber, int maxRow) {
@@ -71,23 +73,17 @@ public class LevelFileLoader implements MapLoader {
         }
     }
 
-    public int countLines(String filename) throws IOException {
-        try (InputStream is = getStream(filename)) {
-            byte[] c = new byte[1024];
-            int count = 0;
-            int readChars = 0;
-            boolean endsWithoutNewLine = false;
-            while ((readChars = is.read(c)) != -1) {
-                for (int i = 0; i < readChars; ++i) {
-                    if (c[i] == '\n')
-                        ++count;
-                }
-                endsWithoutNewLine = (c[readChars - 1] != '\n');
-            }
-            if (endsWithoutNewLine) {
-                ++count;
-            }
-            return count;
+    private int getWidth() throws IOException {
+        String firstLine = Files.lines(Paths.get(filePath), Charset.defaultCharset()).findFirst().orElse("");
+        String[] parts = firstLine.split("\\s+");
+        if (parts.length > 0) {
+            return Integer.parseInt(parts[0]);
+        } else {
+            throw new IncorrectFileFormatException("Invalid file format!");
         }
+    }
+
+    public int getHeight() throws IOException {
+        return (int) Files.lines(Paths.get(filePath), Charset.defaultCharset()).count();
     }
 }

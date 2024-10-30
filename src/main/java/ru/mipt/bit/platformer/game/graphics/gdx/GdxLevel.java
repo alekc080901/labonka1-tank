@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.core.*;
-import ru.mipt.bit.platformer.game.graphics.Level;
+import ru.mipt.bit.platformer.game.graphics.contracts.Level;
 
 import java.util.HashMap;
 import java.util.Map;

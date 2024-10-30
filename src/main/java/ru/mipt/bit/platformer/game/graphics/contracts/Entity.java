@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.graphics;
+package ru.mipt.bit.platformer.game.graphics.contracts;
 
 import ru.mipt.bit.platformer.game.core.GameEntity;
 

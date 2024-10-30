@@ -14,7 +14,7 @@ class PlayerMoveObstacleTest {
     private static final int MAP_SIZE_HEIGHT = 6;
 
     static Tank player;
-    static PlayerMoveLogic moveLogic;
+    static TankMoveLogic moveLogic;
 
     @BeforeAll
     static void beforeAll() {
@@ -26,7 +26,7 @@ class PlayerMoveObstacleTest {
         Set<Tank> players = Set.of(player);
         BaseLevel level = new BaseLevel(players, obstacles, new Coordinates(MAP_SIZE_WIDTH, MAP_SIZE_HEIGHT));
 
-        moveLogic = new PlayerMoveLogic(player, level);
+        moveLogic = new TankMoveLogic(player, level);
     }
 
     @Test

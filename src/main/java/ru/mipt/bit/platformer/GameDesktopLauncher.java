@@ -3,43 +3,40 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandHandler;
-import ru.mipt.bit.platformer.game.graphics.LevelLoader;
-import ru.mipt.bit.platformer.game.graphics.Renderer;
-import ru.mipt.bit.platformer.game.graphics.TimeCounter;
+import ru.mipt.bit.platformer.game.controls.command_processing.CommandHandler;
+import ru.mipt.bit.platformer.game.graphics.contracts.LevelLoader;
+import ru.mipt.bit.platformer.game.graphics.contracts.Renderers;
+import ru.mipt.bit.platformer.game.graphics.contracts.TimeCounter;
 import ru.mipt.bit.platformer.game.graphics.gdx.GdxLevelLoader;
 import ru.mipt.bit.platformer.game.graphics.gdx.GdxTimeCounter;
-
-import java.util.List;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
     Класс, ответственный за инициализацию объектов
      */
 
-    private Renderer renderer;
+    private Renderers renderers;
     private TimeCounter timeCounter;
-    private List<PlayerCommandHandler> commandHandlers;
+    private CommandHandler commandHandler;
 
     @Override
     public void create() {
         LevelLoader levelLoader = new GdxLevelLoader("level.tmx");
 //        renderer = loader.generateRendererFromFile("level1.level");  // TODO: Реализовать выбор метода генерации через CLI
-        renderer = levelLoader.generateRandomRenderer();
-        commandHandlers = levelLoader.getCommandHandlersFromLevelRenderer(renderer);
+        renderers = levelLoader.loadByRandom();
+        commandHandler = CommandHandler.getCommandHandler(renderers);
         timeCounter = new GdxTimeCounter();
     }
 
     @Override
     public void render() {
-        renderer.clear();
+        renderers.levelRenderer().clear();
 
         float deltaTime = timeCounter.getDelta();
-        for (PlayerCommandHandler playerHandler : commandHandlers) {
-            playerHandler.handleSinglePlayer(deltaTime);
-        }
 
-        renderer.render();
+        commandHandler.handleAllPlayers(deltaTime);
+
+        renderers.levelRenderer().render();
     }
 
     @Override
@@ -60,7 +57,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        renderer.dispose();
+        renderers.levelRenderer().dispose();
     }
 
     public static void main(String[] args) {

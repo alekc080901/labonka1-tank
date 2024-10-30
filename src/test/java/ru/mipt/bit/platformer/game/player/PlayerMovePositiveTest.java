@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PlayerMovePositiveTest {
 
     static Tank player;
-    static PlayerMoveLogic moveLogic;
+    static TankMoveLogic moveLogic;
 
     @BeforeAll
     static void beforeAll() {
@@ -25,7 +25,7 @@ class PlayerMovePositiveTest {
         Set<Tank> players = Set.of(player);
         BaseLevel level = new BaseLevel(players, obstacles, new Coordinates(10, 10));
 
-        moveLogic = new PlayerMoveLogic(player, level);
+        moveLogic = new TankMoveLogic(player, level);
     }
 
     @Test

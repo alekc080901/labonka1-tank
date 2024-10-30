@@ -6,7 +6,7 @@ import ru.mipt.bit.platformer.game.controls.input.KeyboardReceiver;
 
 import java.util.List;
 
-public class PlayerCommandDistributor implements CommandDistributor {
+public class PlayerCommandGenerator implements CommandGenerator {
     /*
     Реализация контракта генерации команд, производимых с подключенных устройств пользователем.
      */

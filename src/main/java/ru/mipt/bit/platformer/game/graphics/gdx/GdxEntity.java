@@ -6,11 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.graphics.contracts.Entity;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
 
-public class GdxEntity implements ru.mipt.bit.platformer.game.graphics.Entity {
+public class GdxEntity implements Entity {
     /*
     Класс объекта, размещенного на карте. Может быть кем угодно, лишь бы была нужная текстурка.
     */

@@ -1,20 +1,14 @@
 package ru.mipt.bit.platformer.game.graphics.gdx;
 
-import ru.mipt.bit.platformer.data.LevelFileLoader;
-import ru.mipt.bit.platformer.data.RandomGeneratorLoader;
-import ru.mipt.bit.platformer.game.PlayerRenderer;
-import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandDistributor;
-import ru.mipt.bit.platformer.game.controls.command_processing.PlayerCommandHandler;
+import ru.mipt.bit.platformer.data.MapFileLoader;
+import ru.mipt.bit.platformer.data.MapLoader;
+import ru.mipt.bit.platformer.data.MapRandomLoader;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.PlayerMoveLogic;
-import ru.mipt.bit.platformer.game.core.Tank;
-import ru.mipt.bit.platformer.game.graphics.LevelLoader;
-import ru.mipt.bit.platformer.game.graphics.Renderer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import ru.mipt.bit.platformer.game.graphics.contracts.LevelLoader;
+import ru.mipt.bit.platformer.game.graphics.contracts.LevelRenderer;
+import ru.mipt.bit.platformer.game.graphics.contracts.MoveRenderer;
+import ru.mipt.bit.platformer.game.graphics.contracts.Renderers;
 
 public class GdxLevelLoader implements LevelLoader {
 
@@ -25,39 +19,31 @@ public class GdxLevelLoader implements LevelLoader {
     }
 
     @Override
-    public Renderer generateRendererFromFile(String filePath) {
-        BaseLevel level = new LevelFileLoader().load(filePath);
-        GdxLevel gdxLevel = new GdxLevel(gdxMapPath, level);
-        level.setUpperRightSize(gdxLevel.getLevelSize());
-        return new GdxRenderer(gdxLevel);
+    public Renderers loadFromFile(String filePath) {
+        MapLoader loader = new MapFileLoader(filePath);
+        GdxLevel level = loadLevel(loader);
+        return getRenderers(level);
     }
 
     @Override
-    public Renderer generateRandomRenderer() {
+    public Renderers loadByRandom() {
         Coordinates upperRightLimit = GdxLevel.getLevelSizeFromFile(gdxMapPath);
-        BaseLevel level = new RandomGeneratorLoader(upperRightLimit).load();
+        MapLoader loader = new MapRandomLoader(upperRightLimit);
+        GdxLevel level = loadLevel(loader);
+        return getRenderers(level);
+    }
+
+    private GdxLevel loadLevel(MapLoader mapLoader) {
+        BaseLevel level = mapLoader.load();
         GdxLevel gdxLevel = new GdxLevel(gdxMapPath, level);
         level.setUpperRightSize(gdxLevel.getLevelSize());
-        return new GdxRenderer(gdxLevel);
+        return gdxLevel;
     }
 
-    @Override
-    public List<PlayerCommandHandler> getCommandHandlersFromLevelRenderer(Renderer renderer) {
-        BaseLevel level = renderer.getLevel();
-        Set<Tank> tanks = level.getTanks();
-
-        List<PlayerCommandHandler> handlers = new ArrayList<>();
-        for (Tank tank : tanks) {
-            handlers.add(getCommandHandlerFromTank(renderer, tank, level));
-        }
-        return handlers;
-    }
-
-    private static PlayerCommandHandler getCommandHandlerFromTank(Renderer renderer, Tank tank, BaseLevel level) {
-        PlayerMoveLogic playerMoveLogic = new PlayerMoveLogic(tank, level);
-        PlayerRenderer playerRenderer = new PlayerRenderer(playerMoveLogic, renderer);
-
-        return new PlayerCommandHandler(playerRenderer, new PlayerCommandDistributor());
+    private Renderers getRenderers(GdxLevel level) {
+        LevelRenderer levelRenderer = new GdxLevelRenderer(level);
+        MoveRenderer moveRenderer = new GdxMoveRenderer(level);
+        return new GdxRenderers(levelRenderer, moveRenderer);
     }
 
 }

@@ -10,15 +10,15 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-public class RandomGeneratorLoader implements MapLoader {
+public class MapRandomLoader implements MapLoader {
     private static final double TREE_PROBABILITY = 0.3;
-    private static final int MAP_WIDTH = 10;
-    private static final int MAP_HEIGHT = 8;
+    private final Coordinates upperBorder;
     private final Set<Tank> tanks = new HashSet<>();
     private final Set<Obstacle> obstacles = new HashSet<>();
     private final Set<Coordinates> vacantCoords;
 
-    public RandomGeneratorLoader(Coordinates upperBorder) {
+    public MapRandomLoader(Coordinates upperBorder) {
+        this.upperBorder = upperBorder;
         this.vacantCoords = this.generateCoords(upperBorder);
     }
 
@@ -33,18 +33,11 @@ public class RandomGeneratorLoader implements MapLoader {
     }
 
     @Override
-    public BaseLevel load(String seed) {
-        Random random = new Random(seed.hashCode());
-        addPlayers(random);
-        addObstacles(random);
-        return new BaseLevel(tanks, obstacles, new Coordinates(MAP_WIDTH, MAP_HEIGHT));
-    }
-
     public BaseLevel load() {
         Random random = new Random();
         addPlayers(random);
         addObstacles(random);
-        return new BaseLevel(tanks, obstacles, new Coordinates(MAP_WIDTH, MAP_HEIGHT));
+        return new BaseLevel(tanks, obstacles, upperBorder);
     }
 
     private void addObstacles(Random random) {
