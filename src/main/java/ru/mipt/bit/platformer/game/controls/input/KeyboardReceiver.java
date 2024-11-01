@@ -16,11 +16,21 @@ public class KeyboardReceiver implements InputReceiver {
     @Override
     public Command receiveInput() {
         for (Map.Entry<Integer, Command> entry : keyboardInput.entrySet()) {
-            if (Gdx.input.isKeyPressed(entry.getKey())) {
+            int keyCode = entry.getKey();
+            if (isPressed(keyCode) && isPressedOnlyOnceIfNeeded(keyCode)) {
                 return entry.getValue();
             }
         }
         return null;
+    }
+
+    private boolean isPressedOnlyOnceIfNeeded(int keyCode) {
+        return DefaultInputSettings.isHoldable(keyCode)
+                || !DefaultInputSettings.isHoldable(keyCode) && Gdx.input.isKeyJustPressed(keyCode);
+    }
+
+    private boolean isPressed(int keyCode) {
+        return Gdx.input.isKeyPressed(keyCode);
     }
 
 }

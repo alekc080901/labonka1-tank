@@ -6,7 +6,7 @@ import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.GameEntity;
 import ru.mipt.bit.platformer.game.core.MovableEntity;
 import ru.mipt.bit.platformer.game.graphics.contracts.MoveRenderer;
-import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 public class GdxMoveRenderer implements MoveRenderer {
     private final GdxLevel level;

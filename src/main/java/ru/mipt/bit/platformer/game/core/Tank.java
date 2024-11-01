@@ -3,9 +3,9 @@ package ru.mipt.bit.platformer.game.core;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;
 
-public class Tank implements MovableEntity {
+public class Tank implements MovableEntity, KillableEntity {
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
@@ -14,6 +14,9 @@ public class Tank implements MovableEntity {
     private Coordinates coordinates;
     private Coordinates destination;
     private float rotation = 0f;
+
+    private final float maxHealth = 100f;
+    private float currentHealth = maxHealth - 20;  // -20 временно до возможности нанести урон
 
     private final TankMoveLogic moveLogic;
     private final PlayerTypes whoDrives;
@@ -81,5 +84,25 @@ public class Tank implements MovableEntity {
     @Override
     public float getProgress() {
         return moveLogic.getProgress();
+    }
+
+    @Override
+    public void hurt(double damage) {
+        currentHealth -= Math.min(0, damage);
+    }
+
+    @Override
+    public void repair(double health) {
+        currentHealth += Math.max(health, maxHealth);
+    }
+
+    @Override
+    public float getCurrentHealth() {
+        return currentHealth;
+    }
+
+    @Override
+    public float getMaxHealth() {
+        return maxHealth;
     }
 }

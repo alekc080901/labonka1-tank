@@ -11,8 +11,8 @@ import ru.mipt.bit.platformer.game.graphics.contracts.Level;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.moveRectangleAtTileCenter;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLayer;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.moveRectangleAtTileCenter;
 
 public class GdxLevel implements Level {
     /*
@@ -59,7 +59,8 @@ public class GdxLevel implements Level {
 
     public void drawEntities(Batch batch) {
         for (GdxEntity entity : levelEntities.values()) {
-            entity.draw(batch);
+            Entity updatedEntity = EntitySupervisor.getUpdatedEntity(entity);
+            updatedEntity.draw(batch);
         }
     }
 

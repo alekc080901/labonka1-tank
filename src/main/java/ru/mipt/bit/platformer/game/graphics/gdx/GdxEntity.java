@@ -6,10 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.GameEntity;
-import ru.mipt.bit.platformer.game.graphics.contracts.Entity;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createBoundingRectangle;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxEntity implements Entity {
     /*
@@ -18,7 +17,7 @@ public class GdxEntity implements Entity {
     private final GameEntity gameEntity;
     private final Texture texture;
     private float rotation = 0f;
-    private final TextureRegion graphics;
+    private TextureRegion graphics;
     private final Rectangle rectangle;
 
     public GdxEntity(GameEntity entity, String texturePath) {
@@ -28,14 +27,17 @@ public class GdxEntity implements Entity {
         this.rectangle = createBoundingRectangle(graphics);
     }
 
+    @Override
     public void draw(Batch batch) {
         drawTextureRegionUnscaled(batch, graphics, rectangle, rotation);
     }
 
+    @Override
     public void dispose() {
         texture.dispose();
     }
 
+    @Override
     public Rectangle getRectangle() {
         return rectangle;
     }
@@ -44,15 +46,22 @@ public class GdxEntity implements Entity {
         return gameEntity.getCoordinates();
     }
 
+    @Override
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }
 
-    public float getRotation() {
-        return rotation;
-    }
-
+    @Override
     public GameEntity getGameEntity() {
         return gameEntity;
+    }
+
+    @Override
+    public TextureRegion getGraphics() {
+        return graphics;
+    }
+
+    public void setGraphics(TextureRegion graphics) {
+        this.graphics = graphics;
     }
 }
