@@ -3,65 +3,37 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import ru.mipt.bit.platformer.game.level.Level;
-import ru.mipt.bit.platformer.game.level.LevelEntity;
-import ru.mipt.bit.platformer.game.level.LevelEntityDatabase;
-import ru.mipt.bit.platformer.game.level.LevelRenderer;
-import ru.mipt.bit.platformer.game.player.Player;
-import ru.mipt.bit.platformer.game.player.PlayerMove;
-import ru.mipt.bit.platformer.game.player.PlayerMoveCoordinator;
-import ru.mipt.bit.platformer.game.UserInput;
-
-import java.util.List;
+import ru.mipt.bit.platformer.game.controls.command_processing.CommandHandler;
+import ru.mipt.bit.platformer.game.graphics.contracts.LevelLoader;
+import ru.mipt.bit.platformer.game.graphics.contracts.Renderers;
+import ru.mipt.bit.platformer.game.graphics.contracts.TimeCounter;
+import ru.mipt.bit.platformer.game.graphics.gdx.GdxLevelLoader;
+import ru.mipt.bit.platformer.game.graphics.gdx.GdxTimeCounter;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
     Класс, ответственный за инициализацию объектов
      */
 
-    private LevelRenderer levelRenderer;
-    private PlayerMoveCoordinator playerMoveCoordinator;
-    private Player player;
+    private Renderers renderers;
+    private TimeCounter timeCounter;
+    private CommandHandler commandHandler;
 
     @Override
     public void create() {
-        Level level = new Level("level.tmx");
-        Batch batch = new SpriteBatch();
-
-        LevelEntity blueTank = LevelEntityDatabase.getBlueTank();
-        blueTank.setCoordinates(1, 1);
-
-        LevelEntity greenTree = LevelEntityDatabase.getGreenTree();
-        greenTree.setCoordinates(1, 3);
-
-        player = new Player(blueTank);
-//        player = new Player(greenTree);  // Можно двигаться кустом :)
-
-        List<LevelEntity> obstacles = LevelEntityDatabase.createdObjects;  // Пока препятствия - все объекты
-//        List<LevelObject> obstacles = Arrays.asList(greenTree);
-
-        levelRenderer = new LevelRenderer(level, batch, LevelEntityDatabase.createdObjects);
-        playerMoveCoordinator = new PlayerMoveCoordinator(player, obstacles);
+        LevelLoader levelLoader = new GdxLevelLoader("level.tmx");
+//        renderer = loader.generateRendererFromFile("level1.level");  // TODO: Реализовать выбор метода генерации через CLI
+        renderers = levelLoader.loadByRandom();
+        commandHandler = CommandHandler.getCommandHandler(renderers);
+        timeCounter = new GdxTimeCounter();
     }
 
     @Override
     public void render() {
-        levelRenderer.clear();
-
-        float deltaTime = levelRenderer.getDeltaTime();
-
-        PlayerMove playerMove = UserInput.handleUserInput();
-        if (playerMove != null) {
-            playerMoveCoordinator.makeMove(playerMove);
-        }
-        playerMoveCoordinator.confirmMove(deltaTime);
-        levelRenderer.shiftEntity(
-                player.getPlayerObject(), playerMoveCoordinator.getDestination(), playerMoveCoordinator.getMovementProgress()
-        );
-
-        levelRenderer.render();
+        renderers.levelRenderer().clear();
+        float deltaTime = timeCounter.getDelta();
+        commandHandler.handleAllPlayers(deltaTime);
+        renderers.levelRenderer().render();
     }
 
     @Override
@@ -82,7 +54,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        levelRenderer.dispose();
+        renderers.levelRenderer().dispose();
     }
 
     public static void main(String[] args) {
