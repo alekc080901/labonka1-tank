@@ -31,9 +31,14 @@ public class CommandReceiver {
 
     private void onAnyCommand(float deltaTime) {
         if (entity instanceof MovableEntity ) {
-            ((MovableEntity) entity).updateProgress(deltaTime);
-            renderers.moveRenderer().shiftEntity((MovableEntity) entity);
-            renderers.moveRenderer().turnEntity(entity);
+            MovableEntity movableEntity = (MovableEntity) entity;
+
+            if (movableEntity.getMoveProgress() == 1f) {
+                movableEntity.stopMoving();
+            }
+            movableEntity.updateMoveProgress(deltaTime);
+            renderers.moveRenderer().shiftEntity(movableEntity);
+            renderers.moveRenderer().turnEntity(movableEntity);
         }
     }
 }

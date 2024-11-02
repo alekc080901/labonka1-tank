@@ -3,8 +3,7 @@ package ru.mipt.bit.platformer.game.controls.input;
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.game.controls.commands.Command;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class KeyboardReceiver implements InputReceiver {
     /*
@@ -14,14 +13,15 @@ public class KeyboardReceiver implements InputReceiver {
     private static final HashMap<Integer, Command> keyboardInput = DefaultInputSettings.forKeyboard();
 
     @Override
-    public Command receiveInput() {
+    public Collection<Command> receiveInput() {
+        Set<Command> inputtedCommands = new HashSet<Command>();
         for (Map.Entry<Integer, Command> entry : keyboardInput.entrySet()) {
             int keyCode = entry.getKey();
             if (isPressed(keyCode) && isPressedOnlyOnceIfNeeded(keyCode)) {
-                return entry.getValue();
+                inputtedCommands.add(entry.getValue());
             }
         }
-        return null;
+        return inputtedCommands;
     }
 
     private boolean isPressedOnlyOnceIfNeeded(int keyCode) {

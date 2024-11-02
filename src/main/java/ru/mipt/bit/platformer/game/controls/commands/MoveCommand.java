@@ -46,4 +46,6 @@ public enum MoveCommand implements Command {
     public void execute() {
         entity.move(this, level);
     }
+
+
 }

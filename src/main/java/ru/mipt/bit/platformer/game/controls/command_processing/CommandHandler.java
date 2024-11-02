@@ -1,14 +1,10 @@
 package ru.mipt.bit.platformer.game.controls.command_processing;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
-import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.PlayerTypes;
-import ru.mipt.bit.platformer.game.core.TankMoveLogic;
 import ru.mipt.bit.platformer.game.core.Tank;
-import ru.mipt.bit.platformer.game.graphics.contracts.MoveRenderer;
 import ru.mipt.bit.platformer.game.graphics.contracts.Renderers;
-import ru.mipt.bit.platformer.game.graphics.gdx.GdxLevelRenderer;
 
 import java.util.*;
 
@@ -26,7 +22,7 @@ public class CommandHandler {
         // Сначала считываем все команды
         ArrayDeque<Command> playerCommands = new ArrayDeque<>();
         for (CommandGenerator commandGenerator : playerCommandHandler.values()) {
-            playerCommands.add(commandGenerator.getCurrentCommand());
+            playerCommands.addAll(commandGenerator.getCommands());
         }
 
         // Затем их обрабатываем

@@ -8,7 +8,8 @@ public interface MovableEntity extends GameEntity {
      */
     void turn(float direction);
     void move(MoveCommand command, BaseLevel level);
-    void updateProgress(float deltaTime);
-    float getProgress();
+    void updateMoveProgress(float deltaTime);
+    void stopMoving();
+    float getMoveProgress();
     Coordinates getDestination();
 }

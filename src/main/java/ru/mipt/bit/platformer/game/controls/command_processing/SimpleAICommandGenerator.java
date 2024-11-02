@@ -13,11 +13,13 @@ public class SimpleAICommandGenerator implements CommandGenerator {
      */
 
     @Override
-    public Command getCurrentCommand() {
+    public Collection<Command> getCommands() {
         Set<Command> moveCommands = new HashSet<>(
                 Set.of(MoveCommand.UP, MoveCommand.DOWN, MoveCommand.LEFT, MoveCommand.RIGHT)
         );
-        return randomFromCollection(moveCommands);
+        Set<Command> inputtedCommands = new HashSet<>();
+        inputtedCommands.add(randomFromCollection(moveCommands));
+        return inputtedCommands;
 
     }
 

@@ -23,7 +23,7 @@ public class GdxMoveRenderer implements MoveRenderer {
         GdxEntity gdxEntity = getRenderedEntity(entity);
         Coordinates coords = gdxEntity.getCoordinates();
         tileMovement.moveRectangleBetweenTileCenters(
-                gdxEntity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), entity.getProgress()
+                gdxEntity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), entity.getMoveProgress()
         );
     }
 

@@ -76,13 +76,18 @@ public class Tank implements MovableEntity, KillableEntity {
     }
 
     @Override
-    public void updateProgress(float deltaTime) {
+    public void updateMoveProgress(float deltaTime) {
         float playerMovementProgress = continueProgress(moveLogic.getProgress(), deltaTime, MOVEMENT_SPEED);
         moveLogic.setProgress(playerMovementProgress);
     }
 
     @Override
-    public float getProgress() {
+    public void stopMoving() {
+        moveLogic.finishMove();
+    }
+
+    @Override
+    public float getMoveProgress() {
         return moveLogic.getProgress();
     }
 
