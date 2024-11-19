@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.game.gdx.input;
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.game.controls.input.DefaultInputSettings;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
+import ru.mipt.bit.platformer.game.controls.input.InputReceiver;
 
 import java.util.*;
 

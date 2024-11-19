@@ -5,13 +5,9 @@ import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.GameEntity;
 import ru.mipt.bit.platformer.game.core.MovableEntity;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static ru.mipt.bit.platformer.game.controls.commands.CommandType.MOVE;
-import static ru.mipt.bit.platformer.game.controls.commands.CommandType.TOGGLE_HEALTH;
 
 public class CommandFactory {
 
@@ -25,7 +21,7 @@ public class CommandFactory {
     }
 
     public Command fromInstruction(BaseLevel level, GameEntity entity, InputInstruction instruction) {
-        CommandType commandType = CommandType.getType(instruction);
+        CommandType commandType = CommandType.get(instruction);
         Command command;
         long delay;
         switch (commandType) {
@@ -38,7 +34,7 @@ public class CommandFactory {
                 delay = toggleHealthCommandDelay;
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + CommandType.getType(instruction));
+                throw new IllegalStateException("Unexpected value: " + CommandType.get(instruction));
         }
         if (isRecharging(commandType, entity, delay)) {
             return new NoneCommand();

@@ -18,7 +18,7 @@ public enum CommandType {
         fillInstructionCommandMap();
     }
 
-    public static CommandType getType(InputInstruction instruction) {
+    public static CommandType get(InputInstruction instruction) {
         return accordingType.get(instruction);
     }
 

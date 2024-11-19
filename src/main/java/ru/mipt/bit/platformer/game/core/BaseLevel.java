@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.game.core;
 
+import com.badlogic.gdx.Game;
 import ru.mipt.bit.platformer.exceptions.IncorrectLevelSize;
 
 import java.util.Set;
@@ -42,6 +43,10 @@ public class BaseLevel {
     public boolean hasTrespassedMap(MovableEntity entity) {
         Coordinates coords = entity.getDestination();
         return coords.x >= upperRightSize.x || coords.x < 0 || coords.y >= upperRightSize.y || coords.y < 0;
+    }
+
+    public Set<GameEntity> getAllEntities() {
+        return entities;
     }
 
     public Set<Tank> getTanks() {

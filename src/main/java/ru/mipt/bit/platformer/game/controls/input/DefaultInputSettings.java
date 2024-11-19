@@ -11,6 +11,7 @@ public class DefaultInputSettings {
     Возвращает команды по умолчанию для различных устройств ввода.
      */
 
+    // Клавиши, считывания из которых происходит непрерывно при зажатии клавиш
     private static final Set<Integer> holdableKeys = new HashSet<>(Set.of(UP, W, RIGHT, D, DOWN, S, LEFT, A));
 
     public static HashMap<Integer, InputInstruction> forKeyboard() {
