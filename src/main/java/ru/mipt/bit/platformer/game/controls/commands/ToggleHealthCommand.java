@@ -7,6 +7,5 @@ public class ToggleHealthCommand implements Command {
     @Override
     public void execute() {
         GameSettings.toggleHealthBar();
-        System.out.println("Health toggled");
     }
 }

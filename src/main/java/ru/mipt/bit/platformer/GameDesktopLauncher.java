@@ -3,12 +3,14 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.game.controls.command_processing.CommandHandler;
-import ru.mipt.bit.platformer.game.graphics.contracts.LevelLoader;
-import ru.mipt.bit.platformer.game.graphics.contracts.Renderers;
-import ru.mipt.bit.platformer.game.graphics.contracts.TimeCounter;
-import ru.mipt.bit.platformer.game.graphics.gdx.GdxLevelLoader;
-import ru.mipt.bit.platformer.game.graphics.gdx.GdxTimeCounter;
+import ru.mipt.bit.platformer.game.controls.command_processing.CommandPublisher;
+import ru.mipt.bit.platformer.game.controls.command_processing.CommandQueue;
+import ru.mipt.bit.platformer.game.controls.command_processing.CommandReceiver;
+import ru.mipt.bit.platformer.game.graphic_contracts.LevelLoader;
+import ru.mipt.bit.platformer.game.graphic_contracts.Renderers;
+import ru.mipt.bit.platformer.game.graphic_contracts.TimeCounter;
+import ru.mipt.bit.platformer.game.gdx.graphics.GdxLevelLoader;
+import ru.mipt.bit.platformer.game.gdx.graphics.GdxTimeCounter;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
@@ -17,14 +19,16 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private Renderers renderers;
     private TimeCounter timeCounter;
-    private CommandHandler commandHandler;
+    private CommandPublisher commandPublisher;
+    private CommandReceiver commandReceiver;
 
     @Override
     public void create() {
         LevelLoader levelLoader = new GdxLevelLoader("level.tmx");
-//        renderer = loader.generateRendererFromFile("level1.level");  // TODO: Реализовать выбор метода генерации через CLI
         renderers = levelLoader.loadByRandom();
-        commandHandler = CommandHandler.getCommandHandler(renderers);
+        CommandQueue commandQueue = new CommandQueue();
+        commandPublisher = CommandPublisher.initCommandPublisher(commandQueue, renderers);
+        commandReceiver = CommandReceiver.initCommandReceiver(commandQueue, renderers);
         timeCounter = new GdxTimeCounter();
     }
 
@@ -32,7 +36,8 @@ public class GameDesktopLauncher implements ApplicationListener {
     public void render() {
         renderers.levelRenderer().clear();
         float deltaTime = timeCounter.getDelta();
-        commandHandler.handleAllPlayers(deltaTime);
+        commandPublisher.publishAll();
+        commandReceiver.processAll(deltaTime);
         renderers.levelRenderer().render();
     }
 

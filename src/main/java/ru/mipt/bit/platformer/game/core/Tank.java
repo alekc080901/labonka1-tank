@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.core;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;
+import static ru.mipt.bit.platformer.game.gdx.util.GdxGameUtils.continueProgress;
 
 public class Tank implements MovableEntity, KillableEntity {
     /*
