@@ -4,7 +4,7 @@ import ru.mipt.bit.platformer.game.controls.commands.*;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.controls.input.InputReceiver;
 import ru.mipt.bit.platformer.game.gdx.input.KeyboardReceiver;
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 import java.util.*;
 import java.util.stream.Collectors;

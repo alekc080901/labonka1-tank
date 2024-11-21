@@ -1,15 +1,16 @@
-package ru.mipt.bit.platformer.game.core;
+package ru.mipt.bit.platformer.game.core.entity;
 
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.Coordinates;
 
 public interface MovableEntity extends GameEntity {
     /*
     Некий объект игры, способный к перемещению.
      */
-    void turn(float direction);
     void move(MoveCommand command, BaseLevel level);
-    void updateMoveProgress(float deltaTime);
-    void stopMoving();
-    float getMoveProgress();
+    boolean isMoving();
+    void updateProgress(float deltaTime);
+    float getProgress();
     Coordinates getDestination();
 }

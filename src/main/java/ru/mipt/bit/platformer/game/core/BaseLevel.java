@@ -1,7 +1,10 @@
 package ru.mipt.bit.platformer.game.core;
 
-import com.badlogic.gdx.Game;
 import ru.mipt.bit.platformer.exceptions.IncorrectLevelSize;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
+import ru.mipt.bit.platformer.game.core.entity.Obstacle;
+import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.util.Set;
 import java.util.stream.Collectors;

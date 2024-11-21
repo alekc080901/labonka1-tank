@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.input.generators;
 
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 import java.util.Collection;
 

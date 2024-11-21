@@ -17,6 +17,10 @@ public class Coordinates {
         this.y = srcCoords.y;
     }
 
+    public Coordinates copy() {
+        return new Coordinates(x, y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

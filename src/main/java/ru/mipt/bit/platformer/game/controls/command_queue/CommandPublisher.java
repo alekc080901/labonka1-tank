@@ -8,10 +8,9 @@ import ru.mipt.bit.platformer.game.controls.commands.CommandFactory;
 import ru.mipt.bit.platformer.game.controls.commands.CommandType;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.PlayerTypes;
-import ru.mipt.bit.platformer.game.core.Tank;
-import ru.mipt.bit.platformer.game.render.Renderer;
+import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,7 +59,7 @@ public class CommandPublisher {
     public static CommandPublisher initCommandPublisher(CommandQueue commandQueue, BaseLevel level) {
         Set<Tank> tanks = level.getTanks();
 
-        CommandFactory commandFactory = new CommandFactory(200, 200);
+        CommandFactory commandFactory = new CommandFactory(0, 200);
         CommandPublisher commandPublisher = new CommandPublisher(commandQueue, level, commandFactory);
         for (Tank tank : tanks) {
             commandPublisher.register(

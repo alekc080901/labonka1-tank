@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.*;
+import ru.mipt.bit.platformer.game.core.entity.Obstacle;
+import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.util.Set;
 

@@ -1,8 +1,8 @@
 package ru.mipt.bit.platformer.game.render;
 
 import ru.mipt.bit.platformer.game.core.BaseLevel;
-import ru.mipt.bit.platformer.game.core.GameEntity;
-import ru.mipt.bit.platformer.game.core.MovableEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 
 import java.util.Set;
 
@@ -26,10 +26,9 @@ public class GameRenderer implements Renderer {
     }
 
     private void renderMovable(MovableEntity movableEntity, float deltaTime) {
-        if (movableEntity.getMoveProgress() == 1f) {
-            movableEntity.stopMoving();
+        if (movableEntity.isMoving()) {
+            movableEntity.updateProgress(deltaTime);
         }
-        movableEntity.updateMoveProgress(deltaTime);
         moveRenderer.shiftEntity(movableEntity);
         moveRenderer.turnEntity(movableEntity);
     }

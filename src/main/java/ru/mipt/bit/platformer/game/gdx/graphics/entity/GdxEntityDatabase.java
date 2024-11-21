@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.gdx.graphics.entity;
 
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import com.badlogic.gdx.math.Interpolation;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +16,13 @@ public class GdxEntityDatabase {
     public static List<GdxEntity> createdObjects = new ArrayList<>();
 
     public static GdxEntity getBlueTank(GameEntity gameEntity) {
-        return getLevelObject("images/tank_blue.png", gameEntity);
+        GdxEntity object = new GdxMoveEntity(gameEntity, "images/tank_blue.png", Interpolation.smooth);
+        createdObjects.add(object);
+        return object;
     }
 
     public static GdxEntity getGreenTree(GameEntity gameEntity) {
-        return getLevelObject("images/greenTree.png", gameEntity);
-    }
-
-    private static GdxEntity getLevelObject(String path, GameEntity gameEntity) {
-        GdxEntity object = new GdxEntity(gameEntity, path);
+        GdxEntity object = new GdxEntity(gameEntity, "images/greenTree.png");
         createdObjects.add(object);
         return object;
     }

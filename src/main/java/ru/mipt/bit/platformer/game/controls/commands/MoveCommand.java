@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.controls.commands;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.MovableEntity;
+import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 
 import java.util.HashMap;
 

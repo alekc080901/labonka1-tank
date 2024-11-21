@@ -1,4 +1,6 @@
-package ru.mipt.bit.platformer.game.core;
+package ru.mipt.bit.platformer.game.core.entity;
+
+import ru.mipt.bit.platformer.game.core.Coordinates;
 
 public class Obstacle implements GameEntity{
 

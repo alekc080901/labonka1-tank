@@ -10,14 +10,12 @@ import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.moveRectangleAt
 public class TileMovement {
 
     private final TiledMapTileLayer tileLayer;
-    private final Interpolation interpolation;
 
-    public TileMovement(TiledMapTileLayer tileLayer, Interpolation interpolation) {
+    public TileMovement(TiledMapTileLayer tileLayer) {
         this.tileLayer = tileLayer;
-        this.interpolation = interpolation;
     }
 
-    public Rectangle moveRectangleBetweenTileCenters(Rectangle rectangle, GridPoint2 fromTileCoordinates, GridPoint2 toTileCoordinates, float progress) {
+    public Rectangle moveRectangleBetweenTileCenters(Rectangle rectangle, GridPoint2 fromTileCoordinates, GridPoint2 toTileCoordinates, Interpolation interpolation, float progress) {
         moveRectangleAtTileCenter(tileLayer, rectangle, fromTileCoordinates);
         float fromTileBottomLeftX = rectangle.x;
         float fromTileBottomLeftY = rectangle.y;

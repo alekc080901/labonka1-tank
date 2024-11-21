@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.game.core.GameEntity;
-import ru.mipt.bit.platformer.game.core.KillableEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.KillableEntity;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils;
 
 class HealthDecorator implements EntityDecorator {

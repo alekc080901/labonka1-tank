@@ -1,18 +1,20 @@
-package ru.mipt.bit.platformer.game.core;
+package ru.mipt.bit.platformer.game.core.entity;
 
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.Coordinates;
+import ru.mipt.bit.platformer.game.core.PlayerTypes;
+import ru.mipt.bit.platformer.game.core.logic.TankMoveLogic;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
-import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.continueProgress;
 
-public class Tank implements MovableEntity, KillableEntity {
+public class Tank implements MovableEntity, KillableEntity, ShootableEntity, RotatableEntity {
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
     private static final float MOVEMENT_SPEED = 0.5f;
 
     private Coordinates coordinates;
-    private Coordinates destination;
     private float rotation = 0f;
 
     private final float maxHealth = 100f;
@@ -23,7 +25,6 @@ public class Tank implements MovableEntity, KillableEntity {
 
     public Tank(Coordinates coordinates, PlayerTypes whoDrives) {
         this.coordinates = coordinates;
-        this.destination = coordinates;
         this.whoDrives = whoDrives;
         this.moveLogic = new TankMoveLogic(this);
     }
@@ -37,8 +38,9 @@ public class Tank implements MovableEntity, KillableEntity {
         return coordinates;
     }
 
-    public void setDestination(Coordinates destination) {
-        this.destination = new Coordinates(destination);
+    @Override
+    public boolean isMoving() {
+        return moveLogic.isMoving();
     }
 
     @Override
@@ -47,7 +49,7 @@ public class Tank implements MovableEntity, KillableEntity {
     }
 
     public Coordinates getDestination() {
-        return destination;
+        return moveLogic.getDestination();
     }
 
     @Override
@@ -62,32 +64,16 @@ public class Tank implements MovableEntity, KillableEntity {
 
     @Override
     public void move(MoveCommand command, BaseLevel level) {
-        if (!isEqual(moveLogic.getProgress(), 1f)) {
-            return;
-        }
-        // Finish previous move (do nothing if move hasn't been started)
-        moveLogic.finishMove();
-
-        boolean hasStarted = moveLogic.startMove(command, level);
-        // Rotation for playerMoveLogic and player on screen are different entities
-        if (hasStarted) {
-            moveLogic.setProgress(0f);
-        }
+        moveLogic.makeMove(command, level);
     }
 
     @Override
-    public void updateMoveProgress(float deltaTime) {
-        float playerMovementProgress = continueProgress(moveLogic.getProgress(), deltaTime, MOVEMENT_SPEED);
-        moveLogic.setProgress(playerMovementProgress);
+    public void updateProgress(float deltaTime) {
+        moveLogic.updateProgress(deltaTime);
     }
 
     @Override
-    public void stopMoving() {
-        moveLogic.finishMove();
-    }
-
-    @Override
-    public float getMoveProgress() {
+    public float getProgress() {
         return moveLogic.getProgress();
     }
 
@@ -109,5 +95,14 @@ public class Tank implements MovableEntity, KillableEntity {
     @Override
     public float getMaxHealth() {
         return maxHealth;
+    }
+
+    @Override
+    public void shoot() {
+
+    }
+
+    public float getSpeed() {
+        return MOVEMENT_SPEED;
     }
 }

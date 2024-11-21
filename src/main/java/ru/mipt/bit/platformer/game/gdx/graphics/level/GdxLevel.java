@@ -6,6 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.core.*;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.Tank;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.Entity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.EntityFactory;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntity;

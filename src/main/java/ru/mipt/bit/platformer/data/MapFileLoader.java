@@ -3,6 +3,8 @@ package ru.mipt.bit.platformer.data;
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.exceptions.NotFoundException;
 import ru.mipt.bit.platformer.game.core.*;
+import ru.mipt.bit.platformer.game.core.entity.Obstacle;
+import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.io.*;
 import java.nio.charset.Charset;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.drawTextureRegionUnscaled;

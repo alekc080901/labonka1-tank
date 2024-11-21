@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.game.controls.command_queue;
 
 import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.commands.CommandType;
-import ru.mipt.bit.platformer.game.core.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 public class QueueElement {
     private final GameEntity entity;
