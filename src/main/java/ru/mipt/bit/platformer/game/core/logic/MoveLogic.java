@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.game.core.logic;
 
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 
@@ -17,7 +17,7 @@ public class MoveLogic {
     private final MovableEntity entity;
     private final float moveSpeed;
     private boolean isMoving = false;
-    private float movementProgress = 0f;
+    protected float movementProgress = 0f;
     private Coordinates destination;
 
 
@@ -27,11 +27,11 @@ public class MoveLogic {
         this.destination = entity.getCoordinates().copy();
     }
 
-    public void makeMove(MoveCommand direction, BaseLevel level) {
+    public void makeMove(float rotation, BaseLevel level) {
         if (isMoving()) return;
 
-        Coordinates oldCoordinates = new Coordinates(entity.getCoordinates());
-        moveAndChangeDestination(direction);
+        Coordinates oldCoordinates = entity.getCoordinates().copy();
+        moveAndChangeDestination(MoveCommand.getChangeFromRotation(rotation));
 
         if (canMove(level)) {
             isMoving = true;
@@ -65,17 +65,20 @@ public class MoveLogic {
         }
     }
 
+    public void setDestination(Coordinates newDestination) {
+        destination = newDestination.copy();
+    }
+
     protected float calculateProgress(float deltaTime) {
-        return movementProgress + deltaTime / moveSpeed;
+        return continueProgress(movementProgress, deltaTime, moveSpeed);
     }
 
     public Coordinates getDestination() {
         return destination;
     }
 
-    private void moveAndChangeDestination(MoveCommand direction) {
-        destination.x += direction.getShiftX();
-        destination.y += direction.getShiftY();
+    private void moveAndChangeDestination(Coordinates target) {
+        destination = destination.add(target);
     }
 
     public float getSpeed() {

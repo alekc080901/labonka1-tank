@@ -1,7 +1,6 @@
 package ru.mipt.bit.platformer.game.core.entity;
 
-import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.PlayerTypes;
 import ru.mipt.bit.platformer.game.core.logic.TankMoveLogic;
@@ -12,7 +11,10 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
-    private static final float MOVEMENT_SPEED = 0.5f;
+    private static final EntityMovePattern MOVE_PATTERN = EntityMovePattern.EASE;
+    private static final float MOVEMENT_SPEED = EntityConfig.TANK_DEFAULT_SPEED;
+    private static final float BULLET_SPEED = EntityConfig.BULLET_DEFAULT_SPEED;
+    private static final long RECHARGE = 1000;
 
     private Coordinates coordinates;
     private float rotation = 0f;
@@ -53,6 +55,11 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     }
 
     @Override
+    public EntityMovePattern getMovePattern() {
+        return MOVE_PATTERN;
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
     }
@@ -63,8 +70,8 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     }
 
     @Override
-    public void move(MoveCommand command, BaseLevel level) {
-        moveLogic.makeMove(command, level);
+    public void move(float rotation, BaseLevel level) {
+        moveLogic.makeMove(rotation, level);
     }
 
     @Override
@@ -79,12 +86,12 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public void hurt(double damage) {
-        currentHealth -= Math.min(0, damage);
+        currentHealth -= (float) Math.min(0, damage);
     }
 
     @Override
     public void repair(double health) {
-        currentHealth += Math.max(health, maxHealth);
+        currentHealth += (float) Math.max(health, maxHealth);
     }
 
     @Override
@@ -98,8 +105,16 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     }
 
     @Override
-    public void shoot() {
+    public void shoot(BaseLevel level) {
+        Bullet bullet = new Bullet(this, BULLET_SPEED);
+        bullet.setCoordinates(bullet.yetAnotherStepForward()); ;
+        bullet.move(rotation, level);
+        level.registerEntity(bullet, EntityConfig.BULLET_IMAGE_PATH);
+    }
 
+    @Override
+    public long getRecharge() {
+        return RECHARGE;
     }
 
     public float getSpeed() {

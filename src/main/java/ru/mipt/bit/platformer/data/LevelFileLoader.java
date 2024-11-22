@@ -3,25 +3,32 @@ package ru.mipt.bit.platformer.data;
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.exceptions.NotFoundException;
 import ru.mipt.bit.platformer.game.core.*;
+import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
+import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class MapFileLoader implements MapLoader {
+public class LevelFileLoader implements LevelLoader {
 
     private final String filePath;
-    private final Set<Tank> tanks = new HashSet<>();
-    private final Set<Obstacle> obstacles = new HashSet<>();
+    private final Set<EntitySubscriber> subscribers;
 
-    public MapFileLoader(String filePath) {
+    public LevelFileLoader(String filePath, Set<EntitySubscriber> subscribers) {
         this.filePath = filePath;
+        this.subscribers = subscribers;
+    }
+
+    public LevelFileLoader(String filePath) {
+        this.filePath = filePath;
+        this.subscribers = null;
     }
 
     @Override
@@ -32,8 +39,9 @@ public class MapFileLoader implements MapLoader {
                 )) {
             int width = getWidth();
             int height = getHeight();
-            fillTanksAndObstacles(br, height);
-            return new BaseLevel(tanks, obstacles, new Coordinates(width, height));
+            BaseLevel level = new BaseLevel(new Coordinates(width, height));
+            fillTanksAndObstacles(level, br, height);
+            return level;
         } catch (FileNotFoundException e) {
             throw new NotFoundException("Level file not found!");
         } catch (IOException e) {
@@ -45,27 +53,27 @@ public class MapFileLoader implements MapLoader {
         return Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(filePath));
     }
 
-    private void fillTanksAndObstacles(BufferedReader br, int height) throws IOException {
+    private void fillTanksAndObstacles(BaseLevel level, BufferedReader br, int height) throws IOException {
         String line;
         int currentLineNumber = 0;
         while ((line = br.readLine()) != null) {
             currentLineNumber++;
-            processLine(line, currentLineNumber, height);
+            processLine(level, line, currentLineNumber, height);
         }
     }
 
-    private void processLine(String line, int rowNumber, int maxRow) {
+    private void processLine(BaseLevel level, String line, int rowNumber, int maxRow) {
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
             switch (c) {
                 case 'T':
-                    obstacles.add(new Obstacle(new Coordinates(i, maxRow - rowNumber)));
+                    level.registerEntity(new Obstacle(new Coordinates(i, maxRow - rowNumber)), EntityConfig.GREEN_TREE_IMAGE_PATH);
                     break;
                 case 'X':
-                    tanks.add(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER));
+                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH);
                     break;
                 case 'B':
-                    tanks.add(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI));
+                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH);
                     break;
                 case '_':
                     break;

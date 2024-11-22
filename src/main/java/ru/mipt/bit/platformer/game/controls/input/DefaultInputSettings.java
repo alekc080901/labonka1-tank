@@ -25,6 +25,7 @@ public class DefaultInputSettings {
         map.put(LEFT, InputInstruction.LEFT);
         map.put(A, InputInstruction.LEFT);
         map.put(L, InputInstruction.HEALTH_BAR);
+        map.put(SPACE, InputInstruction.SHOOT);
         return map;
     }
 

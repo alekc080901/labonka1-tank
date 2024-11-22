@@ -1,16 +1,11 @@
 package ru.mipt.bit.platformer.game.core.logic;
 
-import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.continueProgress;
 
 public class TankMoveLogic extends MoveLogic {
-    /*
-    Класс, ответственный за перемещение игрока по полю (логическое). Также следит, чтобы игрок не врезался в препятствия.
-    Композиция внутри танка, призванная упростить восприятие кода.
-     */
 
     private final Tank tank;
 
@@ -20,11 +15,11 @@ public class TankMoveLogic extends MoveLogic {
     }
 
     @Override
-    public void makeMove(MoveCommand direction, BaseLevel level) {
+    public void makeMove(float rotation, BaseLevel level) {
         if (!super.isMoving()) {
-            tank.turn(direction.getRotation());
+            tank.turn(rotation);
         }
-        super.makeMove(direction, level);
+        super.makeMove(rotation, level);
     }
 
     @Override

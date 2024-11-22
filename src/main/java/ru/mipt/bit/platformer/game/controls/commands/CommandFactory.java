@@ -1,9 +1,10 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
+import ru.mipt.bit.platformer.game.core.entity.ShootableEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,11 @@ public class CommandFactory {
             case TOGGLE_HEALTH:
                 command = new ToggleHealthCommand();
                 delay = toggleHealthCommandDelay;
+                break;
+            case SHOOT:
+                ShootableEntity shootableEntity = (ShootableEntity) entity;
+                command = new ShootCommand(level, shootableEntity);
+                delay = shootableEntity.getRecharge();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + CommandType.get(instruction));

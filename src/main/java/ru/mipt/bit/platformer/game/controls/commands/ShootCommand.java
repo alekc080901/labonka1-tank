@@ -1,12 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
-import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
-import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.ShootableEntity;
-
-import java.util.HashMap;
 
 public class ShootCommand implements Command {
     /*
@@ -14,15 +9,15 @@ public class ShootCommand implements Command {
      */
 
     private final ShootableEntity entity;
-//    private final BaseLevel level;
+    private final BaseLevel level;
 
 
     public ShootCommand(BaseLevel level, ShootableEntity entity) {
         this.entity = entity;
-//        this.level = level;
+        this.level = level;
     }
     @Override
     public void execute() {
-        entity.shoot();
+        entity.shoot(level);
     }
 }

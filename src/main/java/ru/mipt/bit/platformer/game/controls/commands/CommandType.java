@@ -11,7 +11,7 @@ public enum CommandType {
      */
     MOVE,
     TOGGLE_HEALTH,
-    NONE;
+    SHOOT;
     private static final Map<InputInstruction, CommandType> accordingType = new HashMap<>();
 
     static {
@@ -28,5 +28,6 @@ public enum CommandType {
         accordingType.put(InputInstruction.LEFT, CommandType.MOVE);
         accordingType.put(InputInstruction.RIGHT, CommandType.MOVE);
         accordingType.put(InputInstruction.HEALTH_BAR, CommandType.TOGGLE_HEALTH);
+        accordingType.put(InputInstruction.SHOOT, CommandType.SHOOT);
     }
 }

@@ -7,7 +7,7 @@ import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.commands.CommandFactory;
 import ru.mipt.bit.platformer.game.controls.commands.CommandType;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.PlayerTypes;
 import ru.mipt.bit.platformer.game.core.entity.Tank;

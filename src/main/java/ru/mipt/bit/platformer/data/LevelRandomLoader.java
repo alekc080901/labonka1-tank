@@ -1,24 +1,34 @@
 package ru.mipt.bit.platformer.data;
 
 import ru.mipt.bit.platformer.game.core.*;
+import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
+import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-public class MapRandomLoader implements MapLoader {
+public class LevelRandomLoader implements LevelLoader {
     private static final double TREE_PROBABILITY = 0.3;
+    private static final int AI_NUMBER = 0;
     private final Coordinates upperBorder;
-    private final Set<Tank> tanks = new HashSet<>();
-    private final Set<Obstacle> obstacles = new HashSet<>();
     private final Set<Coordinates> vacantCoords;
+    private final Set<EntitySubscriber> subscribers;
 
-    public MapRandomLoader(Coordinates upperBorder) {
+    public LevelRandomLoader(Set<EntitySubscriber> subscribers, Coordinates upperBorder) {
         this.upperBorder = upperBorder;
         this.vacantCoords = this.generateCoords(upperBorder);
+         this.subscribers = subscribers;
+    }
+
+    public LevelRandomLoader(Coordinates upperBorder) {
+        this.upperBorder = upperBorder;
+        this.vacantCoords = this.generateCoords(upperBorder);
+        this.subscribers = new HashSet<>();
     }
 
     private Set<Coordinates> generateCoords(Coordinates upperBorder) {
@@ -34,23 +44,28 @@ public class MapRandomLoader implements MapLoader {
     @Override
     public BaseLevel load() {
         Random random = new Random();
-        addPlayers(random);
-        addObstacles(random);
-        return new BaseLevel(tanks, obstacles, upperBorder);
+        BaseLevel level = new BaseLevel(upperBorder);
+        for (EntitySubscriber subscriber : subscribers) {
+            level.bindWithGraphics(subscriber);
+        }
+        registerTanks(level, random);
+        registerObstacles(level, random);
+        return level;
     }
 
-    private void addObstacles(Random random) {
+    private void registerObstacles(BaseLevel level, Random random) {
         for (int i = 0; i < vacantCoords.size(); i++) {
             if (random.nextDouble() < TREE_PROBABILITY) {
-                obstacles.add(new Obstacle(getRandomCoordinates(random)));
+                level.registerEntity(new Obstacle(getRandomCoordinates(random)), EntityConfig.GREEN_TREE_IMAGE_PATH);
             }
         }
     }
 
-    private void addPlayers(Random random) {
-        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.PLAYER));
-//        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI));
-//        tanks.add(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI));
+    private void registerTanks(BaseLevel level, Random random) {
+        level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH);
+        for (int i = 0; i < AI_NUMBER; i++) {
+            level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH);
+        }
     }
 
     private Coordinates getRandomCoordinates(Random random) {

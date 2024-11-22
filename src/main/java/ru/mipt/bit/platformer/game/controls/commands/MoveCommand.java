@@ -1,23 +1,19 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 
 import java.util.HashMap;
 
 public class MoveCommand implements Command {
-    /*
-    Enum с командой перемещения от пользователя и направлением перемещения.
-     */
-
     private final Coordinates directionChange;
+    private final float rotation;
     private final MovableEntity entity;
     private final BaseLevel level;
-    private final InputInstruction instruction;
     private final static HashMap<InputInstruction, Float> rotationFromInstruction = new HashMap<>();
-    private final static HashMap<InputInstruction, Coordinates> directionFromInstruction = new HashMap<>();
+    private final static HashMap<Float, Coordinates> directionFromRotation = new HashMap<>();
 
     static {
         fillRotationMap();
@@ -25,28 +21,29 @@ public class MoveCommand implements Command {
     }
 
     public MoveCommand(BaseLevel level, MovableEntity entity, InputInstruction instruction) {
-        this.directionChange = directionFromInstruction.get(instruction);
+        this.rotation = getRotationFromInstruction(instruction);
+        this.directionChange = getChangeFromRotation(getRotationFromInstruction(instruction));
         this.entity = entity;
         this.level = level;
-        this.instruction = instruction;
-    }
-
-    public float getRotation() {
-        return rotationFromInstruction.get(instruction);
-    }
-
-    public int getShiftX() {
-        return directionChange.x;
-    }
-
-    public int getShiftY() {
-        return directionChange.y;
     }
 
     @Override
     public void execute() {
-        entity.move(this, level);
+        entity.move(rotation, level);
     }
+
+    public static Coordinates getChangeFromRotation(float rotation) {
+        return directionFromRotation.get(rotation);
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    private static float getRotationFromInstruction(InputInstruction instruction) {
+        return rotationFromInstruction.get(instruction);
+    }
+
 
     private static void fillRotationMap() {
         rotationFromInstruction.put(InputInstruction.LEFT, 180f);
@@ -56,14 +53,9 @@ public class MoveCommand implements Command {
     }
 
     private static void fillDirectionMap() {
-        directionFromInstruction.put(InputInstruction.LEFT, new Coordinates(-1, 0));
-        directionFromInstruction.put(InputInstruction.UP, new Coordinates(0, 1));
-        directionFromInstruction.put(InputInstruction.RIGHT, new Coordinates(1, 0));
-        directionFromInstruction.put(InputInstruction.DOWN, new Coordinates(0, -1));
-    }
-
-    @Override
-    public String toString() {
-        return instruction.toString();
+        directionFromRotation.put(180f, new Coordinates(-1, 0));
+        directionFromRotation.put(90f, new Coordinates(0, 1));
+        directionFromRotation.put(0f, new Coordinates(1, 0));
+        directionFromRotation.put(270f, new Coordinates(0, -1));
     }
 }

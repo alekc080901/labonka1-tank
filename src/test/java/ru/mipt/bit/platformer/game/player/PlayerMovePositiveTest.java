@@ -6,6 +6,7 @@ import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 import java.util.Set;
 

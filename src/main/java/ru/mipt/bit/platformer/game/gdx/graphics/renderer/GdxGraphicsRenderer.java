@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
-import ru.mipt.bit.platformer.game.core.BaseLevel;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.render.GraphicsRenderer;
 
@@ -39,18 +38,9 @@ public class GdxGraphicsRenderer implements GraphicsRenderer {
         batch.end();
     }
 
-    public BaseLevel getLevel() {
-        return level.getSourceLevel();
-    }
-
     @Override
     public void dispose() {
         level.dispose();
         batch.dispose();
-    }
-
-    @Override
-    public BaseLevel getSource() {
-        return level.getSourceLevel();
     }
 }

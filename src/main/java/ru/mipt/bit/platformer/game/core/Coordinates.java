@@ -21,6 +21,10 @@ public class Coordinates {
         return new Coordinates(x, y);
     }
 
+    public Coordinates add(Coordinates coords) {
+        return new Coordinates(x + coords.x, y + coords.y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -5,5 +5,6 @@ public enum InputInstruction {
     DOWN,
     LEFT,
     RIGHT,
-    HEALTH_BAR
+    HEALTH_BAR,
+    SHOOT,
 }
