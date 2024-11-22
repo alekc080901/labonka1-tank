@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class LevelRandomLoader implements LevelLoader {
     private static final double TREE_PROBABILITY = 0.3;
-    private static final int AI_NUMBER = 0;
+    private static final int AI_NUMBER = 2;
     private final Coordinates upperBorder;
     private final Set<Coordinates> vacantCoords;
     private final Set<EntitySubscriber> subscribers;

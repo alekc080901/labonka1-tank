@@ -4,6 +4,8 @@ import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 public class GameRenderer implements Renderer {
@@ -17,8 +19,9 @@ public class GameRenderer implements Renderer {
     }
 
     public void render(float deltaTime) {
-        Set<GameEntity> gameEntities = level.getAllEntities();
-        for (GameEntity gameEntity : gameEntities) {
+        ArrayList<GameEntity> gameEntities = level.getAllEntities();
+        for (int i = 0; i < gameEntities.size(); i++) {
+            GameEntity gameEntity = gameEntities.get(i);
             if (gameEntity instanceof MovableEntity) {
                 renderMovable((MovableEntity) gameEntity, deltaTime);
             }
@@ -31,5 +34,6 @@ public class GameRenderer implements Renderer {
         }
         moveRenderer.shiftEntity(movableEntity);
         moveRenderer.turnEntity(movableEntity);
+        level.removeZeroHealth();
     }
 }

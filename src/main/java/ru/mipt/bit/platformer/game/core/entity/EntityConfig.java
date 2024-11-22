@@ -6,6 +6,8 @@ public class EntityConfig {
     public static final String BULLET_IMAGE_PATH = "images/greenTree.png";
     public static final float TANK_DEFAULT_SPEED = 0.5f;
     public static final float BULLET_DEFAULT_SPEED = 0.2f;
+    public static final float BULLET_DEFAULT_DAMAGE = 20;
+    public static final float TANK_DEFAULT_HEALTH = 100;
 
 
 }

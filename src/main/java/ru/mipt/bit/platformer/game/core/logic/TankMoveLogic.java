@@ -5,7 +5,7 @@ import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.continueProgress;
 
-public class TankMoveLogic extends MoveLogic {
+public class TankMoveLogic extends BasicMoveLogic {
 
     private final Tank tank;
 

@@ -8,7 +8,7 @@ import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.continueProgress;
 
-public class MoveLogic {
+public class BasicMoveLogic {
     /*
     Класс, ответственный за перемещение игрока по полю (логическое). Также следит, чтобы игрок не врезался в препятствия.
     Композиция внутри танка, призванная упростить восприятие кода.
@@ -21,7 +21,7 @@ public class MoveLogic {
     private Coordinates destination;
 
 
-    public MoveLogic(MovableEntity entity, float moveSpeed) {
+    public BasicMoveLogic(MovableEntity entity, float moveSpeed) {
         this.entity = entity;
         this.moveSpeed = moveSpeed;
         this.destination = entity.getCoordinates().copy();
@@ -44,8 +44,11 @@ public class MoveLogic {
         return isMoving;
     }
 
-    private boolean canMove(BaseLevel level) {
-        return !level.hasHitObstacle(entity) && !level.hasHitTank(entity) && !level.hasTrespassedMap(entity);
+    protected boolean canMove(BaseLevel level) {
+        Coordinates destination = entity.getDestination();
+        return !level.hasObstacle(destination)
+                && !level.occupiedWithEnemyTank(entity, destination)
+                && !level.isOutOfBounds(destination);
     }
 
     public void finishMove() {

@@ -4,7 +4,7 @@ import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.logic.BulletMoveLogic;
-import ru.mipt.bit.platformer.game.core.logic.MoveLogic;
+import ru.mipt.bit.platformer.game.core.logic.BasicMoveLogic;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 
@@ -13,14 +13,18 @@ public class Bullet implements MovableEntity {
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
     private static final EntityMovePattern MOVE_PATTERN = EntityMovePattern.SIMPLE;
+    private final ShootableEntity shooter;
     private final float rotation;
-    private final MoveLogic moveLogic;
+    private final BasicMoveLogic moveLogic;
     private Coordinates coordinates;
+    private final float damage;
 
-    public Bullet(GameEntity shooter, float bulletSpeed) {
+    public Bullet(ShootableEntity shooter, float bulletSpeed, float damage) {
         this.rotation = shooter.getRotation();
         this.coordinates = shooter.getCoordinates();
+        this.shooter = shooter;
         this.moveLogic = new BulletMoveLogic(this, bulletSpeed);
+        this.damage = damage;
     }
 
     public Coordinates yetAnotherStepForward() {
@@ -48,8 +52,8 @@ public class Bullet implements MovableEntity {
         moveLogic.makeMove(rotation, level);
     }
 
-    public void firstMove(float rotation, BaseLevel level) {
-        move(rotation, level);
+    public ShootableEntity getShooter() {
+        return shooter;
     }
 
     @Override
@@ -75,5 +79,9 @@ public class Bullet implements MovableEntity {
     @Override
     public EntityMovePattern getMovePattern() {
         return MOVE_PATTERN;
+    }
+
+    public float getDamage() {
+        return damage;
     }
 }

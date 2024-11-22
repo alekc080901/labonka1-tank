@@ -5,14 +5,13 @@ import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.*;
 import ru.mipt.bit.platformer.game.core.entity.pubsub.*;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BaseLevel {
 
-    private final Set<GameEntity> entities = new HashSet<>();
+    private final ArrayList<GameEntity> entities = new ArrayList<>();  // ArrayList, чтобы модифицировать на лету
     private final EntityPublisher graphicsLevelPublisher = new EntityPublisherImpl();
     private Coordinates upperRightSize;
 
@@ -24,31 +23,66 @@ public class BaseLevel {
         graphicsLevelPublisher.register(graphicsSubscriber);
     }
 
-    public boolean hasHitObstacle(MovableEntity entity) {
+    public GameEntity getAt(Coordinates coordinates) {
+        for (GameEntity entity : entities) {
+            if (entity.getCoordinates().equals(coordinates)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public Tank getTankAt(Coordinates coordinates) {
+        for (GameEntity entity : entities) {
+            if (entity.getCoordinates().equals(coordinates) && entity instanceof Tank) {
+                return (Tank) entity;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasObstacle(Coordinates coordinates) {
         for (GameEntity obstacle : getObstacles()) {
-            if (obstacle.getCoordinates().equals(entity.getDestination())) {
+            if (obstacle.getCoordinates().equals(coordinates)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean hasHitTank(MovableEntity entity) {
+    public boolean occupiedWithEnemyTank(GameEntity caller, Coordinates coordinates) {
         for (MovableEntity tank : getTanks()) {
-            if ((tank.getCoordinates().equals(entity.getDestination()) && !entity.equals(tank)) ||
-                    (tank.getDestination().equals(entity.getDestination())) && !entity.equals(tank)) {
+            if ((tank.getCoordinates().equals(coordinates) && !caller.equals(tank)) ||
+                    (tank.getDestination().equals(coordinates)) && !caller.equals(tank)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean hasTrespassedMap(MovableEntity entity) {
-        Coordinates coords = entity.getDestination();
+    public boolean hasTank(GameEntity caller, Coordinates coordinates) {
+        for (MovableEntity tank : getTanks()) {
+            if (tank.getCoordinates().equals(coordinates) && !caller.equals(tank)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isOutOfBounds(Coordinates coords) {
         return coords.x >= upperRightSize.x || coords.x < 0 || coords.y >= upperRightSize.y || coords.y < 0;
     }
 
-    public Set<GameEntity> getAllEntities() {
+    public void removeZeroHealth() {
+        for (int i = 0; i < entities.size(); i++) {
+            GameEntity entity = entities.get(i);
+            if (entity instanceof KillableEntity && ((KillableEntity) entity).getCurrentHealth() <= 0) {
+                deleteEntity(entity);
+            }
+        }
+    }
+
+    public ArrayList<GameEntity> getAllEntities() {
         return entities;
     }
 
@@ -77,7 +111,10 @@ public class BaseLevel {
     }
 
     public void deleteEntity(GameEntity entity) {
-        entities.remove(entity);
+        boolean isRemoved = entities.remove(entity);
+        if (!isRemoved) {
+            throw new IllegalStateException("Try to delete not registered entity");
+        }
         notifyOnDelete(entity);
     }
 

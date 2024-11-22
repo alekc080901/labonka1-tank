@@ -14,12 +14,13 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private static final EntityMovePattern MOVE_PATTERN = EntityMovePattern.EASE;
     private static final float MOVEMENT_SPEED = EntityConfig.TANK_DEFAULT_SPEED;
     private static final float BULLET_SPEED = EntityConfig.BULLET_DEFAULT_SPEED;
+    private static final float BULLET_DAMAGE = EntityConfig.BULLET_DEFAULT_DAMAGE;
     private static final long RECHARGE = 1000;
 
     private Coordinates coordinates;
     private float rotation = 0f;
 
-    private final float maxHealth = 100f;
+    private final float maxHealth = EntityConfig.TANK_DEFAULT_HEALTH;
     private float currentHealth = maxHealth - 20;  // -20 временно до возможности нанести урон
 
     private final TankMoveLogic moveLogic;
@@ -86,12 +87,12 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public void hurt(double damage) {
-        currentHealth -= (float) Math.min(0, damage);
+        currentHealth = (float) Math.max(0, currentHealth - damage);
     }
 
     @Override
     public void repair(double health) {
-        currentHealth += (float) Math.max(health, maxHealth);
+        currentHealth = (float) Math.min(currentHealth + health, maxHealth);
     }
 
     @Override
@@ -106,8 +107,10 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public void shoot(BaseLevel level) {
-        Bullet bullet = new Bullet(this, BULLET_SPEED);
-        bullet.setCoordinates(bullet.yetAnotherStepForward()); ;
+        Bullet bullet = new Bullet(this, BULLET_SPEED, EntityConfig.BULLET_DEFAULT_DAMAGE);
+        Coordinates nextCoordinate = bullet.yetAnotherStepForward();
+        if (level.getAt(nextCoordinate) != null) return;
+        bullet.setCoordinates(nextCoordinate);
         bullet.move(rotation, level);
         level.registerEntity(bullet, EntityConfig.BULLET_IMAGE_PATH);
     }

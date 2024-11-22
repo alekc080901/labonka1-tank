@@ -62,7 +62,15 @@ public class GdxLevel {
     }
 
     public void removeEntity(GameEntity gameEntity) {
+        GdxEntity gdxEntity = levelEntities.get(gameEntity);
+        if (gdxEntity != null) {
+            removeFromLevelEntities(gameEntity, gdxEntity);
+        }
+    }
+
+    private void removeFromLevelEntities(GameEntity gameEntity, GdxEntity gdxEntity) {
         levelEntities.remove(gameEntity);
+        gdxEntity.dispose();
     }
 
     public void dispose() {

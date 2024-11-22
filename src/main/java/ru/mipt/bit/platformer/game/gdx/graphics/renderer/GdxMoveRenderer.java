@@ -24,6 +24,8 @@ public class GdxMoveRenderer implements MoveRenderer {
     public void shiftEntity(MovableEntity entity) {
         Coordinates dest = entity.getDestination();
         GdxMoveEntity gdxEntity = getRenderedEntity(entity);
+        if (gdxEntity == null) return;
+
         Coordinates coords = gdxEntity.getCoordinates();
         tileMovement.moveRectangleBetweenTileCenters(
                 gdxEntity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), gdxEntity.getInterpolationMethod(), entity.getProgress()
@@ -33,6 +35,7 @@ public class GdxMoveRenderer implements MoveRenderer {
     @Override
     public void turnEntity(GameEntity entity) {
         GdxEntity gdxEntity = getRenderedEntity(entity);
+        if (gdxEntity == null) return;
         gdxEntity.setRotation(entity.getRotation());
     }
 
