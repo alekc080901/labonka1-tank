@@ -25,8 +25,8 @@ public class BulletMoveLogic extends BasicMoveLogic {
         if (level == null) {
             throw new IllegalStateException("You can not update progress of Bullet until .makeMove()");
         }
-        if (level.hasTank(bullet.getShooter(), bullet.getCoordinates())) {
-            Tank targetTank = level.getTankAt(bullet.getCoordinates());
+        if (level.hasTankDestination(bullet.getShooter(), bullet.getCoordinates())) {
+            Tank targetTank = level.getTankAtDestination(bullet.getCoordinates());
             targetTank.hurt(bullet.getDamage());
             finishMove();
             level.deleteEntity(bullet);

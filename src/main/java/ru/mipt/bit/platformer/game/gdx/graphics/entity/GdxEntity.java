@@ -1,20 +1,11 @@
 package ru.mipt.bit.platformer.game.gdx.graphics.entity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
-import ru.mipt.bit.platformer.game.gdx.utils.GifDecoder;
 
 import java.util.Set;
-
-import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxEntity implements Entity {
     /*

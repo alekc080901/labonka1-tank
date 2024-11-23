@@ -14,6 +14,8 @@ import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.core.TimeCounter;
 import ru.mipt.bit.platformer.game.gdx.graphics.renderer.GdxGraphicsRenderer;
 import ru.mipt.bit.platformer.game.gdx.graphics.renderer.GdxMoveRenderer;
+import ru.mipt.bit.platformer.game.gdx.sound.BGMPlayer;
+import ru.mipt.bit.platformer.game.gdx.sound.SFXPlayer;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxTimeCounter;
 import ru.mipt.bit.platformer.game.render.AppRenderer;
 import ru.mipt.bit.platformer.game.render.GameRenderer;
@@ -34,8 +36,11 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
+        BGMPlayer bgmPlayer = new BGMPlayer();
+        SFXPlayer sfxPlayer = new SFXPlayer();
+
         GdxLevel gdxLevel = new GdxLevel("level.tmx");
-        LevelLoader levelLoader = new LevelRandomLoader(Set.of(new GdxEntitySubscriber(gdxLevel)),
+        LevelLoader levelLoader = new LevelRandomLoader(Set.of(new GdxEntitySubscriber(gdxLevel, sfxPlayer)),
                 GdxLevel.getLevelSizeFromFile("level.tmx"));
         BaseLevel level = levelLoader.load();
         appRenderer = fromLevel(level, gdxLevel);
@@ -45,6 +50,8 @@ public class GameDesktopLauncher implements ApplicationListener {
         commandReceiver = CommandReceiver.initCommandReceiver(commandQueue);
 
         timeCounter = new GdxTimeCounter();
+
+        bgmPlayer.play();
     }
 
     @Override

@@ -32,9 +32,9 @@ public class BaseLevel {
         return null;
     }
 
-    public Tank getTankAt(Coordinates coordinates) {
+    public Tank getTankAtDestination(Coordinates coordinates) {
         for (GameEntity entity : entities) {
-            if (entity.getCoordinates().equals(coordinates) && entity instanceof Tank) {
+            if (entity instanceof Tank && ((Tank) entity).getDestination().equals(coordinates) ) {
                 return (Tank) entity;
             }
         }
@@ -60,9 +60,9 @@ public class BaseLevel {
         return false;
     }
 
-    public boolean hasTank(GameEntity caller, Coordinates coordinates) {
+    public boolean hasTankDestination(GameEntity caller, Coordinates coordinates) {
         for (MovableEntity tank : getTanks()) {
-            if (tank.getCoordinates().equals(coordinates) && !caller.equals(tank)) {
+            if (tank.getDestination().equals(coordinates) && !caller.equals(tank)) {
                 return true;
             }
         }
