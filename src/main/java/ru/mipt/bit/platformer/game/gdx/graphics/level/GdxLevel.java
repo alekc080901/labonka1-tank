@@ -44,10 +44,10 @@ public class GdxLevel {
         return getSingleLayer(map);
     }
 
-    public void drawEntities(Batch batch) {
+    public void drawEntities(Batch batch, float deltaTime) {
         for (GdxEntity entity : levelEntities.values()) {
             Entity updatedEntity = EntityFactory.getUpdatedEntity(entity);
-            updatedEntity.draw(batch);
+            updatedEntity.draw(batch, deltaTime);
         }
     }
 
@@ -58,7 +58,7 @@ public class GdxLevel {
     public void addEntity(GameEntity gameEntity, GdxEntity graphicsEntity) {
         levelEntities.put(gameEntity, graphicsEntity);
         Coordinates coords = gameEntity.getCoordinates();
-        moveRectangleAtTileCenter(getGroundLayer(), graphicsEntity.getRectangle(), new GridPoint2(coords.x, coords.y));
+        moveRectangleAtTileCenter(getGroundLayer(), graphicsEntity.getTexture().getRectangle(), new GridPoint2(coords.x, coords.y));
     }
 
     public void removeEntity(GameEntity gameEntity) {

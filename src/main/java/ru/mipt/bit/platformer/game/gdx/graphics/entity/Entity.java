@@ -7,9 +7,8 @@ import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 public interface Entity {
     void dispose();
-    void draw(Batch batch);
+    void draw(Batch batch, float deltaTime);
     GameEntity getGameEntity();
-    Rectangle getRectangle();
-    TextureRegion getGraphics();
+    TextureDrawer getTexture();
     void setRotation(float rotation);
 }

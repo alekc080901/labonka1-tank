@@ -31,10 +31,10 @@ public class GdxGraphicsRenderer implements GraphicsRenderer {
     }
 
     @Override
-    public void render() {
+    public void render(float deltaTime) {
         mapRenderer.render();
         batch.begin();
-        level.drawEntities(batch);
+        level.drawEntities(batch, deltaTime);
         batch.end();
     }
 

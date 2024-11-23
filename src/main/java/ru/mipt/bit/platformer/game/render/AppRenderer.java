@@ -13,7 +13,7 @@ public class AppRenderer implements Renderer {
     public void render(float deltaTime) {
         graphicsRenderer.clear();
         gameRenderer.render(deltaTime);
-        graphicsRenderer.render();
+        graphicsRenderer.render(deltaTime);
     }
 
     public void stop() {

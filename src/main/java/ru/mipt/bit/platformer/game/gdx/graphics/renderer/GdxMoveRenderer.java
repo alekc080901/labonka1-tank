@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.Entity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxMoveEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
@@ -28,13 +29,13 @@ public class GdxMoveRenderer implements MoveRenderer {
 
         Coordinates coords = gdxEntity.getCoordinates();
         tileMovement.moveRectangleBetweenTileCenters(
-                gdxEntity.getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), gdxEntity.getInterpolationMethod(), entity.getProgress()
+                gdxEntity.getTexture().getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), gdxEntity.getInterpolationMethod(), entity.getProgress()
         );
     }
 
     @Override
     public void turnEntity(GameEntity entity) {
-        GdxEntity gdxEntity = getRenderedEntity(entity);
+        Entity gdxEntity = getRenderedEntity(entity);
         if (gdxEntity == null) return;
         gdxEntity.setRotation(entity.getRotation());
     }

@@ -25,24 +25,19 @@ class HealthDecorator implements EntityDecorator {
     }
 
     @Override
-    public void draw(Batch batch) {
-        wrappedEntity.draw(batch);
+    public void draw(Batch batch, float deltaTime) {
+        wrappedEntity.draw(batch, deltaTime);
         drawHealthBar(batch);
     }
 
     @Override
     public GameEntity getGameEntity() {
-        return (KillableEntity) wrappedEntity.getGameEntity();
+        return wrappedEntity.getGameEntity();
     }
 
     @Override
-    public Rectangle getRectangle() {
-        return wrappedEntity.getRectangle();
-    }
-
-    @Override
-    public TextureRegion getGraphics() {
-        return wrappedEntity.getGraphics();
+    public TextureDrawer getTexture() {
+        return wrappedEntity.getTexture();
     }
 
     @Override
@@ -66,7 +61,7 @@ class HealthDecorator implements EntityDecorator {
         var pixmap = new Pixmap(90, 20, Pixmap.Format.RGBA8888);
         float healthRatio = currentHealth / maxHealth;
 
-        int healthBarWidth = wrappedEntity.getGraphics().getRegionWidth();
+        int healthBarWidth = Math.round(wrappedEntity.getTexture().getRectangle().width);
         int segmentWidth = healthBarWidth / TOTAL_SEGMENTS;
         for (int i = 0; i < TOTAL_SEGMENTS; i++) {
             if ((float) i / TOTAL_SEGMENTS < healthRatio) {
@@ -82,7 +77,7 @@ class HealthDecorator implements EntityDecorator {
     }
 
     private Rectangle createRectangle() {
-        var rectangle = new Rectangle(wrappedEntity.getRectangle());
+        var rectangle = new Rectangle(wrappedEntity.getTexture().getRectangle());
         rectangle.y += 90;
         return rectangle;
     }
