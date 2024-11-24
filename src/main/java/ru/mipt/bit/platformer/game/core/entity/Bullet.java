@@ -18,6 +18,7 @@ public class Bullet implements MovableEntity {
     private final BasicMoveLogic moveLogic;
     private Coordinates coordinates;
     private final float damage;
+    private final static int Z_INDEX = 1;
 
     public Bullet(ShootableEntity shooter, float bulletSpeed, float damage) {
         this.rotation = shooter.getRotation();
@@ -45,6 +46,11 @@ public class Bullet implements MovableEntity {
     @Override
     public float getRotation() {
         return rotation;
+    }
+
+    @Override
+    public int getZIndex() {
+        return Z_INDEX;
     }
 
     @Override

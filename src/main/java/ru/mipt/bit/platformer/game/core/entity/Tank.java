@@ -16,6 +16,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private static final float BULLET_SPEED = EntityConfig.BULLET_DEFAULT_SPEED;
     private static final float BULLET_DAMAGE = EntityConfig.BULLET_DEFAULT_DAMAGE;
     private static final long RECHARGE = 1000;
+    private final static int Z_INDEX = 2;
 
     private Coordinates coordinates;
     private float rotation = 0f;
@@ -66,6 +67,11 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     }
 
     @Override
+    public int getZIndex() {
+        return Z_INDEX;
+    }
+
+    @Override
     public void turn(float direction) {
         this.rotation = direction;
     }
@@ -107,7 +113,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public void shoot(BaseLevel level) {
-        Bullet bullet = new Bullet(this, BULLET_SPEED, EntityConfig.BULLET_DEFAULT_DAMAGE);
+        Bullet bullet = new Bullet(this, BULLET_SPEED, BULLET_DAMAGE);
         Coordinates nextCoordinate = bullet.yetAnotherStepForward();
         if (level.getAt(nextCoordinate) != null) return;
         bullet.setCoordinates(nextCoordinate);

@@ -6,6 +6,7 @@ public class Obstacle implements GameEntity{
 
     private Coordinates coordinates;
     private float rotation = 0f;
+    private final static int Z_INDEX = 5;
 
     public Obstacle(Coordinates coordinates, float rotation) {
         this.coordinates = coordinates;
@@ -29,5 +30,10 @@ public class Obstacle implements GameEntity{
     @Override
     public float getRotation() {
         return rotation;
+    }
+
+    @Override
+    public int getZIndex() {
+        return Z_INDEX;
     }
 }

@@ -4,14 +4,14 @@ import ru.mipt.bit.platformer.data.GameSettings;
 
 public class EntityFactory {
     
-    public static Entity getUpdatedEntity(Entity entity) {
+    public static GraphicEntity getUpdatedEntity(GraphicEntity entity) {
         if (GameSettings.showHealthBar()) {
             entity = getEntityWithHealthBar(entity);
         }
         return entity;
     }
     
-    private static Entity getEntityWithHealthBar(Entity entity) {
+    private static GraphicEntity getEntityWithHealthBar(GraphicEntity entity) {
         return new HealthDecorator(entity);
     }
 }

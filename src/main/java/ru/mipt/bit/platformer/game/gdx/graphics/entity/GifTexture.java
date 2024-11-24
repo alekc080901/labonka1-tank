@@ -21,6 +21,7 @@ public class GifTexture implements TextureDrawer {
         this.texture = new Texture(path);
         this.graphics = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal(path).read());
         this.rectangle = createBoundingRectangle(graphics.getKeyFrame(0));
+        graphics.setFrameDuration(0.03f);
     }
 
     @Override
@@ -40,5 +41,9 @@ public class GifTexture implements TextureDrawer {
 
     public Rectangle getRectangle() {
         return rectangle;
+    }
+
+    public boolean isFinished() {
+        return graphics.isAnimationFinished(elapsed);
     }
 }

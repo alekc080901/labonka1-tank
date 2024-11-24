@@ -102,12 +102,19 @@ public class BaseLevel {
 
     public void registerEntity(GameEntity entity, String imagePath) {
         entities.add(entity);
-        EntityMovePattern movePattern = entity instanceof MovableEntity ? ((MovableEntity) entity).getMovePattern() : null;
-        notifyOnCreate(entity, imagePath, movePattern);
+        if (entity instanceof MovableEntity) {
+            notifyOnCreateMovable(entity, imagePath, ((MovableEntity) entity).getMovePattern());
+        } else {
+            notifyOnCreate(entity, imagePath);
+        }
     }
 
-    private void notifyOnCreate(GameEntity entity, String imagePath, EntityMovePattern movePattern) {
-        graphicsLevelPublisher.notify(new EntityContainer(entity, SupportedOperation.CREATE, imagePath, movePattern));
+    private void notifyOnCreate(GameEntity entity, String imagePath) {
+        graphicsLevelPublisher.notify(new CreateEntityContainer(entity, imagePath));
+    }
+
+    private void notifyOnCreateMovable(GameEntity entity, String imagePath, EntityMovePattern movePattern) {
+        graphicsLevelPublisher.notify(new CreateMovableEntityContainer(entity, imagePath, movePattern));
     }
 
     public void deleteEntity(GameEntity entity) {
@@ -119,7 +126,7 @@ public class BaseLevel {
     }
 
     private void notifyOnDelete(GameEntity entity) {
-        graphicsLevelPublisher.notify(new EntityContainer(entity, SupportedOperation.DELETE, null, null));
+        graphicsLevelPublisher.notify(new DeleteEntityContainer(entity));
     }
 
     public void setUpperRightSize(Coordinates upperRightSize) {
@@ -130,5 +137,9 @@ public class BaseLevel {
                 throw new IncorrectLevelSize("Level object is out of level bounds!");
             }
         }
+    }
+
+    public EntityPublisher getPublisher() {
+        return graphicsLevelPublisher;
     }
 }

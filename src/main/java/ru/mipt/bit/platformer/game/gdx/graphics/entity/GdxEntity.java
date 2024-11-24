@@ -7,15 +7,15 @@ import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 
 import java.util.Set;
 
-public class GdxEntity implements Entity {
+public class GdxEntity implements GraphicEntity {
     /*
     Класс объекта, размещенного на карте. Может быть кем угодно, лишь бы была нужная текстурка.
     */
     private static final Set<String> IMAGE_EXTENSIONS = Set.of("png", "jpg", "jpeg");
     private static final Set<String> GIF_EXTENSIONS = Set.of("gif");
-    private final GameEntity gameEntity;
+    protected final GameEntity gameEntity;
     private float rotation = 0f;
-    private final TextureDrawer textureDrawer;
+    protected final TextureDrawer textureDrawer;
 
     public GdxEntity(GameEntity entity, String texturePath) {
         this.gameEntity = entity;

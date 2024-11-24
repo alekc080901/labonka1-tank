@@ -7,13 +7,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
-import ru.mipt.bit.platformer.game.core.level.BaseLevel;
-import ru.mipt.bit.platformer.game.gdx.graphics.entity.Entity;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.EntityFactory;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxSinglePlayAnimation;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.getSingleLayer;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.moveRectangleAtTileCenter;
@@ -23,7 +23,9 @@ public class GdxLevel {
     Класс с файлом уровня (карты).
      */
     private final TiledMap map;
-    private final Map<GameEntity, GdxEntity> levelEntities = new HashMap<>();
+    private final TreeMap<GameEntity, GraphicEntity> levelEntities = new TreeMap<>(
+            Comparator.comparingInt(e -> ((GameEntity) e).getZIndex()).thenComparingInt(Object::hashCode)
+);
 
     public GdxLevel(String path) {
         this.map = new TmxMapLoader().load(path);
@@ -45,36 +47,47 @@ public class GdxLevel {
     }
 
     public void drawEntities(Batch batch, float deltaTime) {
-        for (GdxEntity entity : levelEntities.values()) {
-            Entity updatedEntity = EntityFactory.getUpdatedEntity(entity);
+        for (GameEntity entity : levelEntities.descendingKeySet()) {
+            GraphicEntity updatedEntity = EntityFactory.getUpdatedEntity(levelEntities.get(entity));
             updatedEntity.draw(batch, deltaTime);
         }
+        removeSingleUseEntities();
+    }
+
+    private void removeSingleUseEntities() {
+        Set<GameEntity> forRemoval = new HashSet<>();
+        for (Map.Entry<GameEntity, GraphicEntity> entry : levelEntities.entrySet()) {
+            if (entry.getValue() instanceof GdxSinglePlayAnimation && ((GdxSinglePlayAnimation) entry.getValue()).finishedPlaying()) {
+                forRemoval.add(entry.getKey());
+            }
+        }
+        forRemoval.forEach(levelEntities::remove);
     }
 
     public GdxEntity getGdxObjectFromEntity(GameEntity entity) {
-        return levelEntities.get(entity);
+        return (GdxEntity) levelEntities.get(entity);
     }
 
-    public void addEntity(GameEntity gameEntity, GdxEntity graphicsEntity) {
+    public void addEntity(GameEntity gameEntity, GraphicEntity graphicsEntity) {
         levelEntities.put(gameEntity, graphicsEntity);
         Coordinates coords = gameEntity.getCoordinates();
         moveRectangleAtTileCenter(getGroundLayer(), graphicsEntity.getTexture().getRectangle(), new GridPoint2(coords.x, coords.y));
     }
 
     public void removeEntity(GameEntity gameEntity) {
-        GdxEntity gdxEntity = levelEntities.get(gameEntity);
+        GraphicEntity gdxEntity = levelEntities.get(gameEntity);
         if (gdxEntity != null) {
             removeFromLevelEntities(gameEntity, gdxEntity);
         }
     }
 
-    private void removeFromLevelEntities(GameEntity gameEntity, GdxEntity gdxEntity) {
+    private void removeFromLevelEntities(GameEntity gameEntity, GraphicEntity gdxEntity) {
         levelEntities.remove(gameEntity);
         gdxEntity.dispose();
     }
 
     public void dispose() {
-        for (GdxEntity entity : levelEntities.values()) {
+        for (GraphicEntity entity : levelEntities.values()) {
             entity.dispose();
         }
         map.dispose();

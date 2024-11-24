@@ -1,12 +1,10 @@
 package ru.mipt.bit.platformer.game.gdx.graphics.renderer;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
-import ru.mipt.bit.platformer.game.gdx.graphics.entity.Entity;
-import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxMoveEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.render.MoveRenderer;
@@ -35,7 +33,7 @@ public class GdxMoveRenderer implements MoveRenderer {
 
     @Override
     public void turnEntity(GameEntity entity) {
-        Entity gdxEntity = getRenderedEntity(entity);
+        GraphicEntity gdxEntity = getRenderedEntity(entity);
         if (gdxEntity == null) return;
         gdxEntity.setRotation(entity.getRotation());
     }

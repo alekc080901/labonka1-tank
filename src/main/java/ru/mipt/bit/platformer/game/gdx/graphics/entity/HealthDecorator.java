@@ -10,12 +10,12 @@ import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.KillableEntity;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils;
 
-class HealthDecorator implements EntityDecorator {
+class HealthDecorator implements GraphicEntityDecorator {
     private static final int TOTAL_SEGMENTS = 8;
 
-    private final Entity wrappedEntity;
+    private final GraphicEntity wrappedEntity;
 
-    public HealthDecorator(Entity entity) {
+    public HealthDecorator(GraphicEntity entity) {
         this.wrappedEntity = entity;
     }
 

@@ -12,4 +12,5 @@ public interface GameEntity {
     void setCoordinates(Coordinates coordinates);
 
     float getRotation();
+    int getZIndex();
 }

@@ -1,7 +1,9 @@
 package ru.mipt.bit.platformer.game.core.logic;
 
 import ru.mipt.bit.platformer.game.core.entity.Bullet;
+import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
+import ru.mipt.bit.platformer.game.core.entity.pubsub.ImageEntityContainer;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 public class BulletMoveLogic extends BasicMoveLogic {
@@ -26,8 +28,9 @@ public class BulletMoveLogic extends BasicMoveLogic {
             throw new IllegalStateException("You can not update progress of Bullet until .makeMove()");
         }
         if (level.hasTankDestination(bullet.getShooter(), bullet.getCoordinates())) {
-            Tank targetTank = level.getTankAtDestination(bullet.getCoordinates());
+             Tank targetTank = level.getTankAtDestination(bullet.getCoordinates());
             targetTank.hurt(bullet.getDamage());
+            level.getPublisher().notify(new ImageEntityContainer(targetTank.getDestination(), EntityConfig.EXPLOSION_IMAGE_PATH, bullet.getZIndex()));
             finishMove();
             level.deleteEntity(bullet);
             return;
