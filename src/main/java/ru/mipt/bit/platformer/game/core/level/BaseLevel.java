@@ -100,21 +100,22 @@ public class BaseLevel {
                 .collect(Collectors.toSet());
     }
 
-    public void registerEntity(GameEntity entity, String imagePath) {
+    public void registerEntity(GameEntity entity, String imagePath, AbstractSound sound) {
         entities.add(entity);
         if (entity instanceof MovableEntity) {
-            notifyOnCreateMovable(entity, imagePath, ((MovableEntity) entity).getMovePattern());
+            notifyOnCreateMovable(entity, imagePath, sound, ((MovableEntity) entity).getMovePattern());
         } else {
-            notifyOnCreate(entity, imagePath);
+            notifyOnCreate(entity, imagePath, sound);
         }
     }
 
-    private void notifyOnCreate(GameEntity entity, String imagePath) {
-        graphicsLevelPublisher.notify(new CreateEntityContainer(entity, imagePath));
+    private void notifyOnCreate(GameEntity entity, String imagePath, AbstractSound sound) {
+        graphicsLevelPublisher.notify(new CreateEntityContainer(entity, imagePath, sound));
     }
 
-    private void notifyOnCreateMovable(GameEntity entity, String imagePath, EntityMovePattern movePattern) {
-        graphicsLevelPublisher.notify(new CreateMovableEntityContainer(entity, imagePath, movePattern));
+    private void notifyOnCreateMovable(GameEntity entity, String imagePath, AbstractSound sound,
+                                       EntityMovePattern movePattern) {
+        graphicsLevelPublisher.notify(new CreateMovableEntityContainer(entity, imagePath, sound, movePattern));
     }
 
     public void deleteEntity(GameEntity entity) {

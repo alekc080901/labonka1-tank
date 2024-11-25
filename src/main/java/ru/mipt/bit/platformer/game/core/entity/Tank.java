@@ -22,8 +22,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private float rotation = 0f;
 
     private final float maxHealth = EntityConfig.TANK_DEFAULT_HEALTH;
-    private float currentHealth = maxHealth - 20;  // -20 временно до возможности нанести урон
-
+    private float currentHealth = maxHealth;
     private final TankMoveLogic moveLogic;
     private final PlayerTypes whoDrives;
 
@@ -118,7 +117,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
         if (level.getAt(nextCoordinate) != null) return;
         bullet.setCoordinates(nextCoordinate);
         bullet.move(rotation, level);
-        level.registerEntity(bullet, EntityConfig.BULLET_IMAGE_PATH);
+        level.registerEntity(bullet, EntityConfig.BULLET_IMAGE_PATH, AbstractSound.SHOOT_SOUND);
     }
 
     @Override

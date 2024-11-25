@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.data;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
+import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
 import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
@@ -22,7 +23,7 @@ public class LevelRandomLoader implements LevelLoader {
     public LevelRandomLoader(Set<EntitySubscriber> subscribers, Coordinates upperBorder) {
         this.upperBorder = upperBorder;
         this.vacantCoords = this.generateCoords(upperBorder);
-         this.subscribers = subscribers;
+        this.subscribers = subscribers;
     }
 
     public LevelRandomLoader(Coordinates upperBorder) {
@@ -56,15 +57,15 @@ public class LevelRandomLoader implements LevelLoader {
     private void registerObstacles(BaseLevel level, Random random) {
         for (int i = 0; i < vacantCoords.size(); i++) {
             if (random.nextDouble() < TREE_PROBABILITY) {
-                level.registerEntity(new Obstacle(getRandomCoordinates(random)), EntityConfig.GREEN_TREE_IMAGE_PATH);
+                level.registerEntity(new Obstacle(getRandomCoordinates(random)), EntityConfig.GREEN_TREE_IMAGE_PATH, AbstractSound.EMPTY);
             }
         }
     }
 
     private void registerTanks(BaseLevel level, Random random) {
-        level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH);
+        level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
         for (int i = 0; i < AI_NUMBER; i++) {
-            level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH);
+            level.registerEntity(new Tank(getRandomCoordinates(random), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
         }
     }
 

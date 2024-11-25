@@ -1,15 +1,17 @@
 package ru.mipt.bit.platformer.game.core.entity.pubsub;
 
-import ru.mipt.bit.platformer.game.core.entity.EntityMovePattern;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
 
 public class CreateEntityContainer implements EntityContainer{
     private final GameEntity entity;
-    private final String entityImagePath;
+    private final String imagePath;
+    private final AbstractSound soundOnCreate;
 
-    public CreateEntityContainer(GameEntity entity, String entityImagePath) {
+    public CreateEntityContainer(GameEntity entity, String imagePath, AbstractSound soundOnCreate) {
         this.entity = entity;
-        this.entityImagePath = entityImagePath;
+        this.imagePath = imagePath;
+        this.soundOnCreate = soundOnCreate;
     }
 
     public GameEntity getEntity() {
@@ -17,8 +19,10 @@ public class CreateEntityContainer implements EntityContainer{
     }
 
     public String getImagePath() {
-        return entityImagePath;
+        return imagePath;
     }
 
-
+    public AbstractSound getSound() {
+        return soundOnCreate;
+    }
 }

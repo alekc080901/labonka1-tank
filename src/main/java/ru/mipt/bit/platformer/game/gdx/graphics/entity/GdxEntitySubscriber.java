@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.game.gdx.graphics.entity;
 
-import ru.mipt.bit.platformer.game.core.entity.Bullet;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
 import ru.mipt.bit.platformer.game.core.entity.pubsub.*;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.gdx.sound.SFXPlayer;
@@ -43,8 +43,8 @@ public class GdxEntitySubscriber implements EntitySubscriber {
 
     private void registerEntity(CreateEntityContainer container) {
         level.addEntity(container.getEntity(), makeGdxEntityFromCreateContainer(container));
-        if (container.getEntity() instanceof Bullet) {
-            sfxPlayer.playRandomMeow();
+        if (container.getSound() != AbstractSound.EMPTY) {
+            sfxPlayer.play(container.getSound());
         }
     }
 

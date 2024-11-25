@@ -12,7 +12,10 @@ public class SimpleAIInstructionGenerator implements InstructionGenerator {
     Реализация контракта генерации команд, производимых с подключенных устройств пользователем.
      */
 
+    private static final double DEFAULT_SHOOT_INTERVAL = 3000;
     private final GameEntity gameEntity;
+    private long timeUntilNextShot = System.currentTimeMillis();
+    private double shotRandomTimeModifier = calculateShotTimeModifier();
 
     public SimpleAIInstructionGenerator(GameEntity gameEntity) {
         this.gameEntity = gameEntity;
@@ -30,13 +33,26 @@ public class SimpleAIInstructionGenerator implements InstructionGenerator {
         );
         Set<InputInstruction> inputtedCommands = new HashSet<>();
         inputtedCommands.add(randomFromCollection(moveCommands));
-        return inputtedCommands;
 
+        addShotIfNecessary(inputtedCommands);
+        return inputtedCommands;
+    }
+
+    private void addShotIfNecessary(Set<InputInstruction> inputtedCommands) {
+        if (System.currentTimeMillis() - timeUntilNextShot > shotRandomTimeModifier * DEFAULT_SHOOT_INTERVAL) {
+            timeUntilNextShot = System.currentTimeMillis();
+            shotRandomTimeModifier = calculateShotTimeModifier();
+            inputtedCommands.add(InputInstruction.SHOOT);
+        }
     }
 
     private static <T> T randomFromCollection(Collection<T> coll) {
         int num = (int) (Math.random() * coll.size());
         for(T t: coll) if (--num < 0) return t;
         return null;
+    }
+
+    private static double calculateShotTimeModifier() {
+        return (Math.random() * 1.5) + 0.5;
     }
 }

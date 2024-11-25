@@ -5,6 +5,7 @@ import ru.mipt.bit.platformer.exceptions.NotFoundException;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
+import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
 import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
@@ -67,13 +68,13 @@ public class LevelFileLoader implements LevelLoader {
             char c = line.charAt(i);
             switch (c) {
                 case 'T':
-                    level.registerEntity(new Obstacle(new Coordinates(i, maxRow - rowNumber)), EntityConfig.GREEN_TREE_IMAGE_PATH);
+                    level.registerEntity(new Obstacle(new Coordinates(i, maxRow - rowNumber)), EntityConfig.GREEN_TREE_IMAGE_PATH, AbstractSound.EMPTY);
                     break;
                 case 'X':
-                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH);
+                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
                     break;
                 case 'B':
-                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH);
+                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
                     break;
                 case '_':
                     break;
