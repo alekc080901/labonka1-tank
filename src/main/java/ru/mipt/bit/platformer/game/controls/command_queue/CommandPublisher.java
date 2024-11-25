@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.command_queue;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.controls.input.generators.InstructionGenerator;
 import ru.mipt.bit.platformer.game.controls.input.generators.PlayerInstructionGenerator;
 import ru.mipt.bit.platformer.game.controls.input.generators.SimpleAIInstructionGenerator;
@@ -15,20 +17,20 @@ import ru.mipt.bit.platformer.game.core.entity.Tank;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class CommandPublisher {
-    /*
-    Класс, принимающий команды от игрока (кем бы он ни был, не обязательно человека) и передающий их в игру.
-     */
     private final Set<InstructionGenerator> instructionSources = new HashSet<>();
     private final CommandQueue commandQueue;
     private final BaseLevel level;
     private final CommandFactory commandFactory;
 
-
+    @Autowired
     public CommandPublisher(CommandQueue commandQueue, BaseLevel level, CommandFactory commandFactory) {
         this.commandQueue = commandQueue;
         this.level = level;
         this.commandFactory = commandFactory;
+
+        registerInputGenertors(level);
     }
 
     public void register(InstructionGenerator instructionGenerator) {
@@ -49,24 +51,15 @@ public class CommandPublisher {
                     return new QueueElement(gameEntity, command, CommandType.get(instruction));
                 })
                 .collect(Collectors.toSet());
-//        if (commandsFromInstructions.isEmpty()) {
-//            var emptyCommandElement = new QueueElement(gameEntity, new NoneCommand(), CommandType.NONE);
-//            commandsFromInstructions.add(emptyCommandElement);
-//        }
         commandQueue.addCommands(commandsFromInstructions);
     }
 
-    public static CommandPublisher initCommandPublisher(CommandQueue commandQueue, BaseLevel level) {
-        Set<Tank> tanks = level.getTanks();
-
-        CommandFactory commandFactory = new CommandFactory(0, 200);
-        CommandPublisher commandPublisher = new CommandPublisher(commandQueue, level, commandFactory);
-        for (Tank tank : tanks) {
-            commandPublisher.register(
+    private void registerInputGenertors(BaseLevel level) {
+        for (Tank tank : level.getTanks()) {
+            register(
                     tank.whoDrives() == PlayerTypes.PLAYER ? new PlayerInstructionGenerator(tank) :
                             new SimpleAIInstructionGenerator(tank)
             );
         }
-        return commandPublisher;
     }
 }

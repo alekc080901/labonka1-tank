@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.gdx.graphics.renderer;
 
 import com.badlogic.gdx.math.GridPoint2;
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
@@ -10,6 +11,7 @@ import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.render.MoveRenderer;
 import ru.mipt.bit.platformer.game.gdx.utils.TileMovement;
 
+@Component
 public class GdxMoveRenderer implements MoveRenderer {
     private final GdxLevel level;
     private final TileMovement tileMovement;

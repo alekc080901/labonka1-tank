@@ -4,12 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.render.GraphicsRenderer;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.createSingleLayerMapRenderer;
 
+@Component
+//@Profile("gdx")
 public class GdxGraphicsRenderer implements GraphicsRenderer {
     /*
     Класс, отвечающий за отрисовку и обновление уровня (карты).
@@ -18,6 +24,7 @@ public class GdxGraphicsRenderer implements GraphicsRenderer {
     private final GdxLevel level;
     private final Batch batch;
 
+    @Autowired
     public GdxGraphicsRenderer(GdxLevel level) {
         this.level = level;
         this.batch = new SpriteBatch();

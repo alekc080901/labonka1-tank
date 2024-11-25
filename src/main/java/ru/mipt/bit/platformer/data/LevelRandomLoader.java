@@ -20,7 +20,7 @@ public class LevelRandomLoader implements LevelLoader {
     private final Set<Coordinates> vacantCoords;
     private final Set<EntitySubscriber> subscribers;
 
-    public LevelRandomLoader(Set<EntitySubscriber> subscribers, Coordinates upperBorder) {
+    public LevelRandomLoader(Coordinates upperBorder, Set<EntitySubscriber> subscribers) {
         this.upperBorder = upperBorder;
         this.vacantCoords = this.generateCoords(upperBorder);
         this.subscribers = subscribers;

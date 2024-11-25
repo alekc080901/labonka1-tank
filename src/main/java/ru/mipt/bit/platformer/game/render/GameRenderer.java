@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.game.render;
 
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
+@Component
 public class GameRenderer implements Renderer {
 
     private final BaseLevel level;

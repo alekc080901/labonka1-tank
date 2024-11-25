@@ -1,5 +1,8 @@
 package ru.mipt.bit.platformer.game.render;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AppRenderer implements Renderer {
     private final GameRenderer gameRenderer;
     private final GraphicsRenderer graphicsRenderer;

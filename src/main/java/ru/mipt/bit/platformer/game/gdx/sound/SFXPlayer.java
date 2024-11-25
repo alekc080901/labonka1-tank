@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.gdx.sound;
 
 import com.badlogic.gdx.audio.Sound;
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
 import ru.mipt.bit.platformer.game.gdx.utils.SoundUtils;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Component
 public class SFXPlayer {
 
     private static final String SFX_PATH = "sound/sfx";

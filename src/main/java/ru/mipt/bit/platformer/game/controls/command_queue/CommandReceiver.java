@@ -1,7 +1,8 @@
 package ru.mipt.bit.platformer.game.controls.command_queue;
 
-import static com.badlogic.gdx.math.MathUtils.isEqual;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandReceiver {
     /*
     Класс, ответственный за обработку и делегирование всех приходящих команд на объект сущности.

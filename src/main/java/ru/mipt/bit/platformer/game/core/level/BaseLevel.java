@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.game.core.level;
 
-import ru.mipt.bit.platformer.exceptions.IncorrectLevelSize;
+import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.*;
 import ru.mipt.bit.platformer.game.core.entity.pubsub.*;
@@ -135,7 +135,7 @@ public class BaseLevel {
 
         for (GameEntity entity : entities) {
             if (entity.getCoordinates().x > upperRightSize.x || entity.getCoordinates().y > upperRightSize.y) {
-                throw new IncorrectLevelSize("Level object is out of level bounds!");
+                throw new IncorrectFileFormatException("Level object is out of level bounds!");
             }
         }
     }

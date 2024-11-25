@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
+import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
@@ -11,7 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class CommandFactory {
-
     private final long moveCommandDelay;
     private final long toggleHealthCommandDelay;
     private final Map<Object, Long> lastCommandExecuted = new HashMap<>();

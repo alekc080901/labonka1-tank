@@ -1,7 +1,6 @@
 package ru.mipt.bit.platformer.data;
 
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
-import ru.mipt.bit.platformer.exceptions.NotFoundException;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Obstacle;
@@ -12,6 +11,7 @@ import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -44,7 +44,7 @@ public class LevelFileLoader implements LevelLoader {
             fillTanksAndObstacles(level, br, height);
             return level;
         } catch (FileNotFoundException e) {
-            throw new NotFoundException("Level file not found!");
+            throw new FileSystemNotFoundException("Level file not found!");
         } catch (IOException e) {
             throw new IncorrectFileFormatException("Error while parsing level:" + e.getMessage());
         }
@@ -79,7 +79,7 @@ public class LevelFileLoader implements LevelLoader {
                 case '_':
                     break;
                 default:
-                    throw new NotFoundException("Not supported character in level file!");
+                    throw new FileSystemNotFoundException("Not supported character in level file!");
             }
         }
     }
