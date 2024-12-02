@@ -3,65 +3,63 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import ru.mipt.bit.platformer.game.level.Level;
-import ru.mipt.bit.platformer.game.level.LevelEntity;
-import ru.mipt.bit.platformer.game.level.LevelEntityDatabase;
-import ru.mipt.bit.platformer.game.level.LevelRenderer;
-import ru.mipt.bit.platformer.game.player.Player;
-import ru.mipt.bit.platformer.game.player.PlayerMove;
-import ru.mipt.bit.platformer.game.player.PlayerMoveCoordinator;
-import ru.mipt.bit.platformer.game.UserInput;
+import ru.mipt.bit.platformer.data.LevelLoader;
+import ru.mipt.bit.platformer.data.LevelRandomLoader;
+import ru.mipt.bit.platformer.game.controls.command_queue.CommandPublisher;
+import ru.mipt.bit.platformer.game.controls.command_queue.CommandQueue;
+import ru.mipt.bit.platformer.game.controls.command_queue.CommandReceiver;
+import ru.mipt.bit.platformer.game.core.level.BaseLevel;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntitySubscriber;
+import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
+import ru.mipt.bit.platformer.game.core.TimeCounter;
+import ru.mipt.bit.platformer.game.gdx.graphics.renderer.GdxGraphicsRenderer;
+import ru.mipt.bit.platformer.game.gdx.graphics.renderer.GdxMoveRenderer;
+import ru.mipt.bit.platformer.game.gdx.sound.BGMPlayer;
+import ru.mipt.bit.platformer.game.gdx.sound.SFXPlayer;
+import ru.mipt.bit.platformer.game.gdx.utils.GdxTimeCounter;
+import ru.mipt.bit.platformer.game.render.AppRenderer;
+import ru.mipt.bit.platformer.game.render.GameRenderer;
+import ru.mipt.bit.platformer.game.render.GraphicsRenderer;
+import ru.mipt.bit.platformer.game.render.MoveRenderer;
 
-import java.util.List;
+import java.util.Set;
 
 public class GameDesktopLauncher implements ApplicationListener {
     /*
     Класс, ответственный за инициализацию объектов
      */
 
-    private LevelRenderer levelRenderer;
-    private PlayerMoveCoordinator playerMoveCoordinator;
-    private Player player;
+    private AppRenderer appRenderer;
+    private TimeCounter timeCounter;
+    private CommandPublisher commandPublisher;
+    private CommandReceiver commandReceiver;
 
     @Override
     public void create() {
-        Level level = new Level("level.tmx");
-        Batch batch = new SpriteBatch();
+        BGMPlayer bgmPlayer = new BGMPlayer();
+        SFXPlayer sfxPlayer = new SFXPlayer();
 
-        LevelEntity blueTank = LevelEntityDatabase.getBlueTank();
-        blueTank.setCoordinates(1, 1);
+        GdxLevel gdxLevel = new GdxLevel("level.tmx");
+        LevelLoader levelLoader = new LevelRandomLoader(Set.of(new GdxEntitySubscriber(gdxLevel, sfxPlayer)),
+                GdxLevel.getLevelSizeFromFile("level.tmx"));
+        BaseLevel level = levelLoader.load();
+        appRenderer = fromLevel(level, gdxLevel);
 
-        LevelEntity greenTree = LevelEntityDatabase.getGreenTree();
-        greenTree.setCoordinates(1, 3);
+        CommandQueue commandQueue = new CommandQueue();
+        commandPublisher = CommandPublisher.initCommandPublisher(commandQueue, level);
+        commandReceiver = CommandReceiver.initCommandReceiver(commandQueue);
 
-        player = new Player(blueTank);
-//        player = new Player(greenTree);  // Можно двигаться кустом :)
+        timeCounter = new GdxTimeCounter();
 
-        List<LevelEntity> obstacles = LevelEntityDatabase.createdObjects;  // Пока препятствия - все объекты
-//        List<LevelObject> obstacles = Arrays.asList(greenTree);
-
-        levelRenderer = new LevelRenderer(level, batch, LevelEntityDatabase.createdObjects);
-        playerMoveCoordinator = new PlayerMoveCoordinator(player, obstacles);
+        bgmPlayer.play();
     }
 
     @Override
     public void render() {
-        levelRenderer.clear();
-
-        float deltaTime = levelRenderer.getDeltaTime();
-
-        PlayerMove playerMove = UserInput.handleUserInput();
-        if (playerMove != null) {
-            playerMoveCoordinator.makeMove(playerMove);
-        }
-        playerMoveCoordinator.confirmMove(deltaTime);
-        levelRenderer.shiftEntity(
-                player.getPlayerObject(), playerMoveCoordinator.getDestination(), playerMoveCoordinator.getMovementProgress()
-        );
-
-        levelRenderer.render();
+        float deltaTime = timeCounter.getDelta();
+        commandPublisher.publishAll();
+        commandReceiver.processAll();
+        appRenderer.render(deltaTime);
     }
 
     @Override
@@ -82,7 +80,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        levelRenderer.dispose();
+        appRenderer.stop();
     }
 
     public static void main(String[] args) {
@@ -90,5 +88,12 @@ public class GameDesktopLauncher implements ApplicationListener {
         // level width: 10 tiles x 128px, height: 8 tiles x 128px
         config.setWindowedMode(1280, 1024);
         new Lwjgl3Application(new GameDesktopLauncher(), config);
+    }
+
+    private static AppRenderer fromLevel(BaseLevel baseLevel, GdxLevel gdxLevel) {
+        GraphicsRenderer graphicsRenderer = new GdxGraphicsRenderer(gdxLevel);
+        MoveRenderer moveRenderer = new GdxMoveRenderer(gdxLevel);
+        GameRenderer gameRenderer = new GameRenderer(baseLevel, moveRenderer);
+        return new AppRenderer(gameRenderer, graphicsRenderer);
     }
 }
