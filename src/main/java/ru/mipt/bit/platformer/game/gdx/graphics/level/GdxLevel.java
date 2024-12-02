@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.data.GameSettings;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntity;
@@ -21,12 +22,14 @@ public class GdxLevel {
     Класс с файлом уровня (карты).
      */
     private final TiledMap map;
+    private final GraphicEntityFactory entityFactory;
     private final TreeMap<GameEntity, GraphicEntity> levelEntities = new TreeMap<>(
             Comparator.comparingInt(e -> ((GameEntity) e).getZIndex()).thenComparingInt(Object::hashCode)
 );
 
-    public GdxLevel(String path) {
+    public GdxLevel(String path, GraphicEntityFactory entityFactory) {
         this.map = new TmxMapLoader().load(path);
+        this.entityFactory = entityFactory;
     }
 
     public TiledMap getMapObject() {
@@ -46,7 +49,7 @@ public class GdxLevel {
 
     public void drawEntities(Batch batch, float deltaTime) {
         for (GameEntity entity : levelEntities.descendingKeySet()) {
-            GraphicEntity updatedEntity = GraphicEntityFactory.getUpdatedEntity(levelEntities.get(entity));
+            GraphicEntity updatedEntity = entityFactory.getUpdatedEntity(levelEntities.get(entity));
             updatedEntity.draw(batch, deltaTime);
         }
         removeSingleUseEntities();

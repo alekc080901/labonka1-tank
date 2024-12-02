@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.controls.commands;
 
 import org.springframework.stereotype.Component;
+import ru.mipt.bit.platformer.data.GameSettings;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
@@ -14,11 +15,13 @@ import java.util.Objects;
 public class CommandFactory {
     private final long moveCommandDelay;
     private final long toggleHealthCommandDelay;
+    private final GameSettings settings;
     private final Map<Object, Long> lastCommandExecuted = new HashMap<>();
 
-    public CommandFactory(long moveCommandDelay, long toggleHealthCommandDelay) {
+    public CommandFactory(long moveCommandDelay, long toggleHealthCommandDelay, GameSettings settings) {
         this.moveCommandDelay = moveCommandDelay;
         this.toggleHealthCommandDelay = toggleHealthCommandDelay;
+        this.settings = settings;
     }
 
     public Command fromInstruction(BaseLevel level, GameEntity entity, InputInstruction instruction) {
@@ -31,7 +34,7 @@ public class CommandFactory {
                 delay = moveCommandDelay;
                 break;
             case TOGGLE_HEALTH:
-                command = new ToggleHealthCommand();
+                command = new ToggleHealthCommand(settings);
                 delay = toggleHealthCommandDelay;
                 break;
             case SHOOT:

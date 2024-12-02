@@ -1,14 +1,21 @@
 package ru.mipt.bit.platformer.data;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+@PropertySource("classpath:application.properties")
+@Component
 public class GameSettings {
 
-    private static boolean SHOW_HEALTH_BAR = true;
+    @Value("${game.settings.show-health}")
+    private boolean showHealthBar = false;
 
-    public static boolean showHealthBar() {
-        return SHOW_HEALTH_BAR;
+    public boolean showHealthBar() {
+        return showHealthBar;
     }
 
-    public static void toggleHealthBar() {
-        SHOW_HEALTH_BAR = !SHOW_HEALTH_BAR;
+    public void toggleHealthBar() {
+        showHealthBar = !showHealthBar;
     }
 }

@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import ru.mipt.bit.platformer.data.GameSettings;
 import ru.mipt.bit.platformer.data.LevelFileLoader;
 import ru.mipt.bit.platformer.data.LevelLoader;
 import ru.mipt.bit.platformer.data.LevelRandomLoader;
@@ -12,6 +13,7 @@ import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.GameEntityFactory;
 import ru.mipt.bit.platformer.game.core.pubsub.Subscriber;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntityFactory;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxTimeCounter;
 
@@ -42,14 +44,15 @@ public class GameConfiguration {
 
     @Bean
     public CommandFactory initCommandFactory(@Value("${game.command.delay.health}") long moveDelay,
-                                             @Value("${game.command.delay.move}") long healthDelay) {
-        return new CommandFactory(moveDelay, healthDelay);
+                                             @Value("${game.command.delay.move}") long healthDelay,
+                                             @Autowired GameSettings settings) {
+        return new CommandFactory(moveDelay, healthDelay, settings);
     }
 
     @Bean
     @Profile("gdx")
-    public GdxLevel chooseGdxLevel() {
-        return new GdxLevel("level.tmx");
+    public GdxLevel chooseGdxLevel(@Autowired GraphicEntityFactory entityFactory) {
+        return new GdxLevel("level.tmx", entityFactory);
     }
 
     @Bean
