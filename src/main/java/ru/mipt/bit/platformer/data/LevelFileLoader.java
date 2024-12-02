@@ -1,6 +1,9 @@
 package ru.mipt.bit.platformer.data;
 
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
+import ru.mipt.bit.platformer.game.controls.input.generators.InstructionGenerator;
+import ru.mipt.bit.platformer.game.controls.input.generators.PlayerInstructionGenerator;
+import ru.mipt.bit.platformer.game.controls.input.generators.SimpleAIInstructionGenerator;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.*;
 import ru.mipt.bit.platformer.game.core.pubsub.Subscriber;
@@ -69,12 +72,10 @@ public class LevelFileLoader implements LevelLoader {
                     level.registerEntity(obstacle, entityFactory.getGraphicPath(obstacle), AbstractSound.EMPTY);
                     break;
                 case 'X':
-                    var playerTank = entityFactory.getTank(new Coordinates(i, maxRow - rowNumber), PlayerType.PLAYER);
-                    level.registerEntity(playerTank, entityFactory.getGraphicPath(playerTank), AbstractSound.EMPTY);
+                    entityFactory.registerTank(level,  PlayerType.PLAYER, new Coordinates(i, maxRow - rowNumber));
                     break;
                 case 'B':
-                    var enemyTank = entityFactory.getTank(new Coordinates(i, maxRow - rowNumber), PlayerType.SIMPLE_AI);
-                    level.registerEntity(enemyTank, entityFactory.getGraphicPath(enemyTank), AbstractSound.EMPTY);
+                    entityFactory.registerTank(level,  PlayerType.SIMPLE_AI, new Coordinates(i, maxRow - rowNumber));
                     break;
                 case '_':
                     break;

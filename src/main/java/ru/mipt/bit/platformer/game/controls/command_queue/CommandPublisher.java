@@ -3,15 +3,12 @@ package ru.mipt.bit.platformer.game.controls.command_queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.controls.input.generators.InstructionGenerator;
-import ru.mipt.bit.platformer.game.controls.input.generators.PlayerInstructionGenerator;
-import ru.mipt.bit.platformer.game.controls.input.generators.SimpleAIInstructionGenerator;
 import ru.mipt.bit.platformer.game.controls.commands.Command;
 import ru.mipt.bit.platformer.game.controls.commands.CommandFactory;
 import ru.mipt.bit.platformer.game.controls.commands.CommandType;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
-import ru.mipt.bit.platformer.game.core.PlayerType;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.util.*;
@@ -19,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class CommandPublisher {
-    private final Set<InstructionGenerator> instructionSources = new HashSet<>();
     private final CommandQueue commandQueue;
     private final BaseLevel level;
     private final CommandFactory commandFactory;
@@ -30,15 +26,11 @@ public class CommandPublisher {
         this.level = level;
         this.commandFactory = commandFactory;
 
-        registerInputGenertors(level);
-    }
-
-    public void register(InstructionGenerator instructionGenerator) {
-        instructionSources.add(instructionGenerator);
+        getInputGenerators(level);
     }
 
     public void publishAll() {
-        for (InstructionGenerator instructionGenerator : instructionSources) {
+        for (InstructionGenerator instructionGenerator : getInputGenerators(level)) {
             Collection<InputInstruction> instructions = instructionGenerator.getInstructions();
             pushCommandsToQueue(instructionGenerator.getInstructionSource(), instructions);
         }
@@ -54,12 +46,9 @@ public class CommandPublisher {
         commandQueue.addCommands(commandsFromInstructions);
     }
 
-    private void registerInputGenertors(BaseLevel level) {
-        for (Tank tank : level.getTanks()) {
-            register(
-                    tank.whoDrives() == PlayerType.PLAYER ? new PlayerInstructionGenerator(tank) :
-                            new SimpleAIInstructionGenerator(tank)
-            );
-        }
+    private Collection<InstructionGenerator> getInputGenerators(BaseLevel level) {
+        return level.getTanks().stream()
+                .map(Tank::whoDrives)
+                .collect(Collectors.toList());
     }
 }

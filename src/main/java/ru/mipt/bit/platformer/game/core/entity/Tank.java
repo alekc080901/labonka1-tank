@@ -1,8 +1,8 @@
 package ru.mipt.bit.platformer.game.core.entity;
 
+import ru.mipt.bit.platformer.game.controls.input.generators.InstructionGenerator;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.PlayerType;
 import ru.mipt.bit.platformer.game.core.logic.TankMoveLogic;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
@@ -24,9 +24,9 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private final float maxHealth;
     private float currentHealth;
     private final TankMoveLogic moveLogic;
-    private final PlayerType whoDrives;
+    private InstructionGenerator driver;
 
-    public Tank(Coordinates coordinates, PlayerType whoDrives, EntityMovePattern movePattern, float movementSpeed,
+    public Tank(Coordinates coordinates, EntityMovePattern movePattern, float movementSpeed,
                 float bulletSpeed, float bulletDamage, float maxHealth, long recharge, int zIndex) {
         this.movePattern = movePattern;
         this.movementSpeed = movementSpeed;
@@ -36,14 +36,17 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
         RECHARGE = recharge;
         Z_INDEX = zIndex;
         this.maxHealth = maxHealth;
-        this.whoDrives = whoDrives;
         this.moveLogic = new TankMoveLogic(this);
 
         this.currentHealth = maxHealth;
     }
 
-    public PlayerType whoDrives() {
-        return whoDrives;
+    public void setDriver(InstructionGenerator driver) {
+        this.driver = driver;
+    }
+
+    public InstructionGenerator whoDrives() {
+        return driver;
     }
 
     @Override

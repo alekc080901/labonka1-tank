@@ -59,10 +59,9 @@ public class LevelRandomLoader implements LevelLoader {
     }
 
     private void registerTanks(BaseLevel level, Random random) {
-        level.registerEntity(entityFactory.getTank(getRandomCoordinates(random), PlayerType.PLAYER), entityConfig.getTankImagePath(), AbstractSound.EMPTY);
+        entityFactory.registerTank(level, PlayerType.PLAYER, getRandomCoordinates(random));
         for (int i = 0; i < AI_NUMBER; i++) {
-            var tank = entityFactory.getTank(getRandomCoordinates(random), PlayerType.SIMPLE_AI);
-            level.registerEntity(tank, entityFactory.getGraphicPath(tank), AbstractSound.EMPTY);
+            entityFactory.registerTank(level, PlayerType.SIMPLE_AI, getRandomCoordinates(random));
         }
     }
 
