@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.core.entity.pubsub;
+package ru.mipt.bit.platformer.game.core.pubsub;
 
 import org.springframework.stereotype.Component;
 
@@ -7,21 +7,21 @@ import java.util.Set;
 
 @Component
 public class EntityPublisherImpl implements EntityPublisher {
-    Set<EntitySubscriber> subscribers = new HashSet<>();
+    Set<Subscriber> subscribers = new HashSet<>();
 
     @Override
-    public void register(EntitySubscriber subscriber) {
+    public void register(Subscriber subscriber) {
         subscribers.add(subscriber);
     }
 
     @Override
-    public void remove(EntitySubscriber subscriber) {
+    public void remove(Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
 
     @Override
     public void notify(EntityContainer container) {
-        for (EntitySubscriber subscriber : subscribers) {
+        for (Subscriber subscriber : subscribers) {
             subscriber.update(container);
         }
     }

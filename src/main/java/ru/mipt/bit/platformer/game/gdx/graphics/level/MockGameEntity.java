@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.gdx.graphics.entity;
+package ru.mipt.bit.platformer.game.gdx.graphics.level;
 
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;

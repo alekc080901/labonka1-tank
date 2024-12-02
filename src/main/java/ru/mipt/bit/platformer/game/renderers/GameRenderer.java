@@ -1,21 +1,21 @@
-package ru.mipt.bit.platformer.game.render;
+package ru.mipt.bit.platformer.game.renderers;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppRenderer implements Renderer {
-    private final GameRenderer gameRenderer;
+public class GameRenderer implements Renderer {
+    private final LogicRenderer logicRenderer;
     private final GraphicsRenderer graphicsRenderer;
 
-    public AppRenderer(GameRenderer gameRenderer, GraphicsRenderer graphicsRenderer) {
-        this.gameRenderer = gameRenderer;
+    public GameRenderer(LogicRenderer logicRenderer, GraphicsRenderer graphicsRenderer) {
+        this.logicRenderer = logicRenderer;
         this.graphicsRenderer = graphicsRenderer;
     }
 
     @Override
     public void render(float deltaTime) {
         graphicsRenderer.clear();
-        gameRenderer.render(deltaTime);
+        logicRenderer.render(deltaTime);
         graphicsRenderer.render(deltaTime);
     }
 

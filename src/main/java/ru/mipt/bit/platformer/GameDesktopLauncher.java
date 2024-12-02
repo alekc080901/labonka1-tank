@@ -8,7 +8,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.Game;
 
-@Component
+//@Component
 public class GameDesktopLauncher implements ApplicationListener {
     /*
     Класс, ответственный за инициализацию объектов

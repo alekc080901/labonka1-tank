@@ -24,7 +24,7 @@ class PlayerMoveObstacleTest {
         Obstacle obstacle1 = new Obstacle(new Coordinates(1, 3));
         Obstacle obstacle2 = new Obstacle(new Coordinates(3, 3));
 
-        tank = new Tank(new Coordinates(1, 4), PlayerTypes.PLAYER);
+        tank = new Tank(new Coordinates(1, 4), PlayerType.PLAYER);
         Set<Obstacle> obstacles = Set.of(obstacle1, obstacle2);
         Set<Tank> players = Set.of(tank);
         level = new BaseLevel(players, obstacles, new Coordinates(MAP_SIZE_WIDTH, MAP_SIZE_HEIGHT));

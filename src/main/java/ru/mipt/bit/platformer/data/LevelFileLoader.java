@@ -2,11 +2,8 @@ package ru.mipt.bit.platformer.data;
 
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.game.core.*;
-import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
-import ru.mipt.bit.platformer.game.core.entity.Obstacle;
-import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
-import ru.mipt.bit.platformer.game.core.entity.Tank;
-import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
+import ru.mipt.bit.platformer.game.core.entity.*;
+import ru.mipt.bit.platformer.game.core.pubsub.Subscriber;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 import java.io.*;
@@ -20,16 +17,16 @@ import java.util.Set;
 public class LevelFileLoader implements LevelLoader {
 
     private final String filePath;
-    private final Set<EntitySubscriber> subscribers;
+    private final Set<Subscriber> subscribers;
+    private final GameEntityFactory entityFactory;
+    private final EntityConfig entityConfig;
 
-    public LevelFileLoader(String filePath, Set<EntitySubscriber> subscribers) {
+    public LevelFileLoader(String filePath, Set<Subscriber> subscribers, EntityConfig entityConfig,
+                           GameEntityFactory entityFactory) {
         this.filePath = filePath;
         this.subscribers = subscribers;
-    }
-
-    public LevelFileLoader(String filePath) {
-        this.filePath = filePath;
-        this.subscribers = null;
+        this.entityFactory = entityFactory;
+        this.entityConfig = entityConfig;
     }
 
     @Override
@@ -40,7 +37,7 @@ public class LevelFileLoader implements LevelLoader {
                 )) {
             int width = getWidth();
             int height = getHeight();
-            BaseLevel level = new BaseLevel(new Coordinates(width, height));
+            BaseLevel level = new BaseLevel(new Coordinates(width, height), entityFactory);
             fillTanksAndObstacles(level, br, height);
             return level;
         } catch (FileNotFoundException e) {
@@ -68,13 +65,16 @@ public class LevelFileLoader implements LevelLoader {
             char c = line.charAt(i);
             switch (c) {
                 case 'T':
-                    level.registerEntity(new Obstacle(new Coordinates(i, maxRow - rowNumber)), EntityConfig.GREEN_TREE_IMAGE_PATH, AbstractSound.EMPTY);
+                    var obstacle = entityFactory.getObstacle(new Coordinates(i, maxRow - rowNumber));
+                    level.registerEntity(obstacle, entityFactory.getGraphicPath(obstacle), AbstractSound.EMPTY);
                     break;
                 case 'X':
-                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.PLAYER), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
+                    var playerTank = entityFactory.getTank(new Coordinates(i, maxRow - rowNumber), PlayerType.PLAYER);
+                    level.registerEntity(playerTank, entityFactory.getGraphicPath(playerTank), AbstractSound.EMPTY);
                     break;
                 case 'B':
-                    level.registerEntity(new Tank(new Coordinates(i, maxRow - rowNumber), PlayerTypes.SIMPLE_AI), EntityConfig.BLUE_TANK_IMAGE_PATH, AbstractSound.EMPTY);
+                    var enemyTank = entityFactory.getTank(new Coordinates(i, maxRow - rowNumber), PlayerType.SIMPLE_AI);
+                    level.registerEntity(enemyTank, entityFactory.getGraphicPath(enemyTank), AbstractSound.EMPTY);
                     break;
                 case '_':
                     break;

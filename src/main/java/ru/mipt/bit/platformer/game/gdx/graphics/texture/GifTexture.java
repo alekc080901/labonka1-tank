@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.gdx.graphics.entity;
+package ru.mipt.bit.platformer.game.gdx.graphics.texture;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import org.jetbrains.annotations.NotNull;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.GifTexture;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.ImageTexture;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.TextureDrawer;
 
 import java.util.Set;
 
@@ -14,7 +17,6 @@ public class GdxEntity implements GraphicEntity {
     private static final Set<String> IMAGE_EXTENSIONS = Set.of("png", "jpg", "jpeg");
     private static final Set<String> GIF_EXTENSIONS = Set.of("gif");
     protected final GameEntity gameEntity;
-    private float rotation = 0f;
     protected final TextureDrawer textureDrawer;
 
     public GdxEntity(GameEntity entity, String texturePath) {
@@ -35,7 +37,7 @@ public class GdxEntity implements GraphicEntity {
 
     @Override
     public void draw(Batch batch, float deltaTime) {
-        textureDrawer.draw(batch, deltaTime, rotation);
+        textureDrawer.draw(batch, deltaTime, gameEntity.getRotation());
     }
 
     @Override
@@ -49,11 +51,6 @@ public class GdxEntity implements GraphicEntity {
 
     public Coordinates getCoordinates() {
         return gameEntity.getCoordinates();
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
     }
 
     @Override

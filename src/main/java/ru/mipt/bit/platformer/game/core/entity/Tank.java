@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.game.core.entity;
 
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
-import ru.mipt.bit.platformer.game.core.PlayerTypes;
+import ru.mipt.bit.platformer.game.core.PlayerType;
 import ru.mipt.bit.platformer.game.core.logic.TankMoveLogic;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
@@ -11,28 +11,38 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
-    private static final EntityMovePattern MOVE_PATTERN = EntityMovePattern.EASE;
-    private static final float MOVEMENT_SPEED = EntityConfig.TANK_DEFAULT_SPEED;
-    private static final float BULLET_SPEED = EntityConfig.BULLET_DEFAULT_SPEED;
-    private static final float BULLET_DAMAGE = EntityConfig.BULLET_DEFAULT_DAMAGE;
-    private static final long RECHARGE = 1000;
-    private final static int Z_INDEX = 2;
+    private final EntityMovePattern movePattern;
+    private final float movementSpeed;
+    private final float bulletSpeed;
+    private final float bulletDamage;
+    private final long RECHARGE;
+    private final int Z_INDEX;
 
     private Coordinates coordinates;
     private float rotation = 0f;
 
-    private final float maxHealth = EntityConfig.TANK_DEFAULT_HEALTH;
-    private float currentHealth = maxHealth;
+    private final float maxHealth;
+    private float currentHealth;
     private final TankMoveLogic moveLogic;
-    private final PlayerTypes whoDrives;
+    private final PlayerType whoDrives;
 
-    public Tank(Coordinates coordinates, PlayerTypes whoDrives) {
+    public Tank(Coordinates coordinates, PlayerType whoDrives, EntityMovePattern movePattern, float movementSpeed,
+                float bulletSpeed, float bulletDamage, float maxHealth, long recharge, int zIndex) {
+        this.movePattern = movePattern;
+        this.movementSpeed = movementSpeed;
+        this.bulletSpeed = bulletSpeed;
+        this.bulletDamage = bulletDamage;
         this.coordinates = coordinates;
+        RECHARGE = recharge;
+        Z_INDEX = zIndex;
+        this.maxHealth = maxHealth;
         this.whoDrives = whoDrives;
         this.moveLogic = new TankMoveLogic(this);
+
+        this.currentHealth = maxHealth;
     }
 
-    public PlayerTypes whoDrives() {
+    public PlayerType whoDrives() {
         return whoDrives;
     }
 
@@ -57,7 +67,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public EntityMovePattern getMovePattern() {
-        return MOVE_PATTERN;
+        return movePattern;
     }
 
     @Override
@@ -112,12 +122,12 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public void shoot(BaseLevel level) {
-        Bullet bullet = new Bullet(this, BULLET_SPEED, BULLET_DAMAGE);
+        Bullet bullet = level.getEntityFactory().getBullet(this, bulletSpeed, bulletDamage);
         Coordinates nextCoordinate = bullet.yetAnotherStepForward();
         if (level.getAt(nextCoordinate) != null) return;
         bullet.setCoordinates(nextCoordinate);
         bullet.move(rotation, level);
-        level.registerEntity(bullet, EntityConfig.BULLET_IMAGE_PATH, AbstractSound.SHOOT_SOUND);
+        level.registerEntity(bullet, level.getEntityFactory().getGraphicPath(bullet), AbstractSound.SHOOT_SOUND);
     }
 
     @Override
@@ -126,6 +136,6 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     }
 
     public float getSpeed() {
-        return MOVEMENT_SPEED;
+        return movementSpeed;
     }
 }

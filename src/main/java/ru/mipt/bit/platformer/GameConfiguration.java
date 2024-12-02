@@ -8,7 +8,9 @@ import ru.mipt.bit.platformer.data.LevelLoader;
 import ru.mipt.bit.platformer.data.LevelRandomLoader;
 import ru.mipt.bit.platformer.game.controls.commands.CommandFactory;
 import ru.mipt.bit.platformer.game.core.TimeCounter;
-import ru.mipt.bit.platformer.game.core.entity.pubsub.EntitySubscriber;
+import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
+import ru.mipt.bit.platformer.game.core.entity.GameEntityFactory;
+import ru.mipt.bit.platformer.game.core.pubsub.Subscriber;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxTimeCounter;
@@ -22,14 +24,16 @@ public class GameConfiguration {
 
     // Можно написать красивее со Spring Boot и ConditionalOnProperty
     @Bean
-    public BaseLevel chooseBaseLevel(@Value("${game.level.generation}") String generationInfo, @Autowired
-            EntitySubscriber baseLevelSubscriber) {
+    public BaseLevel chooseBaseLevel(@Value("${game.level.generation}") String generationInfo,
+                                     @Autowired Subscriber baseLevelSubscriber,
+                                     @Autowired EntityConfig entityConfig,
+                                     @Autowired GameEntityFactory entityFactory) {
         LevelLoader levelLoader;
         if (generationInfo.equalsIgnoreCase("random")) {
             levelLoader = new LevelRandomLoader(GdxLevel.getLevelSizeFromFile("level.tmx"),
-                    Set.of(baseLevelSubscriber));
+                    Set.of(baseLevelSubscriber), entityConfig, entityFactory);
         } else if (generationInfo.toLowerCase().endsWith(".level")) {
-            levelLoader = new LevelFileLoader(generationInfo, Set.of(baseLevelSubscriber));
+            levelLoader = new LevelFileLoader(generationInfo, Set.of(baseLevelSubscriber), entityConfig, entityFactory);
         } else {
             throw new IllegalArgumentException("Incorrect game.level.generation value!");
         }

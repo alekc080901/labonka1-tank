@@ -3,17 +3,19 @@ package ru.mipt.bit.platformer.game.core.logic;
 import ru.mipt.bit.platformer.game.core.entity.Bullet;
 import ru.mipt.bit.platformer.game.core.entity.EntityConfig;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
-import ru.mipt.bit.platformer.game.core.entity.pubsub.ImageEntityContainer;
+import ru.mipt.bit.platformer.game.core.pubsub.ImageEntityContainer;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 
 public class BulletMoveLogic extends BasicMoveLogic {
 
     private final Bullet bullet;
     private BaseLevel level;
+    private final String explosionPath;
 
-    public BulletMoveLogic(Bullet bullet, float speed) {
+    public BulletMoveLogic(Bullet bullet, float speed, String explosionPath) {
         super(bullet, speed);
         this.bullet = bullet;
+        this.explosionPath = explosionPath;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class BulletMoveLogic extends BasicMoveLogic {
         if (level.hasTankDestination(bullet.getShooter(), bullet.getCoordinates())) {
              Tank targetTank = level.getTankAtDestination(bullet.getCoordinates());
             targetTank.hurt(bullet.getDamage());
-            level.getPublisher().notify(new ImageEntityContainer(targetTank.getDestination(), EntityConfig.EXPLOSION_IMAGE_PATH, bullet.getZIndex()));
+            level.getPublisher().notify(new ImageEntityContainer(targetTank.getDestination(), explosionPath, bullet.getZIndex()));
             finishMove();
             level.deleteEntity(bullet);
             return;

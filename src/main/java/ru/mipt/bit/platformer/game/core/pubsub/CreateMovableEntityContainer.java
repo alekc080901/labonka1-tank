@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.core.entity.pubsub;
+package ru.mipt.bit.platformer.game.core.pubsub;
 
 import ru.mipt.bit.platformer.game.core.entity.EntityMovePattern;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;

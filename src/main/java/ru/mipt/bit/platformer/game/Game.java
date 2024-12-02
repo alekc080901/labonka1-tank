@@ -6,25 +6,24 @@ import ru.mipt.bit.platformer.game.controls.command_queue.CommandPublisher;
 import ru.mipt.bit.platformer.game.controls.command_queue.CommandReceiver;
 import ru.mipt.bit.platformer.game.core.TimeCounter;
 import ru.mipt.bit.platformer.game.gdx.sound.BGMPlayer;
-import ru.mipt.bit.platformer.game.gdx.sound.SFXPlayer;
-import ru.mipt.bit.platformer.game.render.AppRenderer;
+import ru.mipt.bit.platformer.game.renderers.GameRenderer;
 
 @Component
 public class Game {
 
-    private final AppRenderer appRenderer;
+    private final GameRenderer gameRenderer;
     private final TimeCounter timeCounter;
     private final CommandPublisher commandPublisher;
     private final CommandReceiver commandReceiver;
     private final BGMPlayer bgmPlayer;
 
     @Autowired
-    public Game(AppRenderer appRenderer,
+    public Game(GameRenderer gameRenderer,
                 TimeCounter timeCounter,
                 CommandPublisher commandPublisher,
                 CommandReceiver commandReceiver,
                 BGMPlayer bgmPlayer) {
-        this.appRenderer = appRenderer;
+        this.gameRenderer = gameRenderer;
         this.timeCounter = timeCounter;
         this.commandPublisher = commandPublisher;
         this.commandReceiver = commandReceiver;
@@ -41,11 +40,11 @@ public class Game {
         float deltaTime = timeCounter.getDelta();
         commandPublisher.publishAll();
         commandReceiver.processAll();
-        appRenderer.render(deltaTime);
+        gameRenderer.render(deltaTime);
     }
 
     public void stop() {
-        appRenderer.stop();
+        gameRenderer.stop();
     }
 
 }

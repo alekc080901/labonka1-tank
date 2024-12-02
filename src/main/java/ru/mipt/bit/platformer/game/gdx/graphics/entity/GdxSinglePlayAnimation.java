@@ -2,6 +2,8 @@ package ru.mipt.bit.platformer.game.gdx.graphics.entity;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.GifTexture;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.TextureDrawer;
 
 public class GdxSinglePlayAnimation implements GraphicEntity {
 
@@ -36,10 +38,5 @@ public class GdxSinglePlayAnimation implements GraphicEntity {
     @Override
     public TextureDrawer getTexture() {
         return gdxEntity.getTexture();
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        gdxEntity.setRotation(rotation);
     }
 }

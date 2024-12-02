@@ -8,12 +8,10 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.core.*;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntity;
-import ru.mipt.bit.platformer.game.gdx.graphics.entity.EntityFactory;
-import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntityFactory;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxSinglePlayAnimation;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.getSingleLayer;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.moveRectangleAtTileCenter;
@@ -48,7 +46,7 @@ public class GdxLevel {
 
     public void drawEntities(Batch batch, float deltaTime) {
         for (GameEntity entity : levelEntities.descendingKeySet()) {
-            GraphicEntity updatedEntity = EntityFactory.getUpdatedEntity(levelEntities.get(entity));
+            GraphicEntity updatedEntity = GraphicEntityFactory.getUpdatedEntity(levelEntities.get(entity));
             updatedEntity.draw(batch, deltaTime);
         }
         removeSingleUseEntities();
@@ -64,8 +62,8 @@ public class GdxLevel {
         forRemoval.forEach(levelEntities::remove);
     }
 
-    public GdxEntity getGdxObjectFromEntity(GameEntity entity) {
-        return (GdxEntity) levelEntities.get(entity);
+    public GraphicEntity getGraphicFromGame(GameEntity entity) {
+        return levelEntities.get(entity);
     }
 
     public void addEntity(GameEntity gameEntity, GraphicEntity graphicsEntity) {

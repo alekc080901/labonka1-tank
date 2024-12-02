@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.KillableEntity;
+import ru.mipt.bit.platformer.game.gdx.graphics.texture.TextureDrawer;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils;
 
 class HealthDecorator implements GraphicEntityDecorator {
@@ -38,11 +39,6 @@ class HealthDecorator implements GraphicEntityDecorator {
     @Override
     public TextureDrawer getTexture() {
         return wrappedEntity.getTexture();
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        wrappedEntity.setRotation(rotation);
     }
 
     private void drawHealthBar(Batch batch) {

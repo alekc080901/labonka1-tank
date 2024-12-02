@@ -1,22 +1,21 @@
-package ru.mipt.bit.platformer.game.gdx.graphics;
+package ru.mipt.bit.platformer.game.gdx.graphics.level;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.AbstractSound;
-import ru.mipt.bit.platformer.game.core.entity.pubsub.*;
+import ru.mipt.bit.platformer.game.core.pubsub.*;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.*;
-import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
 import ru.mipt.bit.platformer.game.gdx.sound.SFXPlayer;
 
 @Component
-public class GdxEntitySubscriber implements EntitySubscriber {
+public class GdxLevelSubscriber implements Subscriber {
 
     private final GdxLevel level;
     private final SFXPlayer sfxPlayer;
 
     @Autowired
-    public GdxEntitySubscriber(GdxLevel level, SFXPlayer sfxPlayer) {
+    public GdxLevelSubscriber(GdxLevel level, SFXPlayer sfxPlayer) {
         this.level = level;
         this.sfxPlayer = sfxPlayer;
     }

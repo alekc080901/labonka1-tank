@@ -5,16 +5,11 @@ import ru.mipt.bit.platformer.game.core.Coordinates;
 public class Obstacle implements GameEntity{
 
     private Coordinates coordinates;
-    private float rotation = 0f;
-    private final static int Z_INDEX = 5;
+    private final int zIndex;
 
-    public Obstacle(Coordinates coordinates, float rotation) {
+    public Obstacle(Coordinates coordinates, int zIndex) {
         this.coordinates = coordinates;
-        this.rotation = rotation;
-    }
-
-    public Obstacle(Coordinates coordinates) {
-        this.coordinates = coordinates;
+        this.zIndex = zIndex;
     }
 
     @Override
@@ -29,11 +24,11 @@ public class Obstacle implements GameEntity{
 
     @Override
     public float getRotation() {
-        return rotation;
+        return 0f;
     }
 
     @Override
     public int getZIndex() {
-        return Z_INDEX;
+        return zIndex;
     }
 }

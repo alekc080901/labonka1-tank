@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.core.level;
 import ru.mipt.bit.platformer.exceptions.IncorrectFileFormatException;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.*;
-import ru.mipt.bit.platformer.game.core.entity.pubsub.*;
+import ru.mipt.bit.platformer.game.core.pubsub.*;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -13,13 +13,15 @@ public class BaseLevel {
 
     private final ArrayList<GameEntity> entities = new ArrayList<>();  // ArrayList, чтобы модифицировать на лету
     private final EntityPublisher graphicsLevelPublisher = new EntityPublisherImpl();
+    private final GameEntityFactory entityFactory;
     private Coordinates upperRightSize;
 
-    public BaseLevel(Coordinates upperRightSize) {
+    public BaseLevel(Coordinates upperRightSize, GameEntityFactory entityFactory) {
+        this.entityFactory = entityFactory;
         setUpperRightSize(upperRightSize);
     }
 
-    public void bindWithGraphics(EntitySubscriber graphicsSubscriber) {
+    public void bindWithGraphics(Subscriber graphicsSubscriber) {
         graphicsLevelPublisher.register(graphicsSubscriber);
     }
 
@@ -138,6 +140,10 @@ public class BaseLevel {
                 throw new IncorrectFileFormatException("Level object is out of level bounds!");
             }
         }
+    }
+
+    public GameEntityFactory getEntityFactory() {
+        return entityFactory;
     }
 
     public EntityPublisher getPublisher() {

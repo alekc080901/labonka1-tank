@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.game.core;
 
-public enum PlayerTypes {
+public enum PlayerType {
     PLAYER,
     SIMPLE_AI
 }

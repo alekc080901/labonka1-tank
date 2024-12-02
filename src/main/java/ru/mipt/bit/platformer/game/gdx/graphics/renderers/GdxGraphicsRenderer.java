@@ -1,15 +1,13 @@
-package ru.mipt.bit.platformer.game.gdx.graphics.renderer;
+package ru.mipt.bit.platformer.game.gdx.graphics.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
-import ru.mipt.bit.platformer.game.render.GraphicsRenderer;
+import ru.mipt.bit.platformer.game.renderers.GraphicsRenderer;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils.createSingleLayerMapRenderer;

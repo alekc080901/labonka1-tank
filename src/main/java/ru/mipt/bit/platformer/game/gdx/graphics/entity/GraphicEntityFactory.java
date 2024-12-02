@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.game.gdx.graphics.entity;
 
 import ru.mipt.bit.platformer.data.GameSettings;
 
-public class EntityFactory {
+public class GraphicEntityFactory {
     
     public static GraphicEntity getUpdatedEntity(GraphicEntity entity) {
         if (GameSettings.showHealthBar()) {

@@ -1,18 +1,19 @@
-package ru.mipt.bit.platformer.game.gdx.graphics.renderer;
+package ru.mipt.bit.platformer.game.gdx.graphics.renderers;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.springframework.stereotype.Component;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
+import ru.mipt.bit.platformer.game.core.entity.RotatableEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GraphicEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.entity.GdxMoveEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.level.GdxLevel;
-import ru.mipt.bit.platformer.game.render.MoveRenderer;
+import ru.mipt.bit.platformer.game.renderers.GraphicsMoveRenderer;
 import ru.mipt.bit.platformer.game.gdx.utils.TileMovement;
 
 @Component
-public class GdxMoveRenderer implements MoveRenderer {
+public class GdxMoveRenderer implements GraphicsMoveRenderer {
     private final GdxLevel level;
     private final TileMovement tileMovement;
 
@@ -24,23 +25,19 @@ public class GdxMoveRenderer implements MoveRenderer {
     @Override
     public void shiftEntity(MovableEntity entity) {
         Coordinates dest = entity.getDestination();
-        GdxMoveEntity gdxEntity = getRenderedEntity(entity);
-        if (gdxEntity == null) return;
+        var gdxMoveEntity = (GdxMoveEntity) level.getGraphicFromGame(entity);
+        if (gdxMoveEntity == null) return;
 
-        Coordinates coords = gdxEntity.getCoordinates();
+        var coords = gdxMoveEntity.getGameEntity().getCoordinates();
         tileMovement.moveRectangleBetweenTileCenters(
-                gdxEntity.getTexture().getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), gdxEntity.getInterpolationMethod(), entity.getProgress()
+                gdxMoveEntity.getTexture().getRectangle(), new GridPoint2(coords.x, coords.y), new GridPoint2(dest.x, dest.y), gdxMoveEntity.getInterpolationMethod(), entity.getProgress()
         );
     }
 
     @Override
-    public void turnEntity(GameEntity entity) {
-        GraphicEntity gdxEntity = getRenderedEntity(entity);
+    public void turnEntity(RotatableEntity entity) {
+        GraphicEntity gdxEntity = level.getGraphicFromGame(entity);
         if (gdxEntity == null) return;
-        gdxEntity.setRotation(entity.getRotation());
-    }
-
-    private GdxMoveEntity getRenderedEntity(GameEntity gameEntity) {
-        return (GdxMoveEntity) level.getGdxObjectFromEntity(gameEntity);
+        entity.turn(entity.getRotation());
     }
 }

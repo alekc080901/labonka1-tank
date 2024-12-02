@@ -12,20 +12,23 @@ public class Bullet implements MovableEntity {
     /*
     Класс танка, который может двигаться и (скоро) стрелять под контролем игрока или ИИшки.
      */
-    private static final EntityMovePattern MOVE_PATTERN = EntityMovePattern.SIMPLE;
+    private final EntityMovePattern movePattern;
     private final ShootableEntity shooter;
-    private final float rotation;
+    private float rotation;
     private final BasicMoveLogic moveLogic;
     private Coordinates coordinates;
     private final float damage;
-    private final static int Z_INDEX = 1;
+    private final int zIndex;
 
-    public Bullet(ShootableEntity shooter, float bulletSpeed, float damage) {
+    public Bullet(ShootableEntity shooter, float bulletSpeed, EntityMovePattern movePattern, String explosionPath,
+                  float damage, int zIndex) {
+        this.movePattern = movePattern;
         this.rotation = shooter.getRotation();
         this.coordinates = shooter.getCoordinates();
         this.shooter = shooter;
-        this.moveLogic = new BulletMoveLogic(this, bulletSpeed);
+        this.moveLogic = new BulletMoveLogic(this, bulletSpeed, explosionPath);
         this.damage = damage;
+        this.zIndex = zIndex;
     }
 
     public Coordinates yetAnotherStepForward() {
@@ -50,7 +53,7 @@ public class Bullet implements MovableEntity {
 
     @Override
     public int getZIndex() {
-        return Z_INDEX;
+        return zIndex;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class Bullet implements MovableEntity {
 
     @Override
     public EntityMovePattern getMovePattern() {
-        return MOVE_PATTERN;
+        return movePattern;
     }
 
     public float getDamage() {

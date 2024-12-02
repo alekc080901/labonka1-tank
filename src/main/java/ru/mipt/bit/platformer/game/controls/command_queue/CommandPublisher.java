@@ -11,7 +11,7 @@ import ru.mipt.bit.platformer.game.controls.commands.CommandType;
 import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.entity.GameEntity;
-import ru.mipt.bit.platformer.game.core.PlayerTypes;
+import ru.mipt.bit.platformer.game.core.PlayerType;
 import ru.mipt.bit.platformer.game.core.entity.Tank;
 
 import java.util.*;
@@ -57,7 +57,7 @@ public class CommandPublisher {
     private void registerInputGenertors(BaseLevel level) {
         for (Tank tank : level.getTanks()) {
             register(
-                    tank.whoDrives() == PlayerTypes.PLAYER ? new PlayerInstructionGenerator(tank) :
+                    tank.whoDrives() == PlayerType.PLAYER ? new PlayerInstructionGenerator(tank) :
                             new SimpleAIInstructionGenerator(tank)
             );
         }
