@@ -34,10 +34,14 @@ public class BaseLevel {
         return null;
     }
 
-    public Tank getTankAtDestination(Coordinates coordinates) {
+    public KillableEntity getTarget(Coordinates coordinates) {
         for (GameEntity entity : entities) {
-            if (entity instanceof Tank && ((Tank) entity).getDestination().equals(coordinates) ) {
-                return (Tank) entity;
+            if (!(entity instanceof KillableEntity)) continue;
+            if (entity instanceof MovableEntity && ((MovableEntity) entity).getDestination().equals(coordinates)) {
+                return (KillableEntity) entity;
+            }
+            if (entity.getCoordinates().equals(coordinates) ) {
+                return (KillableEntity) entity;
             }
         }
         return null;
@@ -62,7 +66,21 @@ public class BaseLevel {
         return false;
     }
 
-    public boolean hasTankDestination(GameEntity caller, Coordinates coordinates) {
+    public boolean hasTarget(GameEntity caller, Coordinates coordinates) {
+        for (GameEntity entity : entities) {
+            if (!(entity instanceof KillableEntity)) continue;
+
+            // У MovableEntity идет проверка на destination вместо coordinates
+            if (entity instanceof MovableEntity
+                    && !entity.equals(caller)
+                    && ((MovableEntity) entity).getDestination().equals(coordinates)) {
+                return true;
+            }
+            if (!entity.equals(caller)
+                    && entity.getCoordinates().equals(coordinates)) {
+                return true;
+            }
+        }
         for (MovableEntity tank : getTanks()) {
             if (tank.getDestination().equals(coordinates) && !caller.equals(tank)) {
                 return true;

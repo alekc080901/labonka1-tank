@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.core.logic;
 
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.core.Direction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.entity.MovableEntity;
@@ -31,7 +32,7 @@ public class BasicMoveLogic {
         if (isMoving()) return;
 
         Coordinates oldCoordinates = entity.getCoordinates().copy();
-        moveAndChangeDestination(MoveCommand.getChangeFromRotation(rotation));
+        moveAndChangeDestination(Direction.getChangeFromRotation(rotation));
 
         if (canMove(level)) {
             isMoving = true;

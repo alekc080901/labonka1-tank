@@ -11,7 +11,7 @@ import ru.mipt.bit.platformer.game.core.entity.KillableEntity;
 import ru.mipt.bit.platformer.game.gdx.graphics.texture.TextureDrawer;
 import ru.mipt.bit.platformer.game.gdx.utils.GdxGameUtils;
 
-class HealthDecorator implements GraphicEntityDecorator {
+class HealthDecorator implements GraphicEntity {
     private static final int TOTAL_SEGMENTS = 8;
 
     private final GraphicEntity wrappedEntity;

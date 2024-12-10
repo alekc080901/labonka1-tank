@@ -16,16 +16,21 @@ public class CommandFactory {
     private final long moveCommandDelay;
     private final long toggleHealthCommandDelay;
     private final GameSettings settings;
+    private final Map<InputInstruction, CommandType> accordingTypesMap;
     private final Map<Object, Long> lastCommandExecuted = new HashMap<>();
 
-    public CommandFactory(long moveCommandDelay, long toggleHealthCommandDelay, GameSettings settings) {
+    public CommandFactory(long moveCommandDelay,
+                          long toggleHealthCommandDelay,
+                          GameSettings settings,
+                          Map<InputInstruction, CommandType> accordingTypesMap) {
         this.moveCommandDelay = moveCommandDelay;
         this.toggleHealthCommandDelay = toggleHealthCommandDelay;
+        this.accordingTypesMap = accordingTypesMap;
         this.settings = settings;
     }
 
     public Command fromInstruction(BaseLevel level, GameEntity entity, InputInstruction instruction) {
-        CommandType commandType = CommandType.get(instruction);
+        CommandType commandType = accordingTypesMap.get(instruction);
         Command command;
         long delay;
         switch (commandType) {
@@ -43,7 +48,7 @@ public class CommandFactory {
                 delay = shootableEntity.getRecharge();
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + CommandType.get(instruction));
+                throw new IllegalStateException("Unexpected value: " + accordingTypesMap.get(instruction));
         }
         if (isRecharging(commandType, entity, delay)) {
             return new NoneCommand();

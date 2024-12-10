@@ -16,14 +16,12 @@ public class LevelRandomLoader implements LevelLoader {
     private final Coordinates upperBorder;
     private final Set<Coordinates> vacantCoords;
     private final Set<Subscriber> subscribers;
-    private final EntityConfig entityConfig;
     private final GameEntityFactory entityFactory;
 
-    public LevelRandomLoader(Coordinates upperBorder, Set<Subscriber> subscribers, EntityConfig entityConfig, GameEntityFactory entityFactory) {
+    public LevelRandomLoader(Coordinates upperBorder, Set<Subscriber> subscribers, GameEntityFactory entityFactory) {
         this.upperBorder = upperBorder;
         this.vacantCoords = this.generateCoords(upperBorder);
         this.subscribers = subscribers;
-        this.entityConfig = entityConfig;
         this.entityFactory = entityFactory;
     }
 

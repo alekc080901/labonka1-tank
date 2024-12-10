@@ -14,6 +14,7 @@ public class PlayerInstructionGenerator implements InstructionGenerator {
     Реализация контракта генерации команд, производимых с подключенных устройств пользователем.
      */
     private final GameEntity gameEntity;
+    private final Map<InputInstruction, CommandType> accordingTypesMap;
     private final Map<CommandType, InputInstruction> lastInstructions = new HashMap<>();
 
 
@@ -21,8 +22,9 @@ public class PlayerInstructionGenerator implements InstructionGenerator {
             new KeyboardReceiver()
     );
 
-    public PlayerInstructionGenerator(GameEntity gameEntity) {
+    public PlayerInstructionGenerator(GameEntity gameEntity, Map<InputInstruction, CommandType> accordingTypesMap) {
         this.gameEntity = gameEntity;
+        this.accordingTypesMap = accordingTypesMap;
     }
 
     @Override
@@ -59,17 +61,17 @@ public class PlayerInstructionGenerator implements InstructionGenerator {
             }
         }
 
-        var types = filteredInstructions.stream().map(CommandType::get).collect(Collectors.toSet());
+        var types = filteredInstructions.stream().map(accordingTypesMap::get).collect(Collectors.toSet());
         for (InputInstruction newInstruction : newInstructions) {
-            if (!types.contains(CommandType.get(newInstruction))) {
+            if (!types.contains(accordingTypesMap.get(newInstruction))) {
                 filteredInstructions.add(newInstruction);
-                lastInstructions.put(CommandType.get(newInstruction), newInstruction);
+                lastInstructions.put(accordingTypesMap.get(newInstruction), newInstruction);
             }
         }
         return filteredInstructions;
     }
 
     private InputInstruction getLastInstructionOfType(InputInstruction instruction) {
-        return lastInstructions.getOrDefault(CommandType.get(instruction), null);
+        return lastInstructions.getOrDefault(accordingTypesMap.get(instruction), null);
     }
 }

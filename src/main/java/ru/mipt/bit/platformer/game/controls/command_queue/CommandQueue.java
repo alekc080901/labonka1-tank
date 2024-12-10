@@ -19,12 +19,15 @@ public class CommandQueue {
         return commands.poll();
     }
 
-    public boolean isEmpty() {
-        return commands.isEmpty();
-    }
-
     @Override
     public String toString() {
         return commands.toString();
+    }
+
+    public void processAll() {
+        while (!commands.isEmpty()) {
+            QueueElement queueElement = pollCommand();
+            queueElement.getCommand().execute();
+        }
     }
 }

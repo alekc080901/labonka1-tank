@@ -1,7 +1,10 @@
 package ru.mipt.bit.platformer.game.core.entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.mipt.bit.platformer.game.controls.commands.CommandType;
+import ru.mipt.bit.platformer.game.controls.input.InputInstruction;
 import ru.mipt.bit.platformer.game.controls.input.generators.PlayerInstructionGenerator;
 import ru.mipt.bit.platformer.game.controls.input.generators.SimpleAIInstructionGenerator;
 import ru.mipt.bit.platformer.game.core.Coordinates;
@@ -14,24 +17,40 @@ import java.util.Map;
 @Component
 public class GameEntityFactory {
 
-    private final EntityConfig config;
-    private static Map<Class<? extends GameEntity>, String> imagesPath = new HashMap<>();
+    @Value("${game.entity.tank.default-speed}")
+    private float tankDefaultSpeed;
+    @Value("${game.entity.tank.default-health}")
+    private float tankDefaultHealth;
+    @Value("${game.entity.tank.recharge}")
+    private long tankDefaultRecharge;
+    @Value("${game.entity.bullet.default-speed}")
+    private float bulletDefaultSpeed;
+    @Value("${game.entity.bullet.default-damage}")
+    private float bulletDefaultDamage;
+    @Value("${game.entity.explosion.texture}")
+    private String explosionImagePath;
+
+    private final EntityMovePattern tankMovePattern = EntityMovePattern.EASE;
+    private final EntityMovePattern bulletMovePattern = EntityMovePattern.SIMPLE;
+
+    private final Map<InputInstruction, CommandType> accordingTypesMap;
+    private final Map<Class<? extends GameEntity>, String> imagesPath;
 
     @Autowired
-    public GameEntityFactory(EntityConfig config) {
-        this.config = config;
-        fillImagesPath();
+    public GameEntityFactory(Map<InputInstruction, CommandType> accordingTypesMap,
+                             Map<Class<? extends GameEntity>, String> imagesPath) {
+        this.accordingTypesMap = accordingTypesMap;
+        this.imagesPath = imagesPath;
     }
 
     public Tank getTank(Coordinates coordinates) {
-        return new Tank(coordinates, config.getTankMovePattern(), config.getTankDefaultSpeed(),
-                config.getBulletDefaultSpeed(), config.getBulletDefaultDamage(), config.getTankDefaultHealth(),
-                config.getTankDefaultRecharge(), config.getBulletZIndex());
+        return new Tank(coordinates, tankMovePattern, tankDefaultSpeed,
+                bulletDefaultSpeed, bulletDefaultDamage, tankDefaultHealth,
+                tankDefaultRecharge);
     }
 
     public Bullet getBullet(ShootableEntity shooter, float speed, float damage) {
-        return new Bullet(shooter, speed, config.getBulletMovePattern(), config.getExplosionImagePath(),
-                damage, config.getBulletZIndex());
+        return new Bullet(shooter, speed, bulletMovePattern, explosionImagePath, damage);
     }
 
     public void registerTank(BaseLevel level, PlayerType playerType, Coordinates coordinates) {
@@ -39,7 +58,7 @@ public class GameEntityFactory {
         level.registerEntity(tank, getGraphicPath(tank), AbstractSound.EMPTY);
         switch (playerType) {
             case PLAYER:
-                tank.setDriver(new PlayerInstructionGenerator(tank));
+                tank.setDriver(new PlayerInstructionGenerator(tank, accordingTypesMap));
                 break;
             case SIMPLE_AI:
                 tank.setDriver(new SimpleAIInstructionGenerator(tank));
@@ -48,16 +67,10 @@ public class GameEntityFactory {
     }
 
     public Obstacle getObstacle(Coordinates coordinates) {
-        return new Obstacle(coordinates, config.getObstacleZIndex());
+        return new Obstacle(coordinates);
     }
 
     public String getGraphicPath(GameEntity entity) {
         return imagesPath.get(entity.getClass());
-    }
-
-    private void fillImagesPath() {
-        imagesPath.put(Tank.class, config.getTankImagePath());
-        imagesPath.put(Obstacle.class, config.getGreenTreeImagePath());
-        imagesPath.put(Bullet.class, config.getBulletImagePath());
     }
 }

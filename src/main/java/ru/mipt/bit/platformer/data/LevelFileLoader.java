@@ -22,14 +22,12 @@ public class LevelFileLoader implements LevelLoader {
     private final String filePath;
     private final Set<Subscriber> subscribers;
     private final GameEntityFactory entityFactory;
-    private final EntityConfig entityConfig;
 
-    public LevelFileLoader(String filePath, Set<Subscriber> subscribers, EntityConfig entityConfig,
+    public LevelFileLoader(String filePath, Set<Subscriber> subscribers,
                            GameEntityFactory entityFactory) {
         this.filePath = filePath;
         this.subscribers = subscribers;
         this.entityFactory = entityFactory;
-        this.entityConfig = entityConfig;
     }
 
     @Override

@@ -19,12 +19,15 @@ public class CommandPublisher {
     private final CommandQueue commandQueue;
     private final BaseLevel level;
     private final CommandFactory commandFactory;
+    private final Map<InputInstruction, CommandType> accordingTypesMap;
 
     @Autowired
-    public CommandPublisher(CommandQueue commandQueue, BaseLevel level, CommandFactory commandFactory) {
+    public CommandPublisher(CommandQueue commandQueue, BaseLevel level, CommandFactory commandFactory,
+                            Map<InputInstruction, CommandType> accordingTypesMap) {
         this.commandQueue = commandQueue;
         this.level = level;
         this.commandFactory = commandFactory;
+        this.accordingTypesMap = accordingTypesMap;
 
         getInputGenerators(level);
     }
@@ -40,7 +43,7 @@ public class CommandPublisher {
         Set<QueueElement> commandsFromInstructions = userInstructions.stream()
                 .map(instruction -> {
                     Command command = commandFactory.fromInstruction(level, gameEntity, instruction);
-                    return new QueueElement(gameEntity, command, CommandType.get(instruction));
+                    return new QueueElement(gameEntity, command, accordingTypesMap.get(instruction));
                 })
                 .collect(Collectors.toSet());
         commandQueue.addCommands(commandsFromInstructions);

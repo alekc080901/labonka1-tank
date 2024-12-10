@@ -1,6 +1,8 @@
 package ru.mipt.bit.platformer.game.core.entity;
 
+import org.springframework.beans.factory.annotation.Value;
 import ru.mipt.bit.platformer.game.controls.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.core.Direction;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
 import ru.mipt.bit.platformer.game.core.logic.BulletMoveLogic;
@@ -14,25 +16,25 @@ public class Bullet implements MovableEntity {
      */
     private final EntityMovePattern movePattern;
     private final ShootableEntity shooter;
-    private float rotation;
+    private final float rotation;
     private final BasicMoveLogic moveLogic;
     private Coordinates coordinates;
     private final float damage;
-    private final int zIndex;
+    @Value("${game.entity.bullet.z-index}")
+    private int zIndex;
 
     public Bullet(ShootableEntity shooter, float bulletSpeed, EntityMovePattern movePattern, String explosionPath,
-                  float damage, int zIndex) {
+                  float damage) {
         this.movePattern = movePattern;
         this.rotation = shooter.getRotation();
         this.coordinates = shooter.getCoordinates();
         this.shooter = shooter;
         this.moveLogic = new BulletMoveLogic(this, bulletSpeed, explosionPath);
         this.damage = damage;
-        this.zIndex = zIndex;
     }
 
     public Coordinates yetAnotherStepForward() {
-        return coordinates.add(MoveCommand.getChangeFromRotation(rotation));
+        return coordinates.add(Direction.getChangeFromRotation(rotation));
     }
 
     @Override

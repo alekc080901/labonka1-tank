@@ -1,5 +1,6 @@
 package ru.mipt.bit.platformer.game.core.entity;
 
+import org.springframework.beans.factory.annotation.Value;
 import ru.mipt.bit.platformer.game.controls.input.generators.InstructionGenerator;
 import ru.mipt.bit.platformer.game.core.level.BaseLevel;
 import ru.mipt.bit.platformer.game.core.Coordinates;
@@ -16,7 +17,9 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private final float bulletSpeed;
     private final float bulletDamage;
     private final long RECHARGE;
-    private final int Z_INDEX;
+
+    @Value("${game.entity.tank.z-index}")
+    private int zIndex;
 
     private Coordinates coordinates;
     private float rotation = 0f;
@@ -27,14 +30,13 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
     private InstructionGenerator driver;
 
     public Tank(Coordinates coordinates, EntityMovePattern movePattern, float movementSpeed,
-                float bulletSpeed, float bulletDamage, float maxHealth, long recharge, int zIndex) {
+                float bulletSpeed, float bulletDamage, float maxHealth, long recharge) {
         this.movePattern = movePattern;
         this.movementSpeed = movementSpeed;
         this.bulletSpeed = bulletSpeed;
         this.bulletDamage = bulletDamage;
         this.coordinates = coordinates;
         RECHARGE = recharge;
-        Z_INDEX = zIndex;
         this.maxHealth = maxHealth;
         this.moveLogic = new TankMoveLogic(this);
 
@@ -80,7 +82,7 @@ public class Tank implements MovableEntity, KillableEntity, ShootableEntity, Rot
 
     @Override
     public int getZIndex() {
-        return Z_INDEX;
+        return zIndex;
     }
 
     @Override
