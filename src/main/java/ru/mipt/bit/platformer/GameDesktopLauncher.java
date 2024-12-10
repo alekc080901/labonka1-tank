@@ -3,65 +3,28 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import ru.mipt.bit.platformer.game.level.Level;
-import ru.mipt.bit.platformer.game.level.LevelEntity;
-import ru.mipt.bit.platformer.game.level.LevelEntityDatabase;
-import ru.mipt.bit.platformer.game.level.LevelRenderer;
-import ru.mipt.bit.platformer.game.player.Player;
-import ru.mipt.bit.platformer.game.player.PlayerMove;
-import ru.mipt.bit.platformer.game.player.PlayerMoveCoordinator;
-import ru.mipt.bit.platformer.game.UserInput;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+import ru.mipt.bit.platformer.game.Game;
 
-import java.util.List;
-
+//@Component
 public class GameDesktopLauncher implements ApplicationListener {
     /*
     Класс, ответственный за инициализацию объектов
      */
 
-    private LevelRenderer levelRenderer;
-    private PlayerMoveCoordinator playerMoveCoordinator;
-    private Player player;
+    private Game game;
 
     @Override
     public void create() {
-        Level level = new Level("level.tmx");
-        Batch batch = new SpriteBatch();
-
-        LevelEntity blueTank = LevelEntityDatabase.getBlueTank();
-        blueTank.setCoordinates(1, 1);
-
-        LevelEntity greenTree = LevelEntityDatabase.getGreenTree();
-        greenTree.setCoordinates(1, 3);
-
-        player = new Player(blueTank);
-//        player = new Player(greenTree);  // Можно двигаться кустом :)
-
-        List<LevelEntity> obstacles = LevelEntityDatabase.createdObjects;  // Пока препятствия - все объекты
-//        List<LevelObject> obstacles = Arrays.asList(greenTree);
-
-        levelRenderer = new LevelRenderer(level, batch, LevelEntityDatabase.createdObjects);
-        playerMoveCoordinator = new PlayerMoveCoordinator(player, obstacles);
+        ApplicationContext context = new AnnotationConfigApplicationContext(GameConfiguration.class);
+        this.game = (Game) context.getBean("game");
     }
 
     @Override
     public void render() {
-        levelRenderer.clear();
-
-        float deltaTime = levelRenderer.getDeltaTime();
-
-        PlayerMove playerMove = UserInput.handleUserInput();
-        if (playerMove != null) {
-            playerMoveCoordinator.makeMove(playerMove);
-        }
-        playerMoveCoordinator.confirmMove(deltaTime);
-        levelRenderer.shiftEntity(
-                player.getPlayerObject(), playerMoveCoordinator.getDestination(), playerMoveCoordinator.getMovementProgress()
-        );
-
-        levelRenderer.render();
+        game.tick();
     }
 
     @Override
@@ -82,7 +45,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        levelRenderer.dispose();
+        game.stop();
     }
 
     public static void main(String[] args) {
